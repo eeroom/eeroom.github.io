@@ -41,5 +41,20 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 
 ## centos7
 使用界面配置  nmtui  
+### centos7 网卡命名规则：
+### en： ethernet以太网卡
+### o：主板集成网卡
+### p：PCI独立网卡
+### s：热插拔网卡
+### nnn数字：MAC+主板信息（生产唯一序号）
+### 如：ifcfg-ens33 （以太热插拔）
+### 网卡配置文件：
+### /etc/sysconfig/network-scripts/ifcfg-ens33
+### DNS配置文件:
+### /etc/resolv.conf
+### 网络主机绑定IP地址：
+### /etc/hosts
+### 计算机名：
+### /etc/hostname
 
 
