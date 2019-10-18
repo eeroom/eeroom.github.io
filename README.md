@@ -39,4 +39,7 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### 网络管理
 默认本机和容器
 
+## centos7
+使用界面配置  nmtui  
+
 
