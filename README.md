@@ -56,5 +56,8 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### /etc/hosts
 ### 计算机名：
 ### /etc/hostname
-
+### 查看内存使用情况 free -m  
+### 查看cpu使用情况 top   
+### 查看磁盘以及分区情况  df -h   
+### 查看端口使用情况     lsof -i:端口号     netstat -apn|grep 端口号 ps -au|grep 端口号
 
