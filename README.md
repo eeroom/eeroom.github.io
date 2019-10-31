@@ -41,6 +41,8 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 
 ## centos7
 使用界面配置  nmtui  
+查看ip信息  ip address  
+halt 立刻关机  poweroff 立刻关机  shutdown -h now 立刻关机(root用户使用) shutdown -r now 立刻重启(root用户使用)
 ### centos7 网卡命名规则：
 ### en： ethernet以太网卡
 ### o：主板集成网卡
@@ -60,4 +62,8 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### 查看cpu使用情况 top   
 ### 查看磁盘以及分区情况  df -h   
 ### 查看端口使用情况     lsof -i:端口号     netstat -apn|grep 端口号 ps -au|grep 端口号
+
+### yum本地安装 yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck
+### ls -a列出所有  -l详细信息
+### uname -r
 
