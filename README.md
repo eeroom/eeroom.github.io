@@ -31,7 +31,7 @@ docker run 参数
 --name  自定义容器名称  
 -d  容器后台运行  
 -p  当前系统端口：容器端口  端口映射（容器内部端口映射外部）  
--v  档期系统目录：容器目录   目录映射  
+-v  当前系统目录：容器目录   目录映射  
 docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启动
 
 docker exec -i -t 通过docker ps查看的name名 /bin/bash
