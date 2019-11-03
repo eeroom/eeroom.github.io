@@ -2,10 +2,10 @@ src=$(wildcard ./*.c)
 obj=$(patsubst ./%.c,./%.o,$(src))
 target=app
 $(target):$(obj)
-	gcc $^ -o $@
+	gcc  $^ -g -o $@
 
 %.o:%.c
-	gcc -c $< -o $@
+	gcc -c $< -g -o $@
 
 hello:
 	echo hello world

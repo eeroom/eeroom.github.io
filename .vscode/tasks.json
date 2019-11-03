@@ -1,0 +1,25 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "gcc.exe build active file",
+            "command": "E:/Mingw/bin/gcc.exe",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "E:/Mingw/bin"
+            }
+        }
+        ,
+        {
+            "type": "shell",
+            "label": "make",
+            "command": "make"
+        }
+    ],
+    "version": "2.0.0"
+}
