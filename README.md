@@ -15,6 +15,9 @@ Linux笔记
 #### NM_CONTROLLED=yes
 #### BOOTPROTO=dhcp
 
+###	安装桌面 yum groupinstall Desktop    X Window System  Chinese Surport
+### yum info mysql* available
+
 ### Docker
 docker -v
 ### Docker镜像管理
@@ -59,8 +62,17 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### 查看磁盘以及分区情况  df -h   
 ### 查看端口使用情况     lsof -i:端口号     netstat -apn|grep 端口号 ps -au|grep 端口号
 
+### chkconfig --list 列出所有的服务
+### chkconfig  服务名称	[on/off]开机启动/开机不启动
+### service 服务名成 [start/stop/restart]
+
+### which 命令	查看指定命令对应程序所在的位置，类似于查看快捷方式对应的实际文件
 ### yum list installed  //查看所有已经安装的程序  
 ### yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
+### yum grouplist //列出所有的软件组 比如 genome desktop
+### yum group install 某个组的名称 //安装某个组的程序，一系列程序
+### yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
+### yum list available
 ### uname -r
 ### pwd 当前所在的位置 printf   working directory
 ### /bin 命令对应的执行程序
@@ -143,6 +155,8 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### 优缺点，类似，应用程序需要包含so.文件
 
 ### 环境变量 临时修改某个键的值 export LD_LIBRARY_PATH=./lib
+###	export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋值，$PATH表示原来的PATH值，PATH值用:分割
+###	永久修改环境变量的值 第一步，修改文件/etc/profile，在末尾加上行 PATH="/tmp:$PATH"，第二步，source /etc/profile 
 
 ### gdb调试
 
@@ -208,3 +222,7 @@ hello:
 	echo $(src),$(obj),$(LDFLAGS),$(CC)
 
 make默认生成第一个目标，make clean 这是指定make的目标
+
+
+# gtk开发
+## yum install libgnomeui-devel
