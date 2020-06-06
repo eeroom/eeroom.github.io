@@ -36,6 +36,8 @@ docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启
 
 docker exec -i -t 通过docker ps查看的name名 /bin/bash
 
+
+
 ### 网络管理
 默认本机和容器
 
@@ -66,6 +68,17 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### chkconfig  服务名称	[on/off]开机启动/开机不启动
 ### service 服务名成 [start/stop/restart]
 
+### centos7服务管理
+systemctl //列出正在运行的服务
+systemctl list-unit-files //所有已经安装的服务
+systemd-cgls   以树形列出正在运行的进程，它可以递归显示控制组内容
+systemctl start postfix.service  启动一个服务
+systemctl stop postfix.service	停止
+systemctl restart postfix.service	重启
+systemctl status postfix.service	查看服务的状态
+systemctl enable postfix.service	设置开机启动
+systemctl disable postfix.service	设置开机不启动
+systemctl is-enabled postfix.service	查看是否开机启动
 ### which 命令	查看指定命令对应程序所在的位置，类似于查看快捷方式对应的实际文件
 ### yum list installed  //查看所有已经安装的程序  
 ### yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
