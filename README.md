@@ -72,6 +72,8 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### yum grouplist //列出所有的软件组 比如 genome desktop
 ### yum group install 某个组的名称 //安装某个组的程序，一系列程序
 ### yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
+### 局域网共享yum install samba --downloadonly --downloaddir ./download
+### 映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
 ### yum list available
 ### uname -r
 ### pwd 当前所在的位置 printf   working directory
