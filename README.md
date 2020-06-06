@@ -74,6 +74,10 @@ docker exec -i -t 通过docker ps查看的name名 /bin/bash
 ### yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
 ### 局域网共享yum install samba --downloadonly --downloaddir ./download
 ### 映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
+
+###挂在windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
+###挂在windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/hostDownloads/ 
+###安装文件系统 install cifs-utils
 ### yum list available
 ### uname -r
 ### pwd 当前所在的位置 printf   working directory
