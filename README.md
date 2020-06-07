@@ -87,6 +87,13 @@ docker run -it --rm -p 5000:80 --name wch123 wch
 FAQ:
 https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish
 
+// 停止所有容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+// 删除所有停止的容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+// 删除所有tag标签是none的镜像
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+
 ### 网络管理
 默认本机和容器
 
