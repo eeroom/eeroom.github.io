@@ -36,7 +36,56 @@ docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启
 
 docker exec -i -t 通过docker ps查看的name名 /bin/bash
 
+开放TCP连接
+修改/etc/docker/daemon.json，没有就新增
+内容
+  {"hosts":[
+"unix:///var/run/docker.sock",
+"tcp://0.0.0.0:2375"
+]}
+  重启服务或者服务器，查看2375端口是否开放，ss -l |grep -Po '\s[^\s]*2375\s'
 
+客户端连接服务端：docker -H tcp://192.168.56.101:2375 version
+docker -H 192.168.56.101:2375 version
+
+docker load：导入镜像到本地
+docker load [OPTIONS]
+-i：从tar文件读取
+-q：禁止读入输出
+docker load -i mytomcat_v1.tar
+
+客户端每次运行都需要指定 -H tcp://192.168.137.21:2375 ， 比较麻烦，
+可以 通过：   export DOCKER_HOST="tcp://192.168.137.21:2375"  建立一个环境变量，后面就可以直接运行：   docker info 也能得到远程docker 的信息了
+windows环境下 cmd    使用 set DOCKER_HOST=tcp://192.168.56.101:2375
+
+dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
+dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
+
+发布以后，使用docker build发布以后的文件
+Dockerfile内容
+FROM microsoft/aspnetcore:2.0
+#指定一个workdir，目录随便
+WORKDIR /app
+#把相对dockerfile所在目录的相对路径的文件 复制到 workdir相对路径的位置
+COPY . .
+#声明系统运行需要用到的端口，只是声明，方便创建容器的人知道需要处理哪些端口映射
+expose 80
+#等价于cmd的dotnet命令 
+ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
+
+在windows环境下publish项目
+在windows的docker客户端build一个镜像 
+docker build -t 景象名称 dockerfile所在的路径
+docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+
+在windows的docker客户端run一个容器
+docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
+docker run -it --rm -p 5000:80 --name wch123 wch
+
+访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
+
+FAQ:
+https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish
 
 ### 网络管理
 默认本机和容器
@@ -91,6 +140,10 @@ systemctl is-enabled postfix.service	查看是否开机启动
 ###挂在windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
 ###挂在windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/hostDownloads/ 
 ###安装文件系统 install cifs-utils
+
+重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
+//192.168.56.1/Downloads /mnt/hostDownloads/ cifs defaults,username=Deroom,password=BT151 0 2 
+
 ### yum list available
 ### uname -r
 ### pwd 当前所在的位置 printf   working directory
