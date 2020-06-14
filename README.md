@@ -61,6 +61,9 @@ windows环境下 cmd    使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
 dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
 
+##在netcore的项目文件中，让dockerfile始终复制到发布后的目录<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+
+
 发布以后，使用docker build发布以后的文件
 Dockerfile内容
 FROM microsoft/aspnetcore:2.0
@@ -83,6 +86,14 @@ docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称
 docker run -it --rm -p 5000:80 --name wch123 wch
 
 访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
+
+#发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）做成一个cmd,内容为：
+dotnet publish
+docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+docker stop wch123
+docker rm wch123
+docker run -d -it --rm -p 5000:80 --name wch123 wch
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
 
 FAQ:
 https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish
