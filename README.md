@@ -153,14 +153,17 @@ systemctl is-enabled postfix.service	查看是否开机启动
 ### yum group install 某个组的名称 //安装某个组的程序，一系列程序
 ### yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
 ### 局域网共享yum install samba --downloadonly --downloaddir ./download
+yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
+yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
+java-11-openjdk-devel.x86_64
 ### 映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
 
 ###挂在windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
-###挂在windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/hostDownloads/ 
+###挂在windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
 ###安装文件系统 install cifs-utils
 
 重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/hostDownloads/ cifs defaults,username=Deroom,password=BT151 0 2 
+//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=BT151 0 2 
 
 ### yum list available
 ### uname -r
