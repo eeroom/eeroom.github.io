@@ -319,3 +319,118 @@ make默认生成第一个目标，make clean 这是指定make的目标
 
 # gtk开发
 ## yum install libgnomeui-devel
+
+# hadoop安装，vbox新建三天机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
+# 准备三台机器，hadoopNameNode,hadoopDataNode1,hadoopNameNode2
+# 修改机器的名称 /etc/hostname
+# 修改机器的hosts文件 /etc/hosts
+#	安装jdk1.8，yum localinstall以后不会设置环境变量，因为已经配置的PATH，所有可以直接运行java和javac，但是仍然需要设置相关环境变量，其他程序依赖这个这几个环境变量的值
+#JDK全局环境变量配置
+export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+export PATH=$PATH:$JAVA_HOME/bin
+# 把hadoop安装程序上传到hadoopNameNode ，目录/export/server/,直接解压到当前目录，tar zxvf hadoop-2.7.4.tar.gz
+# 配置文件修改
+#/export/server/hadoop2.7.4/etc/hadoop//hadoop-env.sh，找到 export JAVA_HOME={JAVA_HOME}，修改为export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
+#/export/server/hadoop2.7.4/etc/hadoop/core-site.xml，
+<configuration>
+	<property>
+		<name>fs.defaultFS</name>
+		<value>hdfs://hadoopNameNode:9000</value>
+	</property>
+	<property>
+		<name>hadoop.tmp.dir</name>
+		<value>/home/hadoop2.7.4_data</value>
+	</property>
+</configuration>
+
+#hdfs-site.xml，
+<configuration>
+	<property>
+		<name>dfs.replication</name>
+		<value>2</value>
+	</property>
+	<property>
+		<name>dfs.namenode.secondary.http-address</name>
+		<value>hadoopDataNode1:50090</value>
+	</property>
+</configuration>
+# mv mapred-site.xml.template mapred-site.xml
+<configuration>
+	<property>
+		<name>mapreduce.framework.name</name>
+		<value>yarn</value>
+	</property>
+</configuration>
+
+#yarn-site.xml
+<configuration>
+	<property>
+		<name>yarn.resourcemanager.hostname</name>
+		<value>hadoopNameNode</value>
+	</property>
+	<property>
+		<name>yarn.nodemanager.aux-services</name>
+		<value>mapreduce_shuffle</value>
+	</property>
+</configuration>
+#slaves
+hadoopNameNode
+hadoopDataNode1
+hadoopDataNode2
+
+#把hadoop的程序路径配置到环境变量
+export HADOOP_HOME=/export/server/hadoop2.7.4
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+
+
+# 下发配置好的文件到其他机器 scp -r /export/server/hadoop2.7.4 root@hadoopDataNode1:/export/server/hadoop2.7.4/
+scp -r /export/server/hadoop2.7.4 root@hadoopDataNode2:/export/server/hadoop2.7.4/
+# 下发环境变量配置文件
+scp -r /etc/profile root@hadoopDataNode2:/etc/
+scp -r /etc/profile root@hadoopDataNode1:/etc/
+
+# 刷新环境变量 source /etc/profile
+
+#配置文件说明
+***-default.xml 这里面配置了hadoop默认的配置选项
+如果用户没有修改，那么这里面的选项将会生效
+
+***-site.xml 这里面配置了用户需要自定义的配置选项
+
+site中配置的值优先级大于default中的配置项的值
+
+#启动hadoop集群，需要启动HDFS集群，YARN集群
+首次启动HDFS集群，需要对其进行格式化（初始化），格式化只能进行一次，和yarn没有关系,集群启动成功以后，不要再进行格式化
+在namenode所在的机器上进行hdfs格式化
+格式化命令：hdfs namenode -format，执行后需要等待
+
+#脚本启动hdfs集群，也可以单点一个个启动，
+#前提条件，namenode到其他机器免密登陆，配置文件slaves配置好了
+脚本：/export/server/hadoop2.7.4/sbin/start-dfs.sh，也有配套的停止脚本
+#脚本启动yarn集群
+脚本：/export/server/hadoop2.7.4/sbin/start-yarn.sh
+
+#查看状态
+jps
+
+#单节点逐个启动
+
+#集群启动成功后，提供web查看
+http://192.168.56.61:50070
+http://192.168.56.61:8088
+
+#执行一个mapreduce
+hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
+
+
+
+
+
+
+
+
+
+
+
