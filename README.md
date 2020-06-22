@@ -383,7 +383,7 @@ hadoopDataNode2
 export HADOOP_HOME=/export/server/hadoop2.7.4
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 
-
+#虚拟机内存不要低于2048，512和1024MB的情况下，hadoop可以正常启动起来，但是执行demo程序，resourcemanager就出错终止运行了
 
 # 下发配置好的文件到其他机器 scp -r /export/server/hadoop2.7.4 root@hadoopDataNode1:/export/server/hadoop2.7.4/
 scp -r /export/server/hadoop2.7.4 root@hadoopDataNode2:/export/server/hadoop2.7.4/
