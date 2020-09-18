@@ -426,6 +426,27 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 
 
 
+#windows servercore
+	映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
+	删除指定的映射	net use Z: /del 
+	打开 WoW64：Start /w ocsetup ServerCore-WOW64
+  打开 .NET 2.0 层：Start /w ocsetup NetFx2-ServerCore
+  打开 WoW64 的 .NET 2.0 层: Start /w ocsetup NetFx2-ServerCore-WOW64
+	安装servercore版net40
+	安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
+	
+	升级到ps3.0 依赖net40 ,ps4.0依赖net45
+
+	删除或者设置虚拟内存
+	先wmic进入交互模式（必须），然后
+	computersystem where name="WIN-EA2IN74BA3N" set AutomaticManagedPagefile=False
+	重启后
+	PageFileSet where "name='C:\\pagefile.sys'" delete
+
+	
+
+
+
 
 
 
