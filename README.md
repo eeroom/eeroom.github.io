@@ -436,12 +436,56 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 	安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 	
 	升级到ps3.0 依赖net40 ,ps4.0依赖net45
-
-	删除或者设置虚拟内存
+	禁用虚拟内存
+	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive
+	设置为1
+	删除或者设置虚拟内存文件
 	先wmic进入交互模式（必须），然后
-	computersystem where name="WIN-EA2IN74BA3N" set AutomaticManagedPagefile=False
+	computersystem where name="WIN-TAJ0QBHFCHC" set AutomaticManagedPagefile=False
 	重启后
 	PageFileSet where "name='C:\\pagefile.sys'" delete
+	禁用休眠
+	powercfg -h off 重启后生效，会自动删除休眠文件
+	关闭防火墙
+	netsh firewall set opmode disable
+netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
+netsh advfirewall firewall set opmode disable
+
+	计算机管理-远程
+	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
+	计算机管理连接192.168.56.101，就可以进行管理
+
+	配置sqlserverexpress，监听tcp1433
+	
+
+	登陆：BT@151
+	数据库：hw@911226
+
+	安装IIS
+	dism /online /enable-feature /featurename:IIS-WebServerRole
+    dism /online /enable-feature /featurename:IIS-ISAPIFilter
+    dism /online /enable-feature /featurename:IIS-ISAPIExtensions
+    dism /online /enable-feature /featurename:IIS-NetFxExtensibility
+		安装IIS-ASPNET
+    dism /online /enable-feature /featurename:IIS-ASPNET
+		
+		通用 IIS 命令行管理工具。
+		appcmd管理iis,AppCmd.exe is located in the %systemroot%\system32\inetsrv\ directory
+		总的命令格式：APPCMD (命令) (对象类型) <标识符> </参数1:值1 ...>
+		查看所有的参数：appcmd list sites /text:*
+		appcmd list apppool /text:*
+		修改site的应用程序池
+		appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
+		查看某个对象的操作参数
+		appcmd set site "Default web site" /?
+
+		ie打不开，修改注册表权限
+		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
+
+
+
+
+
 
 	
 
