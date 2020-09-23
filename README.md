@@ -482,6 +482,8 @@ netsh advfirewall firewall set opmode disable
 		ie打不开，修改注册表权限
 		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
 
+		111
+
 
 
 
