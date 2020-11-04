@@ -482,22 +482,11 @@ netsh advfirewall firewall set opmode disable
 		ie打不开，修改注册表权限
 		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
 
-		111
+#临时设置环境变量
+查看所有环境变量 ls env:
+查看某个环境变量 ls env:path
+设置某个值 $Env:path=$Env:Path+";C:\Go\bin"
 
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
+#永久设置环境变量
+set pp=%PATH%
+setx PATH 
