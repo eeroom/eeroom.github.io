@@ -1,0 +1,93 @@
+<html>
+    <head></head>
+    <body>
+        <h3>Docker</h3>
+<p>docker -v</p>
+<p>Docker镜像管理</p>
+### 
+docker pull 镜像名称  //获取镜像  
+docker rmi 镜像ID   //删除镜像  
+docker images   //列出所有的镜像  
+### 容器管理
+docker create 镜像名    //新增容器  
+docker rm 容器ID    //删除容器  
+docker run 参数  
+--name  自定义容器名称  
+-d  容器后台运行  
+-p  当前系统端口：容器端口  端口映射（容器内部端口映射外部）  
+-v  当前系统目录：容器目录   目录映射  
+docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启动
+
+docker exec -i -t 通过docker ps查看的name名 /bin/bash
+
+开放TCP连接
+修改/etc/docker/daemon.json，没有就新增
+内容
+  {"hosts":[
+"unix:///var/run/docker.sock",
+"tcp://0.0.0.0:2375"
+]}
+  重启服务或者服务器，查看2375端口是否开放，ss -l |grep -Po '\s[^\s]*2375\s'
+
+客户端连接服务端：docker -H tcp://192.168.56.101:2375 version
+docker -H 192.168.56.101:2375 version
+
+docker load：导入镜像到本地
+docker load [OPTIONS]
+-i：从tar文件读取
+-q：禁止读入输出
+docker load -i mytomcat_v1.tar
+
+客户端每次运行都需要指定 -H tcp://192.168.137.21:2375 ， 比较麻烦，
+可以 通过：   export DOCKER_HOST="tcp://192.168.137.21:2375"  建立一个环境变量，后面就可以直接运行：   docker info 也能得到远程docker 的信息了
+windows环境下 cmd    使用 set DOCKER_HOST=tcp://192.168.56.101:2375
+
+dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
+dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
+
+##在netcore的项目文件中，让dockerfile始终复制到发布后的目录<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+
+
+发布以后，使用docker build发布以后的文件
+Dockerfile内容
+FROM microsoft/aspnetcore:2.0
+#指定一个workdir，目录随便
+WORKDIR /app
+#把相对dockerfile所在目录的相对路径的文件 复制到 workdir相对路径的位置
+COPY . .
+#声明系统运行需要用到的端口，只是声明，方便创建容器的人知道需要处理哪些端口映射
+expose 80
+#等价于cmd的dotnet命令 
+ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
+
+在windows环境下publish项目
+在windows的docker客户端build一个镜像 
+docker build -t 景象名称 dockerfile所在的路径
+docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+
+在windows的docker客户端run一个容器
+docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
+docker run -it --rm -p 5000:80 --name wch123 wch
+
+访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
+
+#发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）做成一个cmd,内容为：
+dotnet publish
+docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+docker stop wch123
+docker rm wch123
+docker run -d -it --rm -p 5000:80 --name wch123 wch
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+
+FAQ:
+https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish
+
+// 停止所有容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+// 删除所有停止的容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+// 删除所有tag标签是none的镜像
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+
+    </body>
+</html>
