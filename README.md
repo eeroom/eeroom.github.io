@@ -428,6 +428,24 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 
 #windows servercore
 	映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
+	做成bat,然后开机启动，修改注册表，位置：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+	类似于："diskZ"="C:\\Users\\Administrator\\diskZ.bat"
+	通过注册表修改环境变量，位置：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+
+ 常用的工具：taskmgr --查看进程、服务等
+ regedit--修改各种配置信息
+ msinfo32--查看磁盘等信息
+
+安装7z,下载命令行版本
+
+压缩：7za a 压缩包全名称含路径 源文件路径
+默认为7z格式，参数最少，比如：7za a wode.7z d:/dcq   
+指定zip,比如：7za a -tzip a wode.zip d:/dcq
+压缩的文件移除根目录级：7za a -r wode.7z d:/dcq
+解压缩：7za x 压缩包全路径 -o目标文件夹
+解压缩比如：7za x d:/abc/wode.7z -od:/目标
+
+
 	删除指定的映射	net use Z: /del 
 	打开 WoW64：Start /w ocsetup ServerCore-WOW64
   打开 .NET 2.0 层：Start /w ocsetup NetFx2-ServerCore
@@ -456,10 +474,18 @@ netsh advfirewall firewall set opmode disable
 	计算机管理连接192.168.56.101，就可以进行管理
 
 	配置sqlserverexpress，监听tcp1433
-	
-
+	32位的安装程序安装到64位，所以注册表要修改Wow6432Node下的
+	修改注册表：HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.SQLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp
+	"Enabled"=dword:00000001
+	"ListenOnAllIPs"=dword:00000001
+	HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.SQLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp\IPAll
+	"TcpPort"="1433"
 	登陆：BT@151
 	数据库：hw@911226
+	配置自动开启SQLBrowser，重启生效，远程连接需要开启这个服务
+	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\SQLBrowser
+	Start=2
+	配置数据库允许sqlserver认证，安装的时候如果没有选择允许，命令行sql登陆，执行相应的sql语句，允许sa登陆
 
 	安装IIS
 	dism /online /enable-feature /featurename:IIS-WebServerRole
@@ -478,6 +504,24 @@ netsh advfirewall firewall set opmode disable
 		appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
 		查看某个对象的操作参数
 		appcmd set site "Default web site" /?
+
+安装java的sdk
+使用解压缩版文件，非安装版，winscp上传到指定目录
+使用7za解压缩到c:/dw
+配置环境变量，重启
+JAVA_HOME=C:\dw\jdk-11.0.2
+增加path的值
+安装tomcat9
+解压到目录：c:/dw
+配置环境变量，重启
+CLASS_PATH=.;%JAVA_HOME%\lib;
+CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
+到tomcat的bin目录，执行：service.bat install
+把服务设定为开机启动
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
+Start=2
+start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
+
 
 		ie打不开，修改注册表权限
 		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
