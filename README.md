@@ -435,7 +435,9 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
  常用的工具：taskmgr --查看进程、服务等
  regedit--修改各种配置信息
  msinfo32--查看磁盘等信息
-
+ sconfig --工具集合，修改计算机名称等
+重启 shutdown -r -t 0
+关机 shutdown -s -t 0
 安装7z,下载命令行版本
 
 压缩：7za a 压缩包全名称含路径 源文件路径
@@ -448,27 +450,52 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 
 	删除指定的映射	net use Z: /del 
 	打开 WoW64：Start /w ocsetup ServerCore-WOW64
-  打开 .NET 2.0 层：Start /w ocsetup NetFx2-ServerCore
-  打开 WoW64 的 .NET 2.0 层: Start /w ocsetup NetFx2-ServerCore-WOW64
-	安装servercore版net40
-	安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
-	
-	升级到ps3.0 依赖net40 ,ps4.0依赖net45
-	禁用虚拟内存
+
+禁用虚拟内存
 	HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive
 	设置为1
 	删除或者设置虚拟内存文件
 	先wmic进入交互模式（必须），然后
-	computersystem where name="WIN-TAJ0QBHFCHC" set AutomaticManagedPagefile=False
+	computersystem where name="TP20201225" set AutomaticManagedPagefile=False
 	重启后
 	PageFileSet where "name='C:\\pagefile.sys'" delete
 	禁用休眠
 	powercfg -h off 重启后生效，会自动删除休眠文件
 	关闭防火墙
 	netsh firewall set opmode disable
-netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
 netsh advfirewall firewall set opmode disable
 
+打开 .NET 2.0 层：Start /w ocsetup NetFx2-ServerCore
+  打开 WoW64 的 .NET 2.0 层: Start /w ocsetup NetFx2-ServerCore-WOW64
+安装IIS
+	dism /online /enable-feature /featurename:IIS-WebServerRole
+    dism /online /enable-feature /featurename:IIS-ISAPIFilter
+    dism /online /enable-feature /featurename:IIS-ISAPIExtensions
+    dism /online /enable-feature /featurename:IIS-NetFxExtensibility
+		安装IIS-ASPNET
+    dism /online /enable-feature /featurename:IIS-ASPNET
+
+windows6.1-kb4474419-v3-x64_.msu		net462的签名验证，新软件的签名验证
+Windows6.1-KB2999226-x64.msu  解决安装vc++2015
+vc++2012 2013 2015
+NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
+	安装servercore版net40或者net462或者net45
+	安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
+	升级到ps3.0 依赖net40 或者ps4.0依赖net45
+	
+	安装openssh
+	创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主机共享，然后复制
+	顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
+	切到OpenSSh目录
+	powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
+	显示3行成功
+	如果启用了防火墙，则
+	netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
+设定服务自动启动
+Set-Service sshd -StartupType Automatic
+设定update服务为手动启动，关闭默认共享，关闭自动播放等
+改注册表HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
+Start=3
 	计算机管理-远程
 	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
 	计算机管理连接192.168.56.101，就可以进行管理
@@ -487,13 +514,7 @@ netsh advfirewall firewall set opmode disable
 	Start=2
 	配置数据库允许sqlserver认证，安装的时候如果没有选择允许，命令行sql登陆，执行相应的sql语句，允许sa登陆
 
-	安装IIS
-	dism /online /enable-feature /featurename:IIS-WebServerRole
-    dism /online /enable-feature /featurename:IIS-ISAPIFilter
-    dism /online /enable-feature /featurename:IIS-ISAPIExtensions
-    dism /online /enable-feature /featurename:IIS-NetFxExtensibility
-		安装IIS-ASPNET
-    dism /online /enable-feature /featurename:IIS-ASPNET
+	
 		
 		通用 IIS 命令行管理工具。
 		appcmd管理iis,AppCmd.exe is located in the %systemroot%\system32\inetsrv\ directory
@@ -508,7 +529,8 @@ netsh advfirewall firewall set opmode disable
 安装java的sdk
 使用解压缩版文件，非安装版，winscp上传到指定目录
 使用7za解压缩到c:/dw
-配置环境变量，重启
+配置环境变量，重启生效
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 JAVA_HOME=C:\dw\jdk-11.0.2
 增加path的值
 安装tomcat9
@@ -521,7 +543,13 @@ CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
 Start=2
 start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
+或者Set-Service Tomcat9 -StartupType Automatic
+启动服务net start Tomcat9
+测试,打开：http://192.168.56.101:8080,
 
+安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
+net stop Tomcat9
+net start Tomcat9
 
 		ie打不开，修改注册表权限
 		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
