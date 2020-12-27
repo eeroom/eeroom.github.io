@@ -493,6 +493,18 @@ NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 	netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
 设定服务自动启动
 Set-Service sshd -StartupType Automatic
+配置免密登陆，场景：A免密登陆B，
+A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在当前用户目录下的.ssh目录里面id_rsa，id_rsa.pub
+打开id_rsa.pub复制里面的内容，追加到B的用户目录下的.ssh目录下的C:/Users/Administrator/.ssh/authorized_keys文件
+如果authorized_keys文件不存在就新建,
+这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，
+修改B中C:/ProgramData/ssh/sshd_config，注释掉2行，默认是在最后
+Match Group administrators
+       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+重启B的ssh和sshagent服务
+A上执行：ssh Administratro@192.168.56.101
+
+
 设定update服务为手动启动，关闭默认共享，关闭自动播放等
 改注册表HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
 Start=3
@@ -550,6 +562,20 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
 net stop Tomcat9
 net start Tomcat9
+
+安装jenkins
+war文件
+安装后amdin在用户管理修改密码
+如果忘记admin的密码
+打开/C:/Windows/ServiceProfiles/LocalService/.jenkins/users/admin/config.xml,找到密码部分， 修改为#jbcrypt:$2a$10$MiIVR0rr/UhQBqT.bBq0QehTiQVqgNpUGyWW2nJObaVAM/2xSQdSq
+然后重启，使用123456登陆
+插件相关
+插件》高级》修改插件源的地址，使用https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
+
+安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
+放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
+
+
 
 		ie打不开，修改注册表权限
 		HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
