@@ -482,7 +482,27 @@ NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 	安装servercore版net40或者net462或者net45
 	安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 	升级到ps3.0 依赖net40 或者ps4.0依赖net45
-	
+
+配置msbuild
+配置环境变量，增加path,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+msbuild不依赖visual studio,但是如果我们使用visual studio生成的项目或者解决方案，vs会抽出一些可复用的配置，
+位置在：C:\Program Files (x86)\MSBuild，安装了vs才会有，只安装.netframework不会有
+把这个目录下的文件复制到对应位置，然后调整参数，
+比如：msbuild JenkinsDemo.sln /p:VisualStudioVersion=14.0
+如果复制的是vs2015的配置，
+参数为/p:VisualStudioVersion=14.0，这个参数会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v14.0下面找
+如果参数为/p:VisualStudioVersion=11.0，就会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0下面找
+对应关系为：vs2010===11.0
+vs2012===12.0
+vs2015===14.0
+发布：msbuild Mytech.csproj /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml /p:VisualStudioVersion=14.0
+
+后续7z打包
+scp分发文件
+执行ps脚本
+
+
+
 	安装openssh
 	创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主机共享，然后复制
 	顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
