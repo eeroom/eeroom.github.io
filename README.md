@@ -608,3 +608,22 @@ war文件
 #永久设置环境变量
 set pp=%PATH%
 setx PATH 
+
+JWTToken，c#和java的com.auth0>java-jwt类库兼容
+输入：hearder(字典)，payload（字典），key(哈希算法的密钥)
+header={{alg:HS256},type:JWT}
+alg根据业务需要，后续算signCode做相应的调整
+payload中的数据根据业务需要
+
+java中的时间,Calendar.getInstance().getTime()等价于
+(DateTime.Now.ToUniversalTime()-new DateTime(1970,1,1)).TotalSeconds
+
+序列化header,然后转base64，然后做额外处理得到headerCode，
+额外处理逻辑：baser64str.Split('=')[0].Replace('+','-').Replace('/','_')
+序列化payload，然后转base64，然后额外处理，逻辑同上,得到payloadCode
+使用HMACSHA256哈希算法，
+算法的Key=key按UTF8取字节数组
+buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
+把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
+最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
+
