@@ -363,7 +363,8 @@ make默认生成第一个目标，make clean 这是指定make的目标
 ```
 
 # hadoop
-### 环境搭建
+## ![效果图](./hadoop集群分布.png)
+## 环境搭建
 ```
 vbox新建三台机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
 准备三台机器，hadoopNameNode,hadoopDataNode1,hadoopNameNode2
@@ -446,7 +447,8 @@ scp -r /etc/profile root@hadoopDataNode1:/etc/
 ***-site.xml 这里面配置了用户需要自定义的配置选项
 site中配置的值优先级大于default中的配置项的值
 ```
-# 运行和调试
+## 运行和调试
+```
 启动hadoop集群，需要启动HDFS集群，YARN集群
 首次启动HDFS集群，需要对其进行格式化（初始化），格式化只能进行一次，和yarn没有关系,集群启动成功以后，不要再进行格式化
 在namenode所在的机器上进行hdfs格式化
@@ -466,7 +468,7 @@ site中配置的值优先级大于default中的配置项的值
 
 执行一个mapreduce
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
-
+```
 
 # Windows ServerCore 2008R2
 ## 局域网共享
@@ -580,6 +582,7 @@ msbuild不依赖visual studio,但是如果我们使用visual studio生成的项�
 执行远程机器的ps脚本,执行后续的部署等操作
 ```
 ## openssh
+1. 安装
 ```
 创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主共享，然后复制
 顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
@@ -590,6 +593,9 @@ powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
 netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
 设定服务自动启动
 Set-Service sshd -StartupType Automatic
+```
+2. 免密登录
+```
 配置免密登陆，场景：A免密登陆B，
 A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在当前用户目录下的.ssh目录里面id_rsa，id_rsa.pub
 打开id_rsa.pub复制里面的内容，追加到B的用户目录下的.ssh目录下的C:/Users/Administrator/.ssh/authorized_keys文件
@@ -601,6 +607,7 @@ Match Group administrators
 重启B的ssh和sshagent服务
 A上执行：ssh Administratro@192.168.56.101
 ```
+![效果图](./配置SSH免密登陆.png)
 ## mssqlserver2008R2
 ```
 配置sqlserverexpress，监听tcp1433
