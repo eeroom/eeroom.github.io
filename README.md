@@ -246,7 +246,7 @@ ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
 docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
 docker run -it --rm -p 5000:80 --name wch123 wch
 ```
-4. 访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
+5. 访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
 4. bat脚本,步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
 ```
 dotnet publish
@@ -256,7 +256,7 @@ docker rm wch123
 docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-5. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
+7. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
 
 # C语言开发
 ##  静态库制作
@@ -461,10 +461,9 @@ site中配置的值优先级大于default中的配置项的值
 
 查看状态 jps
 单节点逐个启动
-集群启动成功后，提供web查看
-[http://192.168.56.61:50070](http://192.168.56.61:50070)
-[http://192.168.56.61:8088](http://192.168.56.61:8088)
-
+```
+集群启动成功后，提供web查看[http://192.168.56.61:50070](http://192.168.56.61:50070)[http://192.168.56.61:8088](http://192.168.56.61:8088)
+```
 执行一个mapreduce
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
@@ -607,6 +606,7 @@ Match Group administrators
 A上执行：ssh Administratro@192.168.56.101
 ```
 ![效果图](./配置SSH免密登陆.png)
+
 ## mssqlserver2008R2
 ```
 配置sqlserverexpress，监听tcp1433
