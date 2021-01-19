@@ -205,7 +205,7 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-## 客户端远程连接服务器
+## 客户端教程
 ```
 Docker服务端提供RestfulAPI，默认不允许远程访问，所以需要修改服务端配置
 服务端开放TCP连接的方法
@@ -225,7 +225,7 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
 dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
 ```
-## 发布到docker容器,场景：docker服务端的宿主为linux
+## doker部署
 1. ` 在netcore的项目文件中，让dockerfile始终复制到发布后的目录<None Include="Dockerfile" CopyToPublishDirectory="Always" /> `
 1. 在windows环境下publish项目
 1. 在windows的docker客户端build一个镜像,执行 docker build -t 镜像名称 Dockerfile所在的路径，例如：docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
@@ -356,7 +356,6 @@ hello:
 
 make默认生成第一个目标，make clean 这是指定make的目标
 ```
-
 ## gtk开发
 ```
 安装依赖库 yum install libgnomeui-devel
