@@ -667,8 +667,8 @@ war文件
 # Windows系统FAQ
 1. ie打不开，修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
 
-# Jwt
-## jwt token
+# C#和JAVA
+## JwtToken互通
 ```
 JWTToken，c#和java的com.auth0>java-jwt类库兼容
 输入：hearder(字典)，payload（字典），key(哈希算法的密钥)
@@ -688,4 +688,10 @@ buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
 把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
 最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
 ```
-
+## byte互转
+```
+c#:byte为无符号一个字节，范围：0-255（00-FF）
+java:byte为有符号一个字节，范围：-128-127
+c#到java,如果值<=127,直接等价，否则，java的值=c#值-256
+java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
+```
