@@ -548,9 +548,8 @@ NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
 ```
-2. 管理和配置
+2. 管理和配置，appcmd
 ```
-通用 IIS 命令行管理工具。
 appcmd管理iis,AppCmd.exe is located in the %systemroot%\system32\inetsrv\ directory
 总的命令格式：APPCMD (命令) (对象类型) <标识符> </参数1:值1 ...>
 查看所有的参数：appcmd list sites /text:*
@@ -559,6 +558,11 @@ appcmd list apppool /text:*
 appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
 查看某个对象的操作参数
 appcmd set site "Default web site" /?
+
+appcmd可以配置iis应用程序池和iis应用程序的所有参数，从配置文件导入新程序池或者新站点，修改配置，等等操作
+所有参数结合2个配置文件可以得出
+C:\Windows\System32\inetsrv\config\applicationHost.config,这个实际起作用的配置文件，iis运行时的配置文件继承这个，再结合用户的web.config
+C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml,这个文件是配置文件的元数据，所有的参数的名称和类型都可以查，特别是枚举类型，技巧：通过开发机图像界面配置iis，然后appcmd导出xml，然后作为脚本的一部分,在部署环境利用appcm导入xml里面的配置
 ```
 ## MSBuild
 ```
