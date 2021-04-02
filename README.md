@@ -612,19 +612,22 @@ A上执行：ssh Administratro@192.168.56.101
 
 ## mssqlserver2008R2
 ```
-配置sqlserverexpress，监听tcp1433
-	32位的安装程序安装到64位，所以注册表要修改Wow6432Node下的
+在servercore2008R2中不能打开sqlserver的服务管理器,需要编辑注册表值来修改sqlserver服务的配置
+配置sqlserverexpress，允许客户端通过tcp连接服务端，固定监听tcp1433端口
 	修改注册表：HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp
 	"Enabled"=dword:00000001
 	"ListenOnAllIPs"=dword:00000001
 	HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp\IPAll
 	"TcpPort"="1433"
+特别注意：32位的安装程序安装到64位，注册表要修改Wow6432Node下的。64位安装程序到64位系统则不用Wow6432Node，32位安装程序到32位系统也不用Wow6432Node
 登陆：BT@151
 数据库：123456
-配置自动开启SQLBrowser，重启生效，远程连接需要开启这个服务
+配置数据库允许sqlserver认证，安装的时候如果没有选择允许，命令行sql登陆，执行相应的sql语句，允许sa登录
+在数据库所在机器使用sqlcmd连接数据库，然后执行sql语句，允许sa账号登陆
+
+配置自动开启SQLBrowser，重启生效。这个服务监听udp1434。配合sqlserver服务的动态端口监听，
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\SQLBrowser
 Start=2
-配置数据库允许sqlserver认证，安装的时候如果没有选择允许，命令行sql登陆，执行相应的sql语句，允许sa陆
 ```
 ## jdk
 ```
