@@ -566,19 +566,18 @@ C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml,这个文件是配置�
 ```
 ## MSBuild
 ```
+.netframework包含完整的msbuild程序
 配置环境变量，增加path,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
-msbuild不依赖visual studio,但是如果我们使用visual studio生成的项目或者解决方案，vs会抽出一些可复用的配置，
-位置在：C:\Program Files (x86)\MSBuild，安装了vs才会有，只安装.netframework不会有
-把这个目录下的文件复制到对应位置，然后调整参数，
-比如：msbuild JenkinsDemo.sln /p:VisualStudioVersion=14.0
-如果复制的是vs2015的配置，
-参数为/p:VisualStudioVersion=14.0，这个参数会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v14.0下面找
+msbuild不依赖visual studio
+vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一些编译参数放在配置文件中，位置在：C:\Program Files (x86)\MSBuild，只有安装了vs才会有，在开发机上复制这个目录下的文件到server2008R2Core的同样位置。
+调用msbuild的编译命令为：msbuild 解决方案.sln/项目.csproj 参数的配置文件。例如：msbuild JenkinsDemo.sln /p:VisualStudioVersion=14.0
+如果复制的是vs2015的配置，参数为/p:VisualStudioVersion=14.0，这个参数会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v14.0下面找
 如果参数为/p:VisualStudioVersion=11.0，就会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0下面找
 对应关系为：
 	vs2010===11.0
 	vs2012===12.0
 	vs2015===14.0
-发布：msbuild Mytech.csproj /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml /p:VisualStudioVersion=14.0
+调用msbuild的发布命令为：msbuild Mytech.csproj /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml /p:VisualStudioVersion=14.0
 7z打包
 执行scp把分发到远程机器
 执行远程机器的ps脚本,执行后续的部署等操作
