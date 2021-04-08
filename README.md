@@ -176,9 +176,10 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 docker -v //查看版本
 docker info //查看信息
 ```
-## 镜像管理
+## 镜像操作
 ```
-docker pull 镜像名称 //获取镜像
+docker pull 镜像名称 //获取镜像，镜像名称=名称:tag
+docker tag 名称:tag 名称:新tag //修改镜像的tag
 docker rmi 镜像ID //删除镜像
 docker images //列出所有的镜像
 docker load：导入本地镜像
@@ -186,8 +187,10 @@ docker load [OPTIONS]
 -i：从tar文件读取
 -q：禁止读入输出
 例如：docker load -i mytomcat_v1.tar
+docker load < /root/wch/mytomcat_v1.tar
+docker push //上次镜像
 ```
-## 容器管理
+## 容器操作
 ```
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
@@ -204,6 +207,26 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
 docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+## 镜像仓库
+```
+公网镜像仓库，dockerhub
+私网镜像仓库
+公有仓库：客户端上传需要登陆仓库，下载不需要登陆
+私有仓库：客户端上传与下载都要登陆仓库
+docker login //登陆仓库
+从dockerhub下载的公开镜像不能直接上传到私网镜像，需要重新tag,然后上传
+Harbor可以快速搭建一个企业级的镜像仓库
+修改linux的主机名称，hostnamectl set-hostname 主机名称
+安装docker-compose,docker官方在单台机器的编排工具，1.24.1
+docker-compose down //停止本机的doker 容器
+docker rmi `docker images -aq`//linux执行符号，
+docker push centos:7.6 
+配置docker不走https,vi /etc/docker/daemon.json  "insecure-registries":["192.168.56.104"]
+docker tag centos:7.6 192.168.56.104/library/centos:7.6
+docker push 192.168.56.104/library/centos:7.6
+docker login 仓库ip
+
 ```
 ## 客户端教程
 ```
