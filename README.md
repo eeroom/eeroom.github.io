@@ -226,7 +226,7 @@ docker push centos:7.6
 docker tag centos:7.6 192.168.56.104/library/centos:7.6
 docker push 192.168.56.104/library/centos:7.6
 docker login 仓库ip
-
+测试git
 ```
 ## 客户端教程
 ```
