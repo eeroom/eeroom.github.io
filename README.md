@@ -250,8 +250,8 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 可以再各个命令后面再接-h查看详细的参数说明
 查看已注册的docker服务端：docker-machine ls
 创建或者注册docker服务端，根据driver:
-docker-machine create --driver generic --generic-ip-address 192.168.56.101 machine名称（自定义）
-docker-machine create --driver none --url tcp://192.168.56.101:2376 machine名称（自定义）
+docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
+docker-machine create  --driver none --url tcp://192.168.56.101:2376 --engine-tlsverify=false --engine-opt tlsverify=false --engine-env tlsverify=false machine名称（自定义）
 docker-machine ls后，解决Unable to query docker version: Get https://
 docker-machine regenerate-certs mywch
 移除machine:docker-machine rm
