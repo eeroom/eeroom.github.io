@@ -621,17 +621,32 @@ Set-Service sshd -StartupType Automatic
 2. 免密登录
 ```
 配置免密登陆，场景：A免密登陆B，
+B作为服务端，要修改sshd_config（不是ssh_config）文件，
+	修改B中C:/ProgramData/ssh/sshd_config，注释掉2行，默认是在最后
+	Match Group administrators
+		AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+	重启B的ssh和sshagent服务
+	Centos7的为/etc/ssh/sshd_config，修改内容，默认情况这三行为注释掉的，只需要取消注释，按如下设置即可
+	RSAAuthentication yes
+	PubkeyAuthentication yes
+	AuthorizedKeysFile	.ssh/authorized_keys
+A作为客户端，要做的事情为：
 A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在当前用户目录下的.ssh目录里面id_rsa，id_rsa.pub
-打开id_rsa.pub复制里面的内容，追加到B的用户目录下的.ssh目录下的C:/Users/Administrator/.ssh/authorized_keys文件
+打开id_rsa.pub复制里面的内容，追加到B的authorized_keys文件，文件位置为【用户名/.ssh/authorized_keys】 比如Administrator/.ssh/authorized_keys
 如果authorized_keys文件不存在就新建,
-这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，
-修改B中C:/ProgramData/ssh/sshd_config，注释掉2行，默认是在最后
-Match Group administrators
-       AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
-重启B的ssh和sshagent服务
+这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，命令为：ssh Administrator@被免密登陆的机器IP
+
 A上执行：ssh Administratro@192.168.56.101
 ```
 ![效果图](./配置SSH免密登陆.png)
+
+
+3. ssh登陆卡
+```
+修改服务端的sshd_config（不是ssh_config），设置为如下：
+UseDNS no
+GSSAPIAuthentication no
+```
 
 ## mssqlserver2008R2
 ```
@@ -730,7 +745,7 @@ java:byte为有符号一个字节，范围：-128-127
 c#到java,如果值<=127,直接等价，否则，java的值=c#值-256
 java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 ```
-
+git@github.com:eeroom/Azeroth.Core.git
 ## git
 ```
 查看仓库已经关联的所有远程地址：git remote
