@@ -121,6 +121,7 @@ systemctl is-enabled postfix.service	查看是否开机启动
 yum info mysql* available  //查询可用的程序
 yum list installed  //查看所有已经安装的程序  
 yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
+yum  localinstall docker-engine-1.12.6-1.el7.centos.x86_64.rpm --nogpgcheck
 yum grouplist //列出所有的软件组 比如 genome desktop
 yum group install 某个组的名称 //安装某个组的程序，一系列程序
 yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
