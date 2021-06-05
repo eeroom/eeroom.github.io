@@ -21,7 +21,7 @@ $res= $req.GetResponse();
 [System.IO.Stream] $resStream= $res.GetResponseStream();
 $reader= [System.IO.StreamReader]::new($resStream);
 $xml= $reader.ReadToEnd();
-[System.Console]::WriteLine("响应");
+[System.Console]::WriteLine("---------------------");
 [System.Console]::WriteLine($xml);
 
 
