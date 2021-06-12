@@ -250,10 +250,14 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 可以再各个命令后面再接-h查看详细的参数说明
 查看已注册的docker服务端：docker-machine ls
 创建或者注册docker服务端，根据driver:
-docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
-docker-machine create  --driver none --url tcp://192.168.56.101:2376 --engine-tlsverify=false --engine-opt tlsverify=false --engine-env tlsverify=false machine名称（自定义）
-docker-machine ls后，解决Unable to query docker version: Get https://
-docker-machine regenerate-certs mywch
+场景：centos7，自己安装了docker1.12,只是为了把该docker添加到windows下docker-machine列表，方便管理
+添加已有（docker安装后不要配置systemd的开机启动，否则machine重新配置docker的时候会冲突）：	docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
+新建和添加已有的命令是一样的
+
+使用powershell,执行：docker-machine env machine名称，会得到一个执行命令
+ docker-machine env yt | Invoke-Expression
+ 执行后,在windows上执行docker命令等价于在centos上执行，作用：windows开发，编译后，使用docker build。windows共享编译后程序的存放目录，centos挂在该恭喜目录。这样docker build可以快速执行。
+ 如果在windows使用docker -H 192.168.56.101:2375 执行。则只能指定windows本地的目录，然后docker再把文件复制到centos，再build，非常不科学
 移除machine:docker-machine rm
 ```
 
@@ -648,6 +652,7 @@ B作为服务端，要修改sshd_config（不是ssh_config）文件，
 A作为客户端，要做的事情为：
 A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在当前用户目录下的.ssh目录里面id_rsa，id_rsa.pub
 打开id_rsa.pub复制里面的内容，追加到B的authorized_keys文件，文件位置为【用户名/.ssh/authorized_keys】 比如Administrator/.ssh/authorized_keys
+centos:.ssh目录的权限为700，其下文件authorized_keys和私钥的权限为600,这是linux的安全要求，如果权限不对，自动登录将不会生效,
 如果authorized_keys文件不存在就新建,
 这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，命令为：ssh Administrator@被免密登陆的机器IP
 
