@@ -256,8 +256,7 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 
 使用powershell,执行：docker-machine env machine名称，会得到一个执行命令
  docker-machine env yt | Invoke-Expression
- 执行后,在windows上执行docker命令等价于在centos上执行，作用：windows开发，编译后，使用docker build。windows共享编译后程序的存放目录，centos挂在该恭喜目录。这样docker build可以快速执行。
- 如果在windows使用docker -H 192.168.56.101:2375 执行。则只能指定windows本地的目录，然后docker再把文件复制到centos，再build，非常不科学
+ 执行后,在windows上执行docker命令等价于在centos上执行，类似于docker -H 192.168.56.101:2375
 移除machine:docker-machine rm
 ```
 
