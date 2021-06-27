@@ -697,22 +697,7 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 JAVA_HOME=C:\dw\jdk-11.0.2
 增加path的值
 ```
-## tomcat
-```
-安装tomcat9
-解压到目录：c:/dw
-配置环境变量，重启
-CLASS_PATH=.;%JAVA_HOME%\lib;
-CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
-到tomcat的bin目录，执行：service.bat install
-把服务设定为开机启动
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
-Start=2
-start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
-或者Set-Service Tomcat9 -StartupType Automatic
-启动服务net start Tomcat9
-测试,打开：http://192.168.56.101:8080,
-```
+
 ## jenkins
 ```
 安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
@@ -727,11 +712,6 @@ war文件
 然后重启，使用123456登陆
 插件相关
 插件》高级》修改插件源的地址，使用https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
-```
-## git
-```
-安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
-放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
 ```
 
 # Windows系统FAQ
@@ -765,19 +745,33 @@ java:byte为有符号一个字节，范围：-128-127
 c#到java,如果值<=127,直接等价，否则，java的值=c#值-256
 java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 ```
-git@github.com:eeroom/Azeroth.Core.git
-## git
+
+## git安装
+```
+安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
+放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
+```
+
+## git使用帮助
 ```
 查看仓库已经关联的所有远程地址：git remote
 增加一个远程地址：git remote add 本地显示名称 远程地址
+
+查看当前的所有分支：git branch all
 签出分支：git checkout -b 本地显示名称 远程名称/分支
 切换分支：git checkout 分支名称
 重新设置本地分支的上游分支：git branch -u 远程名称/分支
-推送到远程分支：git push 远程名称 本地分支
+
 获取远程分支信息：git fetch 远程名称
 获取并且合并到本地当前分支：git pull 远程名称
+推送到远程分支：git push 远程名称 本地分支
 
+查看提交记录：git log
+重置当前点：git reset 提交id
+
+github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 ```
+
 ## activemq
 ```
 安装windows服务的方法，下载解压版，比如：apache-activemq-5.15.10-bin.zip
@@ -799,3 +793,20 @@ sc delete mariadb_hzducha
 配置文件和mysql_install_db.exe参数说明：
 ```
 ### ![mysql_install_db.exe参数说明](./mariadb的配置图01.png)
+
+## tomcat
+```
+安装tomcat9
+解压到目录：c:/dw
+配置环境变量，重启
+CLASS_PATH=.;%JAVA_HOME%\lib;
+CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
+到tomcat的bin目录，执行：service.bat install
+把服务设定为开机启动
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
+Start=2
+start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
+或者Set-Service Tomcat9 -StartupType Automatic
+启动服务net start Tomcat9
+测试,打开：http://192.168.56.101:8080,
+```
