@@ -24,8 +24,8 @@ BOOTPROTO=dhcp
 # Centos7 1511版本
 ## 网络设置
 ```
-使用界面配置  nmtui  
-查看ip信息  ip address  
+网络管理，tui界面：  nmtui  
+ip信息：  ip address  
 centos7 网卡命名规则：
 en： ethernet以太网卡
 o：主板集成网卡
@@ -776,5 +776,13 @@ git@github.com:eeroom/Azeroth.Core.git
 推送到远程分支：git push 远程名称 本地分支
 获取远程分支信息：git fetch 远程名称
 获取并且合并到本地当前分支：git pull 远程名称
+
+```
+## activemq
+```
+安装windows服务的方法，下载解压版，比如：apache-activemq-5.15.10-bin.zip
+解压，切换到目录bin/win64，管理员运行cmd,执行：InstallService.bat，卸载：UninstallService.bat
+验证安装是否ok:打开http://localhost:8161/admin，用户名：admin,密码：admin
+配置文件说明：
 
 ```
