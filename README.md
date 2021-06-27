@@ -810,3 +810,51 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 启动服务net start Tomcat9
 测试,打开：http://192.168.56.101:8080,
 ```
+
+## sql语法
+```
+声明变量：declare @名称 类型
+声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
+
+insert 语句，表必须存在
+insert into 表 values()
+insert into 表 select语句
+insert into 表(列名称，...) values()
+insert into 表(列名称，...) select语句
+
+insert 语句，表必须不存在（#表名称 为临时表，会话结束自动删除，否则为非临时表）
+select 列
+into 表
+from ....
+
+update 语句，批量更新
+update 表 别名1
+join 表2 别名2 on 连接条件
+set 别名1.列=别名2.列
+where ....
+
+delete 语句，批量删除
+
+集合操作
+取差集：except 
+取并集：union
+取交集：intersect
+
+output 语句
+insert into 表（列） output inserted.列名 values()
+update 表 set 列1=值 output inserted.列名 where ...
+
+表分区
+添加文件组和文件
+创建分区函数：create partition function 名称（分区字段类型） as range right for values(区间值1,区间值2,,,)
+创建分区scheme:create partition scheme 名称 as partition 分区函数名称 to(文件组1,文件组2,,,)
+tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段，需要对应6个文件组
+创建分区表：create table 表名称（列1名称 类型，列2名称 类型,...）on 分区scheme(分区字段)
+创建索引：也使用相同的 on 分区scheme(分区字段)
+
+删除1年以前的定分区数据
+创建临时表，结构和源表一样，使用相同的 on 分区scheme(分区字段)
+确定要删除的分区的序号，分区序号从1开始，计算序号的逻辑，借助临时表，键值结构（月份，序号）
+切换别删除分区的数据到临时表：alter table 源表 switch partition 分区序号 to 临时表 partition 分区序号
+删除临时表：drop table 临时表
+```
