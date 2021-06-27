@@ -786,3 +786,16 @@ git@github.com:eeroom/Azeroth.Core.git
 配置文件说明：
 
 ```
+## mariadb
+```
+安装windows服务的方法，下载解压版，比如：mariadb-10.2.26-winx64.zip
+解压，切换到目录bin/，管理员运行cmd,
+tips:确保存放数据的目录的上级目录已经创建ok，这里需要d:\已存在，但是d:\mariadb-data不存在
+创建数据库实例：mysql_install_db.exe --datadir=d:\mariadb-data --service=mariadb_001 --password=123456
+这个命令会自动在数据目录下创建配置文件my.ini
+删除数据库实例：停止服务，删除对应的服务，删除数据目录
+sc delete mariadb_hzducha
+验证安装是否ok:使用客户端连接测试
+配置文件和mysql_install_db.exe参数说明：
+```
+### ![mysql_install_db.exe参数说明](./mariadb的配置图01.png)
