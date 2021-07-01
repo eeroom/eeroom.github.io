@@ -778,6 +778,9 @@ github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 验证安装是否ok:打开http://localhost:8161/admin，用户名：admin,密码：admin
 配置文件说明：
 
+异步消息的两类模型
+点对点消息模型（消息队列），每个消息只有一个接收者可以取到，可以有多个接受者
+发布订阅消息模型，消息被发送到一个主题，主题所有订阅者都可以取到消息，可以有多个接收者
 ```
 ## mariadb
 ```
