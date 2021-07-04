@@ -487,6 +487,53 @@ scp -r /etc/profile root@hadoopDataNode1:/etc/
 ***-site.xml 这里面配置了用户需要自定义的配置选项
 site中配置的值优先级大于default中的配置项的值
 ```
+## HDFS ON Windows
+```
+windows下搭建HDFS，不依赖cygwin，
+解压hadoop的tar.gz包，使用管理员权限解压
+找到对应的hadoop-winutils,按照对应的说明进行替换
+增加环境变量，HADOOP_HOME
+增加/bin和/sbin到PATH，方便后续执行命令
+涉及的命令，hdfs.cmd,start-hdfs.cmd
+如果环境变量配置的jdk不是1.8，修改etc\hadoop\hadoop-env.cmd文件，设置JAVA_HOME为1.8版本的jdk
+修改配置文件:conf/hadoop-site.xml:
+<configuration>
+	<property>
+    <name>fs.default.name</name>
+    <value>hdfs://localhost:9000/</value>
+  </property>
+  <property>
+    <name>mapred.job.tracker</name>
+    <value>localhost:9001</value>
+  </property>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+  <property>
+		<name>hadoop.tmp.dir</name>
+		<value>file:/D:/01Tools/hadoopdata</value>
+  </property>
+</configuration>
+修改配置文件：hdfs-site.xml
+<configuration>
+	<property>
+		<name>dfs.namenode.name.dir</name>
+		<value>file:/D:/01Tools/hadoopdata/namenode</value>
+	</property>
+	<property>
+		<name>dfs.datanode.data.dir</name>
+		<value>file:/D:/01Tools/hadoopdata/datanode</value>
+	</property>
+</configuration>
+格式化文件系统：hdfs namenode -format
+启动HDFS文件系统：start-dfs.cmd
+停止HDFS文件系统：stop-dfs.cmd
+查看HDFS系统的信息：http://localhost:50070
+创建目录：hdfs dfs -mkdir -p hdfs://localhost:9000/a/b/c
+上传文件：hdfs dfs -put d:\wifi密码.txt hdfs://localhost:9000/a/b/c/
+其它操作：hdfs查看帮助
+```
 ## 运行和调试
 ```
 启动hadoop集群，需要启动HDFS集群，YARN集群
