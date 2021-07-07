@@ -533,6 +533,15 @@ windows下搭建HDFS，不依赖cygwin，
 创建目录：hdfs dfs -mkdir -p hdfs://localhost:9000/a/b/c
 上传文件：hdfs dfs -put d:\wifi密码.txt hdfs://localhost:9000/a/b/c/
 其它操作：hdfs查看帮助
+
+把start-dfs.cmd安装为windows服务：
+复制srvany.exe到D:\01Tools\hadoop-2.7.1;
+执行：instsrv.exe apache_HDFS D:\01Tools\hadoop-2.7.1\srvany.exe；
+修改注册表：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\apache_HDFS
+增加项：Parameters
+增加字符串：Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
+AppParameters=
+AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 ```
 ## 运行和调试
 ```
