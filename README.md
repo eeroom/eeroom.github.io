@@ -812,7 +812,9 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 查看仓库已经关联的所有远程地址：git remote
 增加一个远程地址：git remote add 本地显示名称 远程地址
 
-查看当前的所有分支：git branch all
+查看当前的所有分支：git branch --all
+查看当前的所有分支的关联：git branch -vv
+删除本地分支：git branch -d 分支名称
 签出分支：git checkout -b 本地显示名称 远程名称/分支
 切换分支：git checkout 分支名称
 重新设置本地分支的上游分支：git branch -u 远程名称/分支
@@ -825,6 +827,7 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 重置当前点：git reset 提交id
 
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
+git@github.com:eeroom/hz.foundation.git
 ```
 
 ## activemq
