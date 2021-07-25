@@ -828,6 +828,7 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
+git@github.com:adoconnection/SevenZipExtractor.git
 ```
 
 ## activemq
@@ -930,4 +931,12 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 ```
 参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
 参数扩展：~扩展指令；d:
+```
+
+## redis
+```
+修改配置文件redis.windows.conf ，设置密码：requirepass 123456
+安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
+卸载：redis-server.exe  --service-uninstall--service-name redisserver1
+客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
 ```
