@@ -940,3 +940,13 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 卸载：redis-server.exe  --service-uninstall--service-name redisserver1
 客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
 ```
+
+## ef数据迁移
+```
+启用迁移：Enable-Migrations
+增加一个版本：Add-Migration 版本名称
+更新到最新版本：Update-Database -Verbose
+更新到指定版本（支持回退版本）:Update-Database –TargetMigration:版本名称
+获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
+宏变量，0版本名称：$InitialDatabase
+```
