@@ -826,6 +826,11 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 查看提交记录：git log
 重置当前点：git reset 提交id
 
+回退到某次提交的操作：git reset --hard 提交id
+然后：git push -f 远程仓库名称 本地分支名称
+确保远程上的分支名称和本地当前分支名称一致；如果不一致，执行（git push -f 远程仓库名称 远程分支名称）会失败；执行（git push -f 远程仓库名称 本地分支名称）会导致远程仓库创建新的分支；
+待研究正确使用方法
+
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
 git@github.com:adoconnection/SevenZipExtractor.git
