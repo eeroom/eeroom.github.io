@@ -831,6 +831,8 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 确保远程上的分支名称和本地当前分支名称一致；如果不一致，执行（git push -f 远程仓库名称 远程分支名称）会失败；执行（git push -f 远程仓库名称 本地分支名称）会导致远程仓库创建新的分支；
 待研究正确使用方法
 
+提交修改：git commit -am 备注说明
+
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
 git@github.com:adoconnection/SevenZipExtractor.git
