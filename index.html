@@ -33,42 +33,19 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="./marked-js/marked.min.js"></script>
     <style type="text/css">
         
     </style>
     <script type="text/javascript">
-        $(function () {
-
-            $(".nav-sidebar>li>a").click(function () {
-                var brothers = $(this).parents("ul")//所在ul
-                    .siblings("ul")//所有兄弟的ul
-                    .find("li>ul")
-                    .collapse("hide");
-            });
-
-            $(".sidebar .nav-sub").on("show.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").hide();
-                el.find(".menu-xiangxia").show();
-
-
-            });
-
-            $(".sidebar .nav-sub").on("hide.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").show();
-                el.find(".menu-xiangxia").hide();
-            });
-
-        });
-
+      
     </script>
 
 </head>
 
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                     <span class="sr-only">Toggle navigation</span>
@@ -80,9 +57,10 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-left">
-                    <li class="active"><a href="#">HTML</a></li>
-                    <li><a href="#">C#</a></li>
-                    <li><a href="#">java</a></li>
+                    <li ><a href="./bootstrap-table.html">HTML</a></li>
+                    <li id='net'><a href="./index.html?tp=net.md">.net</a></li>
+                    <li id="java"><a href="./index.html?tp=java.md">java</a></li>
+                    <li id="README"><a href="./index.html?tp=README.md">devops</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">设置</a></li>
@@ -93,76 +71,29 @@
         </div>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-md-3 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <a data-toggle="collapse" href="#collapseExample1">
-                            <span>bootsrap</span>
-                            <span class="menu-xiangyou pull-right" style="display:none">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </span>
-                            <span class="menu-xiangxia pull-right" style="">
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <ul id="collapseExample1" class="nav in nav-sub">
-                            <li class="active"><a href="./index.html"><span>layout</span></a></li>
-                            <li><a href="./bootstrap-table.html"><span>table</span></a></li>
-                            <li><a href="./bootstrap-Drawer.html"><span>drawer</span></a></li>
-                            <li><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
-                            <li><a href="./bootstrap-select.html"><span>select</span></a></li>
-                            
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <a data-toggle="collapse" href="#collapseExample2">
-                            <span>react</span>
-                            <span class="menu-xiangyou pull-right" style="">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </span>
-                            <span class="menu-xiangxia pull-right" style="display:none">
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <ul id="collapseExample2" class="nav collapse nav-sub">
-                            <li><a target="_blank" href="./index-react.html"><span>layout</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <a data-toggle="collapse" href="#collapseExample3">
-                            <span>vue</span>
-                            <span class="menu-xiangyou pull-right" style="">
-                                <span class="glyphicon glyphicon-chevron-right"></span>
-                            </span>
-                            <span class="menu-xiangxia pull-right" style="display:none">
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <ul id="collapseExample3" class="nav collapse nav-sub">
-                            <li><a target="_blank" href="./index-vue.html"><span>layout</span></a></li>
-                        </ul>
-                    </li>
-                </ul>
+            <div class="col-md-24 main" id='doc'>
+                
             </div>
-            <div class="col-md-21 col-md-offset-3 main">
-                <p>An ORM class library realizes the creation, reading, updating and deletion of single table data in the database. All these operations are completed by lambda. Nalu translates lambda expressions into SQL statements, then executes queries, and then maps data to entity objects, which is very different from traditional ORM such as mybatis.</p>
-            </div>
+            <script>
+                $(function () {
+                    var targetmd= document.location.href.split('?')[1].split('=')[1];
+                    $("#"+targetmd.split('.')[0]).addClass("active")
+                    $.get(targetmd,function (params) {
+                        $("#doc").html(marked.parse(params),{
+                            gfm:true,
+                            tables:true,
+                            breaks:true,
+                            smartLists:true
+                        });
+                    })
+                })
+            </script>
         </div>
     </div>
 
-    <div class="col-md-offset-3 navbar-fixed-bottom">
+    <div class="navbar">
         <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
     </div>
 </body>

@@ -99,12 +99,12 @@ drwxr-xr-x. 7 root   root      4096 Jul  3  2018 dotnet
 简易版 gzip *.txt ,gunzip a.txt.gz .gz格式的压缩包;  bzip2 .bz2格式压缩包
 高阶版 tar zcvf xxx.tar.gz *.txt  jcvf xxx.tar.bz2 *.txt  参数解释：c压缩 x解压缩 v显示提示信息 f指定压缩文件的名字 z使用gz的方式压缩 j使用bzip2方式压缩 -C压缩到指定目录，解压缩到指定目录 默认到当前目录
 ```
+
 ## 服务管理
 ```
 chkconfig --list 列出所有的服务
 chkconfig  服务名称	[on/off]开机启动/开机不启动
 service 服务名成 [start/stop/restart]
-
 systemctl //列出正在运行的服务
 systemctl list-unit-files //所有已经安装的服务
 systemd-cgls   以树形列出正在运行的进程，它可以递归显示控制组内容
@@ -655,7 +655,6 @@ appcmd list apppool /text:*
 appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
 查看某个对象的操作参数
 appcmd set site "Default web site" /?
-
 appcmd可以配置iis应用程序池和iis应用程序的所有参数，从配置文件导入新程序池或者新站点，修改配置，等等操作
 所有参数结合2个配置文件可以得出
 C:\Windows\System32\inetsrv\config\applicationHost.config,这个实际起作用的配置文件，iis运行时的配置文件继承这个，再结合用户的web.config
@@ -710,7 +709,6 @@ A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在
 centos:.ssh目录的权限为700，其下文件authorized_keys和私钥的权限为600,这是linux的安全要求，如果权限不对，自动登录将不会生效,
 如果authorized_keys文件不存在就新建,
 这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，命令为：ssh Administrator@被免密登陆的机器IP
-
 A上执行：ssh Administratro@192.168.56.101
 ```
 ![效果图](./配置SSH免密登陆.png)
