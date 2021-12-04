@@ -35,7 +35,11 @@
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
     <script src="./marked-js/marked.min.js"></script>
     <style type="text/css">
-        
+        img{
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
     </style>
     <script type="text/javascript">
       
@@ -62,10 +66,8 @@
                     <li id='net'><a href="./index.html?tp=net.md">.net</a></li>
                     <li id="java"><a href="./index.html?tp=java.md">java</a></li>
                     <li id="cpp"><a href="./index.html?tp=cpp.md">c/c++</a></li>
-                    <li id="nodejs"><a href="./index.html?tp=nodejs.md">nodejs</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">设置</a></li>
                     <li><a href="#">帮助</a></li>
                     <li><a href="#">eeroom</a></li>
                 </ul>
@@ -75,8 +77,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-24 main" id='doc'>
-                
+            <div class="col-xs-24" id='doc'>
             </div>
             <script>
                 $(function () {
@@ -96,8 +97,6 @@
         </div>
     </div>
 
-    <div class="navbar">
-        <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
-    </div>
+ 
 </body>
 </html>

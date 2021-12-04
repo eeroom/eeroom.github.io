@@ -267,11 +267,17 @@ dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x
 dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
 ```
 ## doker部署
-1. ` 在netcore的项目文件中，让dockerfile始终复制到发布后的目录<None Include="Dockerfile" CopyToPublishDirectory="Always" /> `
-1. 在windows环境下publish项目
-1. 在windows的docker客户端build一个镜像,执行 docker build -t 镜像名称 Dockerfile所在的路径，例如：docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+1. ` 修改netcore的项目文件 `
 ```
-Dockerfile内容
+目的：dockerfile始终复制到发布后的目录
+内容：<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+```
+1. 在windows环境下publish项目
+1. 在windows的docker客户端build一个镜像,
+```
+命令： docker build -t 镜像名称 Dockerfile所在的路径
+例如：docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+Dockerfile内容：
 FROM microsoft/aspnetcore:2.0
 #指定一个workdir，目录随便
 WORKDIR /app
@@ -287,9 +293,14 @@ ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
 docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
 docker run -it --rm -p 5000:80 --name wch123 wch
 ```
-5. 访问容器所在的linux的地址的http://192.168.56.101:5000/api/values
-4. bat脚本,步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
+5. 访问容器所在的linux的地址
 ```
+http://192.168.56.101:5000/api/values
+```
+4. 制作bat脚本
+```
+步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
+脚步内容：
 dotnet publish
 docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
 docker stop wch123
@@ -558,8 +569,9 @@ AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 
 查看状态 jps
 单节点逐个启动
-```
 集群启动成功后，提供web查看[http://192.168.56.61:50070](http://192.168.56.61:50070)[http://192.168.56.61:8088](http://192.168.56.61:8088)
+```
+
 ```
 执行一个mapreduce
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
@@ -768,7 +780,10 @@ war文件
 ```
 
 # Windows系统FAQ
-1. ie打不开，修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
+1. ie打不开
+```
+修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
+```
 
 # C#和JAVA
 ## JwtToken互通

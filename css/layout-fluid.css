@@ -132,3 +132,8 @@ body {
   border-bottom: 2px solid #ff0000;
 }
 
+.navbar-toggle{
+  float: none;
+  position: absolute;
+  right: 0;
+}
