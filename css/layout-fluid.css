@@ -104,3 +104,31 @@ body {
   border-radius: 50%;
 }
 
+.nav-sidebar {
+  margin-bottom: 0;
+}
+
+  .nav-sidebar > li > a {
+      font-weight: 700;
+  }
+
+.nav-sub > li > a > span {
+  padding-left: 15px;
+}
+
+.nav-sub > li > a:hover {
+  color: #fff;
+  background-color: #428bca;
+}
+
+.active > a {
+  color: #fff;
+  background-color: #8d7c7c;
+}
+
+
+
+.navbar-nav > .active > a {
+  border-bottom: 2px solid #ff0000;
+}
+

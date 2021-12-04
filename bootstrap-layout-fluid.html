@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Drawer-抽屉</title>
+    <title>bootstrap-layout-fluid</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/Bootstrap3.3.7/css/bootstrap.css" rel="stylesheet" />
@@ -18,8 +18,6 @@
     <!-- Custom styles for this template -->
     <link href="/css/layout-fluid.css" rel="stylesheet" />
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    @*
-    <script src="/js/ie-emulation-modes-warning.js"></script>*@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="/js/ie8-responsive-file-warning.js"></script>
@@ -36,17 +34,34 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
     <style type="text/css">
-        .chouti .modal-dialog{
-            right:0;
-            top:0;
-            bottom:0;
-            position:absolute;
-            margin:0 auto;
-            width:400px;
+        .nav-sidebar {
+            margin-bottom: 0;
         }
-        .chouti .modal-content{
-            border-radius:0;
-            
+
+            .nav-sidebar > li > a {
+                font-weight: 700;
+            }
+
+        .nav-sub > li > a > span {
+            padding-left: 15px;
+        }
+
+        .nav-sub > li > a:hover {
+            color: #fff;
+            background-color: #428bca;
+        }
+
+        .active > a {
+            color: #fff;
+            background-color: #428bca;
+        }
+
+        .navbar-nav > li > a:hover {
+            border-bottom: 2px solid #ff0000;
+        }
+
+        .navbar-nav > .active > a {
+            border-bottom: 2px solid #ff0000;
         }
     </style>
     <script type="text/javascript">
@@ -83,18 +98,26 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="navbar-brand" href="#">千针石林</a>
             </div>
-            <ul class="nav navbar-nav navbar-left">
-                <li class="active"><a href="#">HTML</a></li>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="#">HTML</a></li>
                     <li><a href="#">C#</a></li>
                     <li><a href="#">java</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">设置</a></li>
-                <li><a href="#">帮助</a></li>
-                <li><a href="#">eeroom</a></li>
-            </ul>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">设置</a></li>
+                    <li><a href="#">帮助</a></li>
+                    <li><a href="#">eeroom</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -115,9 +138,9 @@
                     </li>
                     <li>
                         <ul id="collapseExample1" class="nav in nav-sub">
-                            <li ><a href="./index.html"><span>layout</span></a></li>
+                            <li class="active"><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
                             <li><a href="./bootstrap-table.html"><span>table</span></a></li>
-                            <li class="active"><a href="./bootstrap-Drawer.html"><span>drawer</span></a></li>
+                            <li><a href="./bootstrap-Drawer.html"><span>drawer</span></a></li>
                             <li><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
                             <li><a href="./bootstrap-select.html"><span>select</span></a></li>
                             
@@ -162,33 +185,7 @@
                 </ul>
             </div>
             <div class="col-md-21 col-md-offset-3 main">
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-                    Launch demo modal
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade chouti" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p style="height:100px">11</p>
-                                <p style="height:300px">11</p>
-                                <p style="height:300px">11</p>
-                                <p style="height:300px">11</p>
-                                <p style="height:300px">11</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <p>An ORM class library realizes the creation, reading, updating and deletion of single table data in the database. All these operations are completed by lambda. Nalu translates lambda expressions into SQL statements, then executes queries, and then maps data to entity objects, which is very different from traditional ORM such as mybatis.</p>
             </div>
         </div>
     </div>
