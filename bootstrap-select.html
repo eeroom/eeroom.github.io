@@ -39,6 +39,7 @@
     <link href="bootstrap-select-1.12.2/css/bootstrap-select.css" rel="stylesheet" />
     <script src="bootstrap-select-1.12.2/js/bootstrap-select.js"></script>
     <script src="bootstrap-select-1.12.2/js/i18n/defaults-zh_CN.js"></script>
+    <script src="./js/menu.js"></script>
     <style type="text/css">
         .chouti .modal-dialog{
             right:0;
@@ -54,31 +55,6 @@
         }
     </style>
     <script type="text/javascript">
-        $(function () {
-
-            $(".nav-sidebar>li>a").click(function () {
-                var brothers = $(this).parents("ul")//所在ul
-                    .siblings("ul")//所有兄弟的ul
-                    .find("li>ul")
-                    .collapse("hide");
-            });
-
-            $(".sidebar .nav-sub").on("show.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").hide();
-                el.find(".menu-xiangxia").show();
-
-
-            });
-
-            $(".sidebar .nav-sub").on("hide.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").show();
-                el.find(".menu-xiangxia").hide();
-            });
-
-        });
-
         $(function () {
             //bootstrap-select的所有方法使用方式
             //$(select元素选择器).selectpicker(方法名称,参数1，参数2.。。。);

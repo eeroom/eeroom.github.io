@@ -35,6 +35,7 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="./js/menu.js"></script>
     <style type="text/css">
         .chouti .modal-dialog{
             right:0;
@@ -50,31 +51,7 @@
         }
     </style>
     <script type="text/javascript">
-        $(function () {
-
-            $(".nav-sidebar>li>a").click(function () {
-                var brothers = $(this).parents("ul")//所在ul
-                    .siblings("ul")//所有兄弟的ul
-                    .find("li>ul")
-                    .collapse("hide");
-            });
-
-            $(".sidebar .nav-sub").on("show.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").hide();
-                el.find(".menu-xiangxia").show();
-
-
-            });
-
-            $(".sidebar .nav-sub").on("hide.bs.collapse", function (event) {
-                var el = $(event.target).parent().prev();
-                el.find(".menu-xiangyou").show();
-                el.find(".menu-xiangxia").hide();
-            });
-
-        });
-
+     
     </script>
 
 </head>
