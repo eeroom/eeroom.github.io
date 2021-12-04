@@ -80,7 +80,8 @@
             </div>
             <script>
                 $(function () {
-                    var targetmd= document.location.href.split('?')[1].split('=')[1];
+                    var pquery= document.location.href.split('?')[1]||'tp=README.md';
+                    var targetmd= pquery.split('=')[1];
                     $("#"+targetmd.split('.')[0]).addClass("active")
                     $.get(targetmd,function (params) {
                         $("#doc").html(marked.parse(params),{
