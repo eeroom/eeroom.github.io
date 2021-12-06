@@ -1,41 +1,33 @@
-# Centos6.9
+# centos
 ## 网络设置
-* 查看本机所有的网卡设备的信息
 ```
+ip信息：  ip address  
+网络主机绑定IP地址：/etc/hosts
+centos6.9:查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
-解析:
-SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
-```
-* 查看具体某个网卡设置信息
-```
+解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
+-------------------------------------------------------------
+centos6.9:查看指定网卡配置信息:
 命令：cat /etc/sysconfig/network-scripts/ifcfg-eth0
-解析：
-ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
+解析：ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
 DEVICE=eth0 //对于网卡设备的NAME
 HWADDR=00:15:5D:38:67:03 //对于网卡设备的ATTR{address}
 TYPE=Ethernet
 ONBOOT=yes //这个默认是no,表示开机不启用该网卡
 NM_CONTROLLED=yes
 BOOTPROTO=dhcp
-```
-## 安装桌面
-命令： yum groupinstall Desktop X Window System Chinese Surport
-
-# Centos7 1511版本
-## 网络设置
-```
-网络管理，tui界面：  nmtui  
-ip信息：  ip address  
-centos7 网卡命名规则：
+-------------------------------------------------------------
+centos7 1511:使用nmtui管理
+命令（tui形式）：  nmtui  
+对应的网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
+网卡命名规则：
 en： ethernet以太网卡
 o：主板集成网卡
 p：PCI独立网卡
 s：热插拔网卡
 nnn数字：MAC+主板信息（生产唯一序号）
 如：ifcfg-ens33 （以太热插拔）
-网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
 DNS配置文件:/etc/resolv.conf
-网络主机绑定IP地址：/etc/hosts
 ifconfig    ping  地址  -c次数      nslookup www.baidu.com
 ```
 ## 常用工具和命令
@@ -99,7 +91,6 @@ drwxr-xr-x. 7 root   root      4096 Jul  3  2018 dotnet
 简易版 gzip *.txt ,gunzip a.txt.gz .gz格式的压缩包;  bzip2 .bz2格式压缩包
 高阶版 tar zcvf xxx.tar.gz *.txt  jcvf xxx.tar.bz2 *.txt  参数解释：c压缩 x解压缩 v显示提示信息 f指定压缩文件的名字 z使用gz的方式压缩 j使用bzip2方式压缩 -C压缩到指定目录，解压缩到指定目录 默认到当前目录
 ```
-
 ## 服务管理
 ```
 chkconfig --list 列出所有的服务
@@ -170,6 +161,8 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 	第一步，修改文件/etc/profile，在末尾加上行 PATH="/tmp:$PATH"，
 	第二步，source /etc/profile 
 ```
+## 安装桌面
+命令： yum groupinstall Desktop X Window System Chinese Surport
 
 # Docker
 ## 基本命令：
@@ -779,13 +772,13 @@ war文件
 插件》高级》修改插件源的地址，使用https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
 ```
 
-# Windows系统FAQ
+# Windows系统疑难杂症
 1. ie打不开
 ```
 修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
 ```
 
-# C#和JAVA
+# c#和java开发笔记
 ## JwtToken互通
 ```
 JWTToken，c#和java的com.auth0>java-jwt类库兼容
