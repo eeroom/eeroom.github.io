@@ -3,13 +3,11 @@
 ```
 ip信息：  ip address  
 网络主机绑定IP地址：/etc/hosts
-```
-```
+
 centos6.9:查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
 解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
-```
-```
+
 centos6.9:查看指定网卡配置信息:
 命令：cat /etc/sysconfig/network-scripts/ifcfg-eth0
 解析：ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
@@ -19,8 +17,7 @@ TYPE=Ethernet
 ONBOOT=yes //这个默认是no,表示开机不启用该网卡
 NM_CONTROLLED=yes
 BOOTPROTO=dhcp
-```
-```
+
 centos7 1511:使用nmtui管理
 命令（tui形式）：  nmtui  
 对应的网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
@@ -53,8 +50,8 @@ shutdown -r now 立刻重启(root用户使用)
 shutdown -s -t 0 windows的关机
 ```
 ## 文件和目录
-1. 系统目录说明
 ```
+系统目录说明
 /bin 命令对应的执行程序
 /dev    设备被抽象成文件
 /etc    系统的配置文件，第三方程序的配置信息
@@ -64,9 +61,8 @@ shutdown -s -t 0 windows的关机
 /mnt    手动挂在
 /root   管理员的一个目录
 /usr    当前用户的软件安装目录
-```
-2. 相关命令
-```
+
+相关命令
 scp(super copy  基于ssh)
 挂载 mount  挂载U盘，挂载FTP
 ls -a列出所有  -l详细信息 -R递归子目录
@@ -89,9 +85,8 @@ drwxr-xr-x. 7 root   root      4096 Jul  3  2018 dotnet
 文件类型    普通文件-   目录d   链接符号l   块设备b 字符设备c   socket文件s 管道p
 修改文件权限 chmod  777 文件或者目录
 修改所在的组    chown 文件所有者【：文件所属组】 文件或者目录
-```
-3. 压缩和解压缩
-```
+
+压缩和解压缩
 简易版 gzip *.txt ,gunzip a.txt.gz .gz格式的压缩包;  bzip2 .bz2格式压缩包
 高阶版 tar zcvf xxx.tar.gz *.txt  jcvf xxx.tar.bz2 *.txt  参数解释：c压缩 x解压缩 v显示提示信息 f指定压缩文件的名字 z使用gz的方式压缩 j使用bzip2方式压缩 -C压缩到指定目录，解压缩到指定目录 默认到当前目录
 ```
@@ -251,7 +246,6 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 场景：centos7，自己安装了docker1.12,只是为了把该docker添加到windows下docker-machine列表，方便管理
 添加已有（docker安装后不要配置systemd的开机启动，否则machine重新配置docker的时候会冲突）：	docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
 新建和添加已有的命令是一样的
-
 使用powershell,执行：docker-machine env machine名称，会得到一个执行命令
  docker-machine env yt | Invoke-Expression
  执行后,在windows上执行docker命令等价于在centos上执行，类似于docker -H 192.168.56.101:2375
@@ -343,8 +337,9 @@ gcc main.c -I ./include ./lib/libazeroth.so -o app
 优缺点，类似，应用程序需要包含so.文件
 ```
 ## gdb调试
-### Makefile或者makefile ,makefile的规则，三要素：目标，依赖，命令，下面例子里的所有文件在同一个目录
+### Makefile/makefile
 ```
+makefile的规则，三要素：目标，依赖，命令，下面例子里的所有文件在同一个目录
 目标:依赖
     命令
 原始版本
@@ -568,9 +563,7 @@ AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 查看状态 jps
 单节点逐个启动
 集群启动成功后，提供web查看[http://192.168.56.61:50070](http://192.168.56.61:50070)[http://192.168.56.61:8088](http://192.168.56.61:8088)
-```
 
-```
 执行一个mapreduce
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
