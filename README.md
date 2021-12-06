@@ -3,10 +3,13 @@
 ```
 ip信息：  ip address  
 网络主机绑定IP地址：/etc/hosts
+```
+```
 centos6.9:查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
 解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
--------------------------------------------------------------
+```
+```
 centos6.9:查看指定网卡配置信息:
 命令：cat /etc/sysconfig/network-scripts/ifcfg-eth0
 解析：ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
@@ -16,7 +19,8 @@ TYPE=Ethernet
 ONBOOT=yes //这个默认是no,表示开机不启用该网卡
 NM_CONTROLLED=yes
 BOOTPROTO=dhcp
--------------------------------------------------------------
+```
+```
 centos7 1511:使用nmtui管理
 命令（tui形式）：  nmtui  
 对应的网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
@@ -162,8 +166,9 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 	第二步，source /etc/profile 
 ```
 ## 安装桌面
+```
 命令： yum groupinstall Desktop X Window System Chinese Surport
-
+```
 # Docker
 ## 基本命令：
 ```
