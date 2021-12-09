@@ -112,25 +112,34 @@ body {
       font-weight: 700;
   }
 
-.nav-sub > li > a > span {
-  padding-left: 15px;
-}
-
-.nav-sub > li > a:hover {
-  color: #fff;
-  background-color: #428bca;
-}
-
-.active > a {
-  color: #fff;
-  background-color: #f33636;
-}
-
-
-
-.navbar-nav > .active > a {
-  border-bottom: 2px solid #ff0000;
-}
+  .nav-sub > li > a > span {
+    padding-left: 15px;
+  }
+  .nav-sub > li > a:hover {
+    color: #fff;
+    background-color: #428bca;
+  }
+  .active > a {
+    color: #fff;
+    background-color: #428bca;
+  }
+  .a-active>a:hover,.a-active>a:focus{
+     color: #fff !important;
+    background-color: #428bca !important;
+    border-right: 4px red solid;
+    transition: 0.1s;
+  }
+  .a-noactive>a:hover,.a-noactive>a:focus{
+     color: rgb(8, 8, 8) !important;
+     border-right: 4px red solid;
+     transition: 0.1s;
+  }
+  .navbar-nav > li > a:hover {
+    border-bottom: 2px solid #ff0000;
+  }
+  .navbar-nav > .active > a {
+    border-bottom: 2px solid #ff0000;
+  }
 
 .navbar-toggle{
   float: none;
