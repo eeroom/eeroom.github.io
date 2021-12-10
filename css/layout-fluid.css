@@ -32,6 +32,7 @@ body {
 
 .navbar-nav > li > a:hover {
   border-bottom: 2px solid #ff0000;
+  transition: 0.2s;
 }
 .navbar-nav > .active > a {
   border-bottom: 2px solid #ff0000;
@@ -79,17 +80,27 @@ right: 0;
   font-weight: 700;
 }
 
-.sidebar .nav-sidebar .nav-sub > li > a:hover,  .sidebar .nav-sidebar .nav-sub > li > a:focus{
+.sidebar .nav-sidebar .nav > li > a:hover{
     color: rgb(8, 8, 8) ;
-   border-right: 4px red solid;
    background-color: #b5b5b6;
-   transition: 0.1s;
+   transition: 0.2s;
 }
-.sidebar .nav-sidebar .active > a {
-  border-right: 4px red solid;
+.sidebar .nav-sidebar .nav > li:hover::after{
+  content: '';
+  position:absolute;
+  top: 11px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  background-color: rgb(24, 23, 23);
+  transform: rotate(45deg);
+}
+.sidebar .nav-sidebar .nav>.active > a:hover {
+  color: #fff;
+  background-color: #428bca;
 }
 
-.sidebar .nav-sidebar .nav-sub > li > a > span {
+.sidebar .nav-sidebar .nav > li > a > span {
   padding-left: 15px;
 }
 
