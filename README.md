@@ -821,7 +821,6 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 
 获取远程分支信息：git fetch 远程名称
 获取并且合并到本地当前分支：git pull 远程名称
-推送到远程分支：git push 远程名称 本地分支
 
 查看提交记录：git log
 重置当前点：git reset 提交id
@@ -832,7 +831,10 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 待研究正确使用方法
 
 把改动提交到暂存区：git add 文件名称；*表示所有改动的文件
-提交修改：git commit -am 备注说明
+提交修改到本地仓：git commit -am 备注说明
+可以不暂存，直接提交到本地仓
+
+推送到远程分支：git push 远程名称 本地分支
 
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
