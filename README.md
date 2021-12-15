@@ -220,7 +220,6 @@ docker push centos:7.6
 docker tag centos:7.6 192.168.56.104/library/centos:7.6
 docker push 192.168.56.104/library/centos:7.6
 docker login 仓库ip
-测试git
 ```
 ## 客户端教程
 ```
@@ -805,14 +804,11 @@ c#到java,如果值<=127,直接等价，否则，java的值=c#值-256
 java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 ```
 
-## git安装
+## git使用帮助
 ```
 安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
 放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
-```
 
-## git使用帮助
-```
 查看仓库已经关联的所有远程地址：git remote
 增加一个远程地址：git remote add 本地显示名称 远程地址
 
