@@ -836,6 +836,17 @@ java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
 
 推送到远程分支：git push 远程名称 本地分支
 
+github使用ssh方式提示time out的解决办法
+可能原因：网络某个节点禁止了22端口，比如某云
+解决：尝试使用443端口进行ssh,检测可行性的命令：ssh -T -p 443 git@ssh.github.com
+如果可行，在当前用户目录下的.ssh目录下建立一个config文件，普通文本格式
+内容：
+Host github.com
+Hostname ssh.github.com
+Port 443
+
+重新打开ssh的bash,进行ssh操作
+
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
 git@github.com:adoconnection/SevenZipExtractor.git
