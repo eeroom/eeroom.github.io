@@ -971,3 +971,9 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
 宏变量，0版本名称：$InitialDatabase
 ```
+
+## SSMS(sqlserver management studio)
+```
+移除缓存的账号和密码，本质就是删除一个对应的缓存文件，这些账号和密码没有写到注册表中
+缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
+```
