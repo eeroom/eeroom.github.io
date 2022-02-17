@@ -894,7 +894,7 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 测试,打开：http://192.168.56.101:8080,
 ```
 
-## sql语法
+## T-SQL和SSMS
 ```
 声明变量：declare @名称 类型
 声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
@@ -940,6 +940,27 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 确定要删除的分区的序号，分区序号从1开始，计算序号的逻辑，借助临时表，键值结构（月份，序号）
 切换别删除分区的数据到临时表：alter table 源表 switch partition 分区序号 to 临时表 partition 分区序号
 删除临时表：drop table 临时表
+
+利用临时表记录数据的变化情况（有时候权限所限，不能触发器，没有建表权限，只能临时表。触发器和非临时表更科学）
+思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
+创建临时表：
+create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
+循环查某个数据写入临时表,每5秒查一次:
+while 1=1
+begin
+	WAITFOR DELAY '00:00:5'
+	insert into #表名称(列1,列2,...,写入时间)
+	select 列a,列b,...,getdate()
+	form ...
+	where ....
+end
+
+指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+级别有：READ UNCOMMITTED;READ COMMITTED
+
+事务、事务隔离级别、锁的区别和关系，update锁，insert锁
+
+SSMS中设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
 ```
 
 ## cmd常用命令
