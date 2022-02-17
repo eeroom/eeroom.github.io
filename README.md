@@ -894,7 +894,7 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 测试,打开：http://192.168.56.101:8080,
 ```
 
-## T-SQL和SSMS
+## T-SQL和SSMS(sqlserver management studio)
 ```
 声明变量：declare @名称 类型
 声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
@@ -961,20 +961,9 @@ end
 事务、事务隔离级别、锁的区别和关系，update锁，insert锁
 
 SSMS中设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
-```
-
-## cmd常用命令
-```
-列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
-查看访问到指定网络地址经过的网络节点：tracert 地址
-```
-
-## bat语法
-```
-参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
-参数扩展：~扩展指令；d:
-
-获取windows服务的名称列表输出到d盘txt文件：sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
+SSMS移除缓存的账号和密码，本质就是删除一个对应的缓存文件，
+这些账号和密码并没有写到注册表中，而是在缓存文件
+缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```
 
 ## redis
@@ -993,12 +982,6 @@ SSMS中设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
 更新到指定版本（支持回退版本）:Update-Database –TargetMigration:版本名称
 获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
 宏变量，0版本名称：$InitialDatabase
-```
-
-## SSMS(sqlserver management studio)
-```
-移除缓存的账号和密码，本质就是删除一个对应的缓存文件，这些账号和密码没有写到注册表中
-缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```
 
 ## powershell
@@ -1028,11 +1011,26 @@ $null 等价于c#的null
 实例方法：实例.方法名称(参数1,参数2,,,)
 
 可以直接执行第三方的exe,比如cmd里常用的命令，用法，exe的全路径 参数....
-iis的appcmd.exe,删除虚拟目录：c:\windows\system32\inetsrv\appcmd.exe delete vdir 虚拟路径
 
 控制台输入直接使用c#的
 控制台输出可以使用c#的，或者write-host
 
 ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
 
+```
+
+## cmd常用命令
+```
+列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
+查看访问到指定网络地址经过的网络节点：tracert 地址
+获取windows服务的名称列表：
+sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
+使用iis的appcmd.exe,删除虚拟目录：
+c:\windows\system32\inetsrv\appcmd.exe delete vdir 虚拟路径
+```
+
+## bat语法
+```
+参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
+参数扩展：~扩展指令；d:
 ```
