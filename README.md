@@ -245,7 +245,7 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 场景：centos7，自己安装了docker1.12,只是为了把该docker添加到windows下docker-machine列表，方便管理
 添加已有（docker安装后不要配置systemd的开机启动，否则machine重新配置docker的时候会冲突）：	docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
 新建和添加已有的命令是一样的
-使用powershell,执行：docker-machine env machine名称，会得到一个执行命令
+使用PS,执行：docker-machine env machine名称，会得到一个执行命令
  docker-machine env yt | Invoke-Expression
  执行后,在windows上执行docker命令等价于在centos上执行，类似于docker -H 192.168.56.101:2375
 移除machine:docker-machine rm
@@ -644,7 +644,7 @@ Windows6.1-KB2999226-x64.msu  解决安装vc++2015
 vc++2012 2013 2015
 NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 安装servercore版net40或者net462或者net45
-安装powershell DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
+安装PS DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
 ```
 2. 管理和配置，appcmd
