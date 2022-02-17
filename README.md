@@ -952,6 +952,8 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 ```
 参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
 参数扩展：~扩展指令；d:
+
+获取windows服务的名称列表输出到d盘txt文件：sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
 ```
 
 ## redis
