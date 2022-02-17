@@ -977,3 +977,39 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 移除缓存的账号和密码，本质就是删除一个对应的缓存文件，这些账号和密码没有写到注册表中
 缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```
+
+## powershell
+```
+定义变量：$变量名称
+定义强类型变量：[类型名称]$变量名称
+全局变量：
+$ErrorActionPreference="Stop" 遇到异常停止执行,需要在脚步第一行
+$null 等价于c#的null
+
+比较运算符不能直接使用==,<,>等等，需要使用对应的字符版
+==	-eq
+!=	-ne
+大于	-gt
+大于等于	-ge
+小于	-lt
+小于等于	-le
+包含	-contains
+不包含	-notcontains
+
+循环语法和c#的for,foreach,while一致，注意变量名称即可
+分支语句和c#一致
+引入程序集：Add-Type -Path "类库全路径"
+使用c#类型，
+构造函数：[类型全名称]::new(参数1,参数2,,,)
+静态方法：[类型全名称]::方法名称(参数1,参数2,,,)
+实例方法：实例.方法名称(参数1,参数2,,,)
+
+可以直接执行第三方的exe,比如cmd里常用的命令，用法，exe的全路径 参数....
+iis的appcmd.exe,删除虚拟目录：c:\windows\system32\inetsrv\appcmd.exe delete vdir 虚拟路径
+
+控制台输入直接使用c#的
+控制台输出可以使用c#的，或者write-host
+
+ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
+
+```
