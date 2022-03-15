@@ -796,18 +796,6 @@ buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
 把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
 最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
 ```
-## byte和sbyte互转
-```
-c#:byte为无符号整数，范围：[0-255][00-FF]，sbyte为有符号整数，范围[-128,127][80,7F]
-java:byte为有符号整数，等价于c#的sbyte，java没有提供无符号的byte类型
-			已知无符号的byte值bv[0-255],获取其二进制序列对应的有符号的值：byte sbv=(byte) ((int)bv)
-			已知有符号的byte值sbv[-128,127],获取其二进制序列对应的无符号的值：int bv= ((int) sbv) & 0xff;
-			0xff就是0x000000ff，进行&运算，导致另一个计算数的高6位全部变为0,只剩下原有最低的2位保持原序列值。
-			((int) sbv) & 0xff的原理等价于下面的代码：
-			byte sbv=-3;
-      var str= Integer.toHexString(sbv);
-      var bv2=Integer.parseInt(str.replace("ffffff","000000"),16);
-```
 
 ## git使用帮助
 ```
