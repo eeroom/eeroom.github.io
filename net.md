@@ -15,7 +15,9 @@ c#:byte为无符号整数，范围：[0-255][00-FF]，sbyte为有符号整数，
 
 java:byte为有符号整数，等价于c#的sbyte，java没有提供无符号的byte类型
 已知无符号的byte值bv[0-255],获取其二进制序列对应的有符号的值：byte sbv=(byte) ((int)bv)
-已知有符号的byte值sbv[-128,127],获取其二进制序列对应的无符号的值：int bv= ((int) sbv) & 0xff;
+已知有符号的byte值sbv[-128,127],获取其二进制序列对应的无符号的值：
+1、int bv= ((int) sbv) & 0xff;
+2、int bv= Byte.toUnsignedInt(bv)
 0xff就是0x000000ff，进行&运算，导致另一个计算数的高6位全部变为0,只剩下原有最低的2位保持原序列值。
 ((int) sbv) & 0xff的原理等价于下面的代码：
 byte sbv=-3;
