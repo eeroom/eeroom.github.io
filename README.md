@@ -796,13 +796,6 @@ buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
 把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
 最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
 ```
-## byte互转
-```
-c#:byte为无符号一个字节，范围：0-255（00-FF）
-java:byte为有符号一个字节，范围：-128-127
-c#到java,如果值<=127,直接等价，否则，java的值=c#值-256
-java到c#,如果值>=0，直接等价，否则，c#的值=java值+256
-```
 
 ## git使用帮助
 ```
