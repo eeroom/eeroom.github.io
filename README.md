@@ -596,6 +596,8 @@ msinfo32--查看磁盘等信息
 sconfig --工具集合，修改计算机名称等
 重启 shutdown -r -t 0
 关机 shutdown -s -t 0
+查看磁盘容量：先使用diskpart命令，进入交互模式，再使用list disk命令即可。
+交互模式下输入？可以查看帮助信息
 
 禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
 删除或者设置虚拟内存文件，步骤：
