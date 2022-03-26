@@ -1005,8 +1005,16 @@ $PSVersionTable 查看ps的版本信息
 包含	-contains
 不包含	-notcontains
 
-循环语法和c#的for,foreach,while一致，注意变量名称即可
-分支语句和c#一致
+分支语句和c#一致，注意变量名称即可
+
+循环语句和c#大体一致，其中while完全一致，for和foreach有细微差别，注意变量名称即可，
+差别：不要变量的类型声明，如果需要强类型变量，在foreach语句外声明
+foreach($tmp in $lst){}
+或者
+[string]$tmp
+foreach($tmp in $lst){}
+for语句同理
+
 引入程序集：Add-Type -Path "类库全路径"
 使用c#类型，
 构造函数：[类型全名称]::new(参数1,参数2,,,)
