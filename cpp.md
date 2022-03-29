@@ -1,6 +1,4 @@
-# c/c++--学习笔记
-# C语言开发
-##  静态库制作
+##  linux静态库
 ```
 命名规则：lib+库名字+.a ,例如：libazeroth.a
 制作步骤：
@@ -13,7 +11,7 @@ gcc main.c ./lib/libazeroth.a -I ./include
 静态库优点，发布应用程序时，不需要提供.a文件（.a里面的.o内容已经被编译到应用程序中），加载库的速度快
 静态库缺点，库被打包到应用程序中，导致应用程序体积较大，如果库升级，应用程序也需要升级
 ```
-##  动态库制作
+##  linux动态库
 ```
 命名规则：lib+库名字+.so,例如：libazeroth.so
 制作步骤：
@@ -33,8 +31,11 @@ gcc main.c -I ./include ./lib/libazeroth.so -o app
 动态连接器 ldd 应用程序    查看应用程序依赖的所有动态库，动态链接器会自动加载依赖的动态库，按照环境变量里的路径找，
 优缺点，类似，应用程序需要包含so.文件
 ```
-## gdb调试
-### Makefile/makefile
+## linux-gdb调试
+```
+todo 调试教程
+```
+### gcc-makefile
 ```
 makefile的规则，三要素：目标，依赖，命令，下面例子里的所有文件在同一个目录
 目标:依赖
@@ -98,7 +99,7 @@ hello:
 
 make默认生成第一个目标，make clean 这是指定make的目标
 ```
-## gtk开发
+## linux-gtk
 ```
 安装依赖库 yum install libgnomeui-devel
 ```
