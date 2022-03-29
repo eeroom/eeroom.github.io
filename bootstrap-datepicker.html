@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,17 +41,18 @@
     <script src="bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     <script src="./js/menu.js"></script>
     <style type="text/css">
-        .chouti .modal-dialog{
-            right:0;
-            top:0;
-            bottom:0;
-            position:absolute;
-            margin:0 auto;
-            width:400px;
+        .chouti .modal-dialog {
+            right: 0;
+            top: 0;
+            bottom: 0;
+            position: absolute;
+            margin: 0 auto;
+            width: 400px;
         }
-        .chouti .modal-content{
-            border-radius:0;
-            
+
+        .chouti .modal-content {
+            border-radius: 0;
+
         }
     </style>
     <script type="text/javascript">
@@ -58,14 +60,14 @@
             var opt = $.fn.datepicker.defaults;
             $('#datetimepicker').datepicker({
                 format: 'yyyy-mm-dd'
-                ,language: "zh-CN"
-                ,autoclose: true
+                , language: "zh-CN"
+                , autoclose: true
                 //,clearBtn: true
                 //,todayBtn: true
-                ,todayHighlight: true
+                , todayHighlight: true
                 , orientation: "bottom right"
                 , minViewMode: 0//天选择
-                ,maxViewMode:2//年,这个往下一级是10年，世纪等
+                , maxViewMode: 2//年,这个往下一级是10年，世纪等
             });
         });
 
@@ -95,10 +97,13 @@
             </div>
             <ul class="nav navbar-nav navbar-left">
                 <li class="active"><a href="./bootstrap-table.html">html</a></li>
-                <li id="README"><a href="./index.html?tp=README.md">devops</a></li>
+                <li id="centos"><a href="./index.html?tp=centos.md">CentOS</a></li>
+                <li id="windows"><a href="./index.html?tp=windows.md">Windows</a></li>
                 <li id='net'><a href="./index.html?tp=net.md">.net</a></li>
                 <li id="java"><a href="./index.html?tp=java.md">java</a></li>
-                <li id="cpp"><a href="./index.html?tp=cpp.md">c/c++</a></li>
+                <li id="c"><a href="./index.html?tp=c.md">c/c++</a></li>
+                <li id="nodejs"><a href="./index.html?tp=nodejs.md">nodejs</a></li>
+                <li><a href="./hzfoundation/index.html" target="_blank">hz</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">帮助</a></li>
@@ -124,12 +129,12 @@
                     </li>
                     <li>
                         <ul id="collapseExample1" class="nav in nav-sub">
-                            <li ><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
+                            <li><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
                             <li><a href="./bootstrap-table.html"><span>table</span></a></li>
                             <li><a href="./bootstrap-Drawer.html"><span>drawer</span></a></li>
                             <li class="active"><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
                             <li><a href="./bootstrap-select.html"><span>select</span></a></li>
-                            
+
                         </ul>
                     </li>
                 </ul>
@@ -187,4 +192,5 @@
         <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
     </div>
 </body>
+
 </html>
