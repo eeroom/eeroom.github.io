@@ -32,7 +32,7 @@ var unsinVal=Integer.parseInt(str.replace("ffffff","000000"),16);
 ## JwtToken互通
 ```
 JWTToken的三部分：hearder(字典)，payload（字典），key(哈希算法的密钥)
-     {% raw %} header:{{alg:HS256 },type:JWT } {% endraw %},alg根据业务需要,后续算signCode做相应的调整
+     header:((alg:HS256 ),type:JWT ),alg根据业务需要,后续算signCode做相应的调整
      payload:数据根据业务需要
 JWTToken串的计算过程：
      序列化header,然后转base64，然后做额外处理得到headerCode，
