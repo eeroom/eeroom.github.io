@@ -300,8 +300,9 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 1. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
 
-## ![效果图](./img/hadoop集群分布.png)
-## hadoop环境搭建
+## hadoop部署模式
+![效果图](./img/hadoop集群分布.png)
+## hadoop搭建集群
 ```
 vbox新建三台机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
 准备三台机器，hadoopNameNode,hadoopDataNode1,hadoopNameNode2
@@ -614,15 +615,13 @@ centos:.ssh目录的权限为700，其下文件authorized_keys和私钥的权限
 A上执行：ssh Administratro@192.168.56.101
 ```
 ![效果图](./img/配置SSH免密登陆.png)
-
-
 3. ssh登陆卡
 ```
 修改服务端的sshd_config（不是ssh_config），设置为如下：
 UseDNS no
 GSSAPIAuthentication no
 ```
-## win2008r2core配置sqlserver
+## win2008r2Core配置sqlserver
 ```
 在servercore2008R2中不能打开sqlserver的服务管理器,需要编辑注册表值来修改sqlserver服务的配置
 配置sqlserverexpress，允许客户端通过tcp连接服务端，固定监听tcp1433端口
