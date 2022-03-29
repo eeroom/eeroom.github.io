@@ -60,7 +60,7 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 所以集群一定是分布式部署，是一种特点情况下的分布式
 ```
 
-## T-SQL和SSMS(sqlserver management studio)
+## T-SQL
 ```
 声明变量：declare @名称 类型
 声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
@@ -128,25 +128,27 @@ begin
 	form ...
 	where ....
 end
-
+```
+## SSMS(sqlserver management studio)
+```
 指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-级别有：READ UNCOMMITTED;READ COMMITTED
+隔离级别包含：READ UNCOMMITTED、READ COMMITTED
 
-事务、事务隔离级别、锁的区别和关系，update锁，insert锁
+todo    事务、事务隔离级别、锁的区别和关系，update锁，insert锁
 
-SSMS中设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
-SSMS移除缓存的账号和密码，本质就是删除一个对应的缓存文件，
-这些账号和密码并没有写到注册表中，而是在缓存文件
+设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
+
+移除登陆窗口缓存的账号和密码，账号和密码数据保存在缓存文件中，所以删除这个缓存文件即可
 缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```
 
-
-## ef数据迁移
+## EF
 ```
-启用迁移：Enable-Migrations
-增加一个版本：Add-Migration 版本名称
-更新到最新版本：Update-Database -Verbose
-更新到指定版本（支持回退版本）:Update-Database –TargetMigration:版本名称
-获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
-宏变量，0版本名称：$InitialDatabase
+数据迁移：
+     启用迁移：Enable-Migrations
+     增加一个版本：Add-Migration 版本名称
+     更新到最新版本：Update-Database -Verbose
+     更新到指定版本（支持回退版本）:Update-Database –TargetMigration:版本名称
+     获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
+     宏变量，0版本名称：$InitialDatabase
 ```
