@@ -1,4 +1,5 @@
-﻿//options:{maxTaskCount,url,formadataHandler, chunkSize,completeHandler,errorHandler,uploadingHandler}
+﻿﻿/// <reference path="../jQuery/jquery-1.11.3.js" />
+//options:{maxTaskCount,url,formadataHandler, chunkSize,completeHandler,errorHandler,uploadingHandler}
 //formadataHandler=(formdata,opt)=>void
 //completeHandler,errorHandler,uploadingHandler=(opt, resdata, options)=>void
 function klzUploader(options) {
