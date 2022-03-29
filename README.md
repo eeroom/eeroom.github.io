@@ -461,7 +461,6 @@ AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 执行一个mapreduce
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
-
 ## windows局域网共享
 ```
 映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
@@ -654,7 +653,6 @@ JAVA_HOME=C:\dw\jdk-11.0.2
 安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
 net stop Tomcat9
 net start Tomcat9
-
 安装jenkins
 war文件
 安装后amdin在用户管理修改密码
