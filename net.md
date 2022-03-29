@@ -142,7 +142,7 @@ todo    事务、事务隔离级别、锁的区别和关系，update锁，insert
 缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```
 
-## EF
+## ef(Entity Framework)
 ```
 数据迁移：
      启用迁移：Enable-Migrations
