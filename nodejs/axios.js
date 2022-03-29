@@ -1,6 +1,4 @@
 let axios=require('axios')
-
-
 /**
  * 注册多个请求拦截器，先注册的后执行
  * 可以多注册几个试一下
@@ -75,7 +73,30 @@ axios.default.get=function () {
 /**
  * 演示回调函数中的抛异常
  */
-axios.default.post("http://www.baidu.com",{"a":3,"b":"张三"})
+ let http=require("http");
+
+
+ var server=http.createServer(function(req,res){
+     console.log("服务端，请求url：",req.url);
+     console.log("服务端，请求method：",req.method);
+     console.log("服务端，请求headers：",req.headers);
+    let lstbuffer=[];
+     req.on("data",function (buffer) {
+         lstbuffer.push(buffer);
+     })
+     req.on("end",function (params) {
+         let buffer=Buffer.concat(lstbuffer)
+         console.log("服务端,请求参数",JSON.parse(buffer));
+         res.setHeader("Content-Type","application/json");
+         res.end(JSON.stringify({"aget":12,"name":"张三"}));
+     })
+});
+
+let serverport=8091
+server.listen(serverport,"localhost",function(){
+    console.log("开始监听...");
+    console.log("http://localhost:"+serverport);
+    axios.default.post("http://localhost:"+serverport,{"a":3,"b":"张三"})
     .then(res=>{
         //todo 业务逻辑代码
         return res.data;
@@ -84,3 +105,4 @@ axios.default.post("http://www.baidu.com",{"a":3,"b":"张三"})
         console.log("响应数据",x.data);
         throw new Error("没有请求到预期的数据！")
     })
+});
