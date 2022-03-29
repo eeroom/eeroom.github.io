@@ -1,14 +1,13 @@
-# centos
-## 网络设置
+## centos6网络设置
 ```
 ip信息：  ip address  
 网络主机绑定IP地址：/etc/hosts
 
-centos6.9:查看所有网卡设备的信息
+查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
 解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
 
-centos6.9:查看指定网卡配置信息:
+查看指定网卡配置信息:
 命令：cat /etc/sysconfig/network-scripts/ifcfg-eth0
 解析：ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
 DEVICE=eth0 //对于网卡设备的NAME
@@ -17,8 +16,10 @@ TYPE=Ethernet
 ONBOOT=yes //这个默认是no,表示开机不启用该网卡
 NM_CONTROLLED=yes
 BOOTPROTO=dhcp
-
-centos7 1511:使用nmtui管理
+```
+## centos7网络设置
+```
+使用nmtui管理
 命令（tui形式）：  nmtui  
 对应的网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
 网卡命名规则：
@@ -31,25 +32,28 @@ nnn数字：MAC+主板信息（生产唯一序号）
 DNS配置文件:/etc/resolv.conf
 ifconfig    ping  地址  -c次数      nslookup www.baidu.com
 ```
-## 常用工具和命令
+## centos常用命令
 ```
 计算机名：/etc/hostname
-内存使用情况 free -m  
-cpu使用情况 top   
-磁盘以及分区情况  df -h   
-端口使用情况 lsof -i:端口号     netstat -apn|grep 端口号 ps -au|grep 端口号
-which 命令	查看指定命令对应程序所在的位置，类似于查看快捷方式对应的实际文件
-uname -r 查询当前系统的内核，版本，用户等等
-pwd 当前所在的位置 printf   working directory
+内存使用情况: free -m  
+cpu使用情况: top   
+磁盘以及分区情况:  df -h   
+查看指定端口被使用情况: lsof -i:端口号     
+				netstat -apn|grep 端口号 
+				ps -au|grep 端口号
+查看指定命令对应程序所在的位置(等价于cmd的where)：which
+查询当前系统的版本:uname -r
+当前所在的位置:pwd(printf working directory) 
 帮助文档 man man
-输出指定的字符  echo $PATH      $后面跟一个变量
-halt 立刻关机
-poweroff 立刻关机
-shutdown -h now 立刻关机(root用户使用)
-shutdown -r now 立刻重启(root用户使用)
-shutdown -s -t 0 windows的关机
+输出指定的字符:echo $PATH      
+$后面跟一个变量
+立刻关机:halt 
+立刻关机:poweroff 
+立刻关机(root用户使用):shutdown -h now 
+立刻重启(root用户使用):shutdown -r now 
+windows的关机:shutdown -s -t 0 
 ```
-## 文件和目录
+## centos文件和目录
 ```
 系统目录说明
 /bin 命令对应的执行程序
@@ -90,7 +94,15 @@ drwxr-xr-x. 7 root   root      4096 Jul  3  2018 dotnet
 简易版 gzip *.txt ,gunzip a.txt.gz .gz格式的压缩包;  bzip2 .bz2格式压缩包
 高阶版 tar zcvf xxx.tar.gz *.txt  jcvf xxx.tar.bz2 *.txt  参数解释：c压缩 x解压缩 v显示提示信息 f指定压缩文件的名字 z使用gz的方式压缩 j使用bzip2方式压缩 -C压缩到指定目录，解压缩到指定目录 默认到当前目录
 ```
-## 服务管理
+## centos进程管理
+```
+ps a 当前操作系统的所有用户 u显示用户自己的信息 x没有终端的应用程序 ps aux | grep bash 利用管道检索指定的进程
+who 查看当前用户 tty1-tty6文字终端 tty7带桌面的终端 ctrl+alt+f1-f7进行切换 pts/0设备终端
+kill 结束进程 -信号 -pid -l列出所有信号
+env 环境变量 env | grep PATH
+top 任务管理器  
+```
+## centos服务管理
 ```
 chkconfig --list 列出所有的服务
 chkconfig  服务名称	[on/off]开机启动/开机不启动
@@ -106,40 +118,7 @@ systemctl enable postfix.service	设置开机启动
 systemctl disable postfix.service	设置开机不启动
 systemctl is-enabled postfix.service	查看是否开机启动
 ```
-## yum教程
-```
-yum info mysql* available  //查询可用的程序
-yum list installed  //查看所有已经安装的程序  
-yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
-yum  localinstall docker-engine-1.12.6-1.el7.centos.x86_64.rpm --nogpgcheck
-yum grouplist //列出所有的软件组 比如 genome desktop
-yum group install 某个组的名称 //安装某个组的程序，一系列程序
-yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
-```
-## 局域网共享
-```
-局域网共享yum install samba --downloadonly --downloaddir ./download
-映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
-挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
-挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
-安装文件系统 install cifs-utils
-重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=BT151 0 2 
-```
-## jdk
-```
-yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
-yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
-```
-## 进程管理
-```
-ps a 当前操作系统的所有用户 u显示用户自己的信息 x没有终端的应用程序 ps aux | grep bash 利用管道检索指定的进程
-who 查看当前用户 tty1-tty6文字终端 tty7带桌面的终端 ctrl+alt+f1-f7进行切换 pts/0设备终端
-kill 结束进程 -信号 -pid -l列出所有信号
-env 环境变量 env | grep PATH
-top 任务管理器  
-```
-## 用户管理
+## centos用户管理
 ```
 创建用户 adduser 用户名     --这个本质是个脚本，后续会提示设置密码等步骤，非常方便
 创建用户    useradd  很多参数
@@ -152,7 +131,7 @@ top 任务管理器
 ssh 用户名@ip 基于服务器openssh-server
 logout  登出
 ```
-## 环境变量
+## centos环境变量
 ```
 临时修改某个键的值 export LD_LIBRARY_PATH=./lib
 export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋值，$PATH表示原来的PATH值，PATH值用:分割
@@ -160,17 +139,41 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 	第一步，修改文件/etc/profile，在末尾加上行 PATH="/tmp:$PATH"，
 	第二步，source /etc/profile 
 ```
-## 安装桌面
+## centos局域网共享
+```
+局域网共享yum install samba --downloadonly --downloaddir ./download
+映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
+挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
+挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
+安装文件系统 install cifs-utils
+重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
+//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=BT151 0 2 
+```
+## yum教程
+```
+yum info mysql* available  //查询可用的程序
+yum list installed  //查看所有已经安装的程序  
+yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
+yum  localinstall docker-engine-1.12.6-1.el7.centos.x86_64.rpm --nogpgcheck
+yum grouplist //列出所有的软件组 比如 genome desktop
+yum group install 某个组的名称 //安装某个组的程序，一系列程序
+yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
+```
+## centos安装桌面
 ```
 命令： yum groupinstall Desktop X Window System Chinese Surport
 ```
-# Docker
-## 基本命令：
+## centos安装jdk
+```
+yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
+yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
+```
+## docker基本命令：
 ```
 docker -v //查看版本
 docker info //查看信息
 ```
-## 镜像操作
+## docker镜像操作
 ```
 docker pull 镜像名称 //获取镜像，镜像名称=名称:tag
 docker tag 名称:tag 名称:新tag //修改镜像的tag
@@ -184,25 +187,7 @@ docker load [OPTIONS]
 docker load < /root/wch/mytomcat_v1.tar
 docker push //上次镜像
 ```
-## 容器操作
-```
-docker create 镜像名 //新增容器
-docker rm 容器ID //删除容器
-docker run 参数
---name 自定义容器名称
--d 容器后台运行
--p 当前系统端口：容器端口 端口映射（容器内部端口映射外部）
--v 当前系统目录：容器目录 目录映射
-例子：docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启动
-docker exec -i -t 通过docker ps查看的name名 /bin/bash
-// 停止所有容器
-docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
-// 删除所有停止的容器
-docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
-// 删除所有tag标签是none的镜像
-docker images|grep none|awk '{print $3 }'|xargs docker rmi
-```
-## 镜像仓库
+## docker镜像仓库
 ```
 公网镜像仓库，dockerhub
 私网镜像仓库
@@ -221,7 +206,25 @@ docker tag centos:7.6 192.168.56.104/library/centos:7.6
 docker push 192.168.56.104/library/centos:7.6
 docker login 仓库ip
 ```
-## 客户端教程
+## docker容器操作
+```
+docker create 镜像名 //新增容器
+docker rm 容器ID //删除容器
+docker run 参数
+--name 自定义容器名称
+-d 容器后台运行
+-p 当前系统端口：容器端口 端口映射（容器内部端口映射外部）
+-v 当前系统目录：容器目录 目录映射
+例子：docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启动
+docker exec -i -t 通过docker ps查看的name名 /bin/bash
+// 停止所有容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
+// 删除所有停止的容器
+docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+// 删除所有tag标签是none的镜像
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+## docker客户端教程
 ```
 Docker服务端提供RestfulAPI，默认不允许远程访问，所以需要修改服务端配置
 服务端开放TCP连接的方法
@@ -234,7 +237,6 @@ docker -H 192.168.56.101:2375 version
 windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 连接成功，可以运行： docker info 查看远程docker的信息
 ```
-
 ## docker-machine
 ```
 安装dockertoolbox就有docker客户端和dockermachine
@@ -250,20 +252,18 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
  执行后,在windows上执行docker命令等价于在centos上执行，类似于docker -H 192.168.56.101:2375
 移除machine:docker-machine rm
 ```
-
-# netcore
-## 交叉编译
+## doker部署netcore程序
+1. `设定dockfile文件为编译输出`
 ```
-dotnet交叉编译 发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
-dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
-```
-## doker部署
-1. ` 修改netcore的项目文件 `
-```
-目的：dockerfile始终复制到发布后的目录
-内容：<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+修改项目文件，增加一行：<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+目的：dockerfile文件始终复制到发布后的目录
 ```
 1. 在windows环境下publish项目
+```
+dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
+交叉编译:发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
+
+```
 1. 在windows的docker客户端build一个镜像,
 ```
 命令： docker build -t 镜像名称 Dockerfile所在的路径
@@ -279,16 +279,16 @@ expose 80
 #等价于cmd的dotnet命令 
 ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
 ```
-4. 在windows的docker客户端run一个容器
+1. 在windows的docker客户端run一个容器
 ```
 docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
 docker run -it --rm -p 5000:80 --name wch123 wch
 ```
-5. 访问容器所在的linux的地址
+1. 访问容器所在的linux的地址
 ```
 http://192.168.56.101:5000/api/values
 ```
-4. 制作bat脚本
+1. 制作bat脚本
 ```
 步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
 脚步内容：
@@ -299,11 +299,10 @@ docker rm wch123
 docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-7. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
+1. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
 
-# hadoop
-## ![效果图](./hadoop集群分布.png)
-## 环境搭建
+## ![效果图](./img/hadoop集群分布.png)
+## hadoop环境搭建
 ```
 vbox新建三台机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
 准备三台机器，hadoopNameNode,hadoopDataNode1,hadoopNameNode2
@@ -442,7 +441,7 @@ windows下搭建HDFS，不依赖cygwin，
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 ```
-## 运行和调试
+## hadoop运行和调试
 ```
 启动hadoop集群，需要启动HDFS集群，YARN集群
 首次启动HDFS集群，需要对其进行格式化（初始化），格式化只能进行一次，和yarn没有关系,集群启动成功以后，不要再进行格式化
@@ -463,15 +462,14 @@ AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
 
-# Windows ServerCore 2008R2
-## 局域网共享
+## windows局域网共享
 ```
 映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
 做成bat,然后开机启动，修改注册表，位置：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 类似于："diskZ"="C:\\Users\\Administrator\\diskZ.bat"
 删除指定的映射	net use Z: /del 
 ```
-## 环境变量
+## windows环境变量
 ```
 通过注册表修改环境变量，位置：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 
@@ -484,9 +482,13 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 set pp=%PATH%
 setx PATH 
 ```
-## 常用工具和命令
+## windows常用命令
 ```
-常用的工具：taskmgr --查看进程、服务等
+列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
+查看访问到指定网络地址经过的网络节点：tracert 地址
+获取windows服务的名称列表：
+sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
+taskmgr --查看进程、服务等
 regedit--修改各种配置信息
 msinfo32--查看磁盘等信息
 sconfig --工具集合，修改计算机名称等
@@ -514,7 +516,7 @@ Start=3
 	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
 	计算机管理连接192.168.56.101，就可以进行管理
 ```
-## 压缩和解压缩
+## windows解压缩
 ```
 安装7z,下载命令行版本,然后修改环境变量，把7za.exe加入到PATH
 压缩：7za a 压缩包全名称含路径 源文件路径
@@ -524,8 +526,7 @@ Start=3
 解压缩：7za x 压缩包全路径 -o目标文件夹
 解压缩比如：7za x d:/abc/wode.7z -od:/目标
 ```
-## ASP.NET和IIS
-1. 安装
+## win2008r2core配置网站服务
 ```
 打开WoW64：Start /w ocsetup ServerCore-WOW64
 打开.NET2.0层：Start /w ocsetup NetFx2-ServerCore
@@ -545,13 +546,15 @@ NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 安装PS DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
 ```
-2. 管理和配置，appcmd
+## iis和appcmd
 ```
-appcmd管理iis,AppCmd.exe is located in the %systemroot%\system32\inetsrv\ directory
+c:\windows\system32\inetsrv\appcmd.exe
 总的命令格式：APPCMD (命令) (对象类型) <标识符> </参数1:值1 ...>
+删除虚拟目录：
+appcmd delete vdir 虚拟路径
 查看所有的参数：appcmd list sites /text:*
 appcmd list apppool /text:*
-修改site的应用程序池
+修改网站的应用程序池
 appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
 查看某个对象的操作参数
 appcmd set site "Default web site" /?
@@ -560,7 +563,7 @@ appcmd可以配置iis应用程序池和iis应用程序的所有参数，从配�
 C:\Windows\System32\inetsrv\config\applicationHost.config,这个实际起作用的配置文件，iis运行时的配置文件继承这个，再结合用户的web.config
 C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml,这个文件是配置文件的元数据，所有的参数的名称和类型都可以查，特别是枚举类型，技巧：通过开发机图像界面配置iis，然后appcmd导出xml，然后作为脚本的一部分,在部署环境利用appcm导入xml里面的配置
 ```
-## MSBuild
+## windows-MSBuild
 ```
 .netframework包含完整的msbuild程序
 配置环境变量，增加path,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
@@ -578,7 +581,7 @@ vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一
 执行scp把分发到远程机器
 执行远程机器的ps脚本,执行后续的部署等操作
 ```
-## openssh
+## Windows-ssh(openssh)
 1. 安装
 ```
 创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主共享，然后复制
@@ -611,7 +614,7 @@ centos:.ssh目录的权限为700，其下文件authorized_keys和私钥的权限
 这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，命令为：ssh Administrator@被免密登陆的机器IP
 A上执行：ssh Administratro@192.168.56.101
 ```
-![效果图](./配置SSH免密登陆.png)
+![效果图](./img/配置SSH免密登陆.png)
 
 
 3. ssh登陆卡
@@ -620,8 +623,7 @@ A上执行：ssh Administratro@192.168.56.101
 UseDNS no
 GSSAPIAuthentication no
 ```
-
-## mssqlserver2008R2
+## win2008r2core配置sqlserver
 ```
 在servercore2008R2中不能打开sqlserver的服务管理器,需要编辑注册表值来修改sqlserver服务的配置
 配置sqlserverexpress，允许客户端通过tcp连接服务端，固定监听tcp1433端口
@@ -640,7 +642,7 @@ GSSAPIAuthentication no
 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\SQLBrowser
 Start=2
 ```
-## jdk
+## windows-jdk
 ```
 安装java的sdk
 使用解压缩版文件，非安装版，winscp上传到指定目录
@@ -650,8 +652,7 @@ HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 JAVA_HOME=C:\dw\jdk-11.0.2
 增加path的值
 ```
-
-## jenkins
+## windows-jenkins
 ```
 安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
 net stop Tomcat9
@@ -666,8 +667,7 @@ war文件
 插件相关
 插件》高级》修改插件源的地址，使用https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
 ```
-
-# Windows系统疑难杂症
+## Windows疑难杂症
 1. ie打不开
 ```
 修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
@@ -676,8 +676,11 @@ war文件
 ```
 进入about:config页面，找到security.enterprise_roots.enabled，把值改成true
 ```
-
-## git使用帮助
+1. 声音或者网卡等名称被加上数字1、2结尾
+```
+进入设备管理器，重点：显示隐藏设备，把设备对应的隐藏和非隐藏都删掉，然后重启电脑解决
+```
+## git教程
 ```
 安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
 放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
@@ -724,8 +727,7 @@ github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
 git@github.com:adoconnection/SevenZipExtractor.git
 ```
-
-## activemq
+## windows-activemq
 ```
 安装windows服务的方法，下载解压版，比如：apache-activemq-5.15.10-bin.zip
 解压，切换到目录bin/win64，管理员运行cmd,执行：InstallService.bat，卸载：UninstallService.bat
@@ -736,7 +738,7 @@ git@github.com:adoconnection/SevenZipExtractor.git
 点对点消息模型（消息队列），每个消息只有一个接收者可以取到，可以有多个接受者
 发布订阅消息模型，消息被发送到一个主题，主题所有订阅者都可以取到消息，可以有多个接收者
 ```
-## mariadb
+## windows-mariadb
 ```
 安装windows服务的方法，下载解压版，比如：mariadb-10.2.26-winx64.zip
 解压，切换到目录bin/，管理员运行cmd,
@@ -748,9 +750,8 @@ sc delete mariadb_hzducha
 验证安装是否ok:使用客户端连接测试
 配置文件和mysql_install_db.exe参数说明：
 ```
-### ![mysql_install_db.exe参数说明](./mariadb的配置图01.png)
-
-## tomcat
+### ![mysql_install_db.exe参数说明](./img/mariadb的配置图01.png)
+## windows-tomcat
 ```
 安装tomcat9
 解压到目录：c:/dw
@@ -766,16 +767,14 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 启动服务net start Tomcat9
 测试,打开：http://192.168.56.101:8080,
 ```
-
-## redis
+## windows-redis
 ```
 修改配置文件redis.windows.conf ，设置密码：requirepass 123456
 安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
 卸载：redis-server.exe  --service-uninstall--service-name redisserver1
 客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
 ```
-
-## powershell
+## powershell教程
 ```
 定义变量：$变量名称
 定义强类型变量：[类型名称]$变量名称
@@ -819,19 +818,20 @@ for语句同理
 ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
 
 ```
-
-## cmd常用命令
-```
-列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
-查看访问到指定网络地址经过的网络节点：tracert 地址
-获取windows服务的名称列表：
-sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
-使用iis的appcmd.exe,删除虚拟目录：
-c:\windows\system32\inetsrv\appcmd.exe delete vdir 虚拟路径
-```
-
-## bat语法
+## bat教程
 ```
 参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
 参数扩展：~扩展指令；d:
+```
+## SSMS(sqlserver management studio)
+```
+指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+隔离级别包含：READ UNCOMMITTED、READ COMMITTED
+
+todo    事务、事务隔离级别、锁的区别和关系，update锁，insert锁
+
+设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
+
+移除登陆窗口缓存的账号和密码，账号和密码数据保存在缓存文件中，所以删除这个缓存文件即可
+缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
 ```

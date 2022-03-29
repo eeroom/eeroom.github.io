@@ -129,19 +129,6 @@ begin
 	where ....
 end
 ```
-## SSMS(sqlserver management studio)
-```
-指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-隔离级别包含：READ UNCOMMITTED、READ COMMITTED
-
-todo    事务、事务隔离级别、锁的区别和关系，update锁，insert锁
-
-设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
-
-移除登陆窗口缓存的账号和密码，账号和密码数据保存在缓存文件中，所以删除这个缓存文件即可
-缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
-```
-
 ## ef(Entity Framework)
 ```
 数据迁移：
