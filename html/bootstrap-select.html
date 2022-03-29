@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,17 +9,17 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>bootstrap-datepicker</title>
+    <title>bootstrap-select</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/Bootstrap3.3.7/css/bootstrap.css" rel="stylesheet" />
+    <link href="../Bootstrap3.3.7/css/bootstrap.css" rel="stylesheet" />
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="/css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
     <!-- Custom styles for this template -->
-    <link href="/css/layout-fluid.css" rel="stylesheet" />
+    <link href="../css/layout-fluid.css" rel="stylesheet" />
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     @*
-    <script src="/js/ie-emulation-modes-warning.js"></script>*@
+    <script src="../js/ie-emulation-modes-warning.js"></script>*@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="/js/ie8-responsive-file-warning.js"></script>
@@ -30,60 +29,41 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/jQuey/jquery-1.11.3.js"></script>
+    <script src="../jQuey/jquery-1.11.3.js"></script>
 
-    <script src="/Bootstrap3.3.7/js/bootstrap.js"></script>
+    <script src="../Bootstrap3.3.7/js/bootstrap.js"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="/js/ie10-viewport-bug-workaround.js"></script>
-    <link href="bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.css" rel="stylesheet" />
-    <script src="bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.js"></script>
-    <script src="bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.zh-CN.min.js"></script>
-    <script src="./js/menu.js"></script>
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <link href="../bootstrap-select-1.12.2/css/bootstrap-select.css" rel="stylesheet" />
+    <script src="../bootstrap-select-1.12.2/js/bootstrap-select.js"></script>
+    <script src="../bootstrap-select-1.12.2/js/i18n/defaults-zh_CN.js"></script>
+    <script src="../js/menu.js"></script>
     <style type="text/css">
-        .chouti .modal-dialog {
-            right: 0;
-            top: 0;
-            bottom: 0;
-            position: absolute;
-            margin: 0 auto;
-            width: 400px;
+        .chouti .modal-dialog{
+            right:0;
+            top:0;
+            bottom:0;
+            position:absolute;
+            margin:0 auto;
+            width:400px;
         }
-
-        .chouti .modal-content {
-            border-radius: 0;
-
+        .chouti .modal-content{
+            border-radius:0;
+            
         }
     </style>
     <script type="text/javascript">
         $(function () {
-            var opt = $.fn.datepicker.defaults;
-            $('#datetimepicker').datepicker({
-                format: 'yyyy-mm-dd'
-                , language: "zh-CN"
-                , autoclose: true
-                //,clearBtn: true
-                //,todayBtn: true
-                , todayHighlight: true
-                , orientation: "bottom right"
-                , minViewMode: 0//天选择
-                , maxViewMode: 2//年,这个往下一级是10年，世纪等
-            });
-        });
+            //bootstrap-select的所有方法使用方式
+            //$(select元素选择器).selectpicker(方法名称,参数1，参数2.。。。);
+            //您可以通过调用元素上的val方法来设置所选值：$('.selectpicker').selectpicker('val', 'Mustard');
+            //这将选择多选中的所有项目：$('.selectpicker').selectpicker('selectAll');
+            //这将取消选择多选中的所有项目：$('.selectpicker').selectpicker('deselectAll');
+            //您可以使用render方法强制重新呈现bootstrap-select ui。 如果以编程方式更改影响元素布局的任何基础值，则此选项非常有用：$('.selectpicker').selectpicker('render');
+            //其他方法：toggle，hide，show，destroy
 
-        $(function () {
-
-            $("#monthpicker").datepicker({
-                format: 'yyyy-mm'
-                , language: "zh-CN"
-                , autoclose: true
-                //,clearBtn: true
-                //,todayBtn: true
-                , todayHighlight: true
-                , orientation: "bottom right"
-                , minViewMode: 1//天选择
-                , maxViewMode: 2//年,这个往下一级是10年，世纪等
-            });
         });
     </script>
 
@@ -97,12 +77,12 @@
             </div>
             <ul class="nav navbar-nav navbar-left">
                 <li class="active"><a href="./bootstrap-table.html">html</a></li>
-                <li id="README"><a href="./index.html?tp=README.md">devops</a></li>
-                    <li id='net'><a href="./index.html?tp=net.md">.net</a></li>
-                    <li id="java"><a href="./index.html?tp=java.md">java</a></li>
-                    <li id="cpp"><a href="./index.html?tp=cpp.md">c/c++</a></li>
-                    <li id="nodejs"><a href="./index.html?tp=nodejs.md">nodejs</a></li>
-                    <li ><a href="./hzfoundation/index.html" target="_blank">hz</a></li>
+                <li id="README"><a href="../index.html?tp=README.md">devops</a></li>
+                <li id='net'><a href="../index.html?tp=net.md">.net</a></li>
+                <li id="java"><a href="../index.html?tp=java.md">java</a></li>
+                <li id="cpp"><a href="../index.html?tp=cpp.md">c/c++</a></li>
+                <li id="nodejs"><a href="../index.html?tp=nodejs.md">nodejs</a></li>
+                <li><a href="../hzfoundation/index.html" target="_blank">hz</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">帮助</a></li>
@@ -114,6 +94,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="menu-l1 active">
+                        <a data-toggle="collapse" href="http://www.baidu.com" >百度一下
+                        </a>
+                    </li>
+                </ul>
                 <ul class="nav nav-sidebar">
                     <li>
                         <a data-toggle="collapse" href="#collapseExample1">
@@ -128,12 +114,12 @@
                     </li>
                     <li>
                         <ul id="collapseExample1" class="nav in nav-sub">
-                            <li><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
+                            <li ><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
                             <li><a href="./bootstrap-table.html"><span>table</span></a></li>
                             <li><a href="./bootstrap-Drawer.html"><span>drawer</span></a></li>
-                            <li class="active"><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
-                            <li><a href="./bootstrap-select.html"><span>select</span></a></li>
-
+                            <li><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
+                            <li class="active"><a href="./bootstrap-select.html"><span>select</span></a></li>
+                            
                         </ul>
                     </li>
                 </ul>
@@ -176,20 +162,26 @@
             </div>
             <div class="col-md-21 col-md-offset-3 main">
 
-                日期选择
-                <input type="text" id="datetimepicker" class="form-control" style="width:205px">
-
-                月份选择
-                <input type="text" id="monthpicker" class="form-control" style="width:205px">
+                标准选择框
+                <select class="selectpicker" data-live-search ="true" >
+                    <option>Mustard</option>
+                    <option>Ketchup</option>
+                    <option>Barbecue</option>
+                </select>
+                多个选择框
+                <select class="selectpicker" multiple data-live-search ="true" data-actions-box="true">
+                    <option>Mustard</option>
+                    <option>Ketchup</option>
+                    <option>Relish</option>
+                </select>
 
 
             </div>
         </div>
     </div>
 
-    <div class="col-md-offset-3">
+    <div class="col-md-offset-3 ">
         <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
     </div>
 </body>
-
 </html>
