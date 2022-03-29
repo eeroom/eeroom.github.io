@@ -30,22 +30,28 @@ axios.default.interceptors.response.use(response=>{
 })
 
 /**
- * 因为Promis的机制，then中回调方法产生的异常只能由后面的catch中的回调方法处理，别的地方捕获不到
- * 但是实际业务代码中，对异常的处理通常就是弹个提示框提示用户，如果每个then后面都加上这种类似的catch处理，会非常冗余
- * 所以这里把then方法替换掉，内部加上catch统一处理axios请求完成后的回调方法中的异常
- * @param {*} params 
+ * 因为Promis的机制，then中回调方法产生的异常只能由后面的catch中的回调方法处理，或者由注册windows.onerror全局异常事件进行处理
+ * 但是windows.onerror方式拿不到当时的状态信息：请求参数，响应结果。
+ * 如果要实现主动地并且精确到接口的异常预警机制，windows.onerror行不通(只能简单的提示用户，上报异常等，但不知道具体哪个接口，当时的请求参数等)
+ * 所以这里把then方法替换掉，内部加上catch统一处理axios请求完成后的回调方法中的异常,
+ * @param {*} context 包含请求参数，响应结果
  * @returns 
  */
-let createErrorHandler=function (params) {
+let createErrorHandler=function (context) {
     return {
         get:function (target,key,receiver) {
             let fuc=Reflect.get(target,key,receiver).bind(target);
             if(key!="then")
                 return fuc;
             let fucProxy=function (callback) {
-                return new Proxy(fuc(callback).catch(err=>{
-                    console.log("统一处理axios请求完成后的回调函数中的异常",err);
-                }),createErrorHandler(params));
+                return new Proxy(fuc(res=>{
+                    context.result.push(res.data);
+                    return res;
+                }).then(callback).catch(err=>{
+                    console.log("回调异常处理,请求参数：",context.parameter);
+                    console.log("回调异常处理,响应内容：",context.result);
+                    console.log("回调异常处理,异常内容",err);
+                }),createErrorHandler(context));
             }
             return fucProxy;
         }
@@ -57,11 +63,13 @@ let createErrorHandler=function (params) {
  */
 let opost= axios.default.post;
 axios.default.post=function () {
-    return new Proxy(opost(...arguments),createErrorHandler(arguments));
+    let context={parameter:arguments,result:[]};
+    return new Proxy(opost(...arguments),createErrorHandler(context));
 }
 let oget=axios.default.get;
 axios.default.get=function () {
-    return new Proxy(oget(...arguments),createErrorHandler(arguments));
+    let context={parameter:arguments,result:[]};
+    return new Proxy(oget(...arguments),createErrorHandler(context));
 }
 
 /**
@@ -69,6 +77,10 @@ axios.default.get=function () {
  */
 axios.default.post("http://www.baidu.com",{"a":3,"b":"张三"})
     .then(res=>{
-        console.log("响应数据",res.data);
+        //todo 业务逻辑代码
+        return res.data;
+    }).then(x=>{
+        //todo 业务逻辑代码
+        console.log("响应数据",x.data);
         throw new Error("没有请求到预期的数据！")
     })
