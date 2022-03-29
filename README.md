@@ -299,7 +299,6 @@ docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 1. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
-
 ## hadoop部署模式
 ![效果图](./img/hadoop集群分布.png)
 ## hadoop搭建集群
