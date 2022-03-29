@@ -301,110 +301,6 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 7. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
 
-# C语言开发
-##  静态库制作
-```
-命名规则：lib+库名字+.a ,例如：libazeroth.a
-制作步骤：
-	1、生成对应的.o文件，gcc ./src/*.c -c -I ./include 
-	2、把.o文件打包，ar rcs 静态库名字(libazeroth.a) 所有的.o
-发布和使用静态库：.a文件和头文件， 
-gcc main.c ./lib/libazeroth.a -I ./include
- (等价写法：gcc main.c -I ./include -L lib -l azeroth)
-查看.a文件的内容：nm ./lib/libazeroth.a             nm ./a.out
-静态库优点，发布应用程序时，不需要提供.a文件（.a里面的.o内容已经被编译到应用程序中），加载库的速度快
-静态库缺点，库被打包到应用程序中，导致应用程序体积较大，如果库升级，应用程序也需要升级
-```
-##  动态库制作
-```
-命名规则：lib+库名字+.so,例如：libazeroth.so
-制作步骤：
-1、生成.o文件（与位置无关的.o文件，程序运行时加载，所以所有的地址都是相对地址，加载位置后的偏移量），
-	gcc ./src/*.c -c -fPIC -I ./include      
-	与静态库相比，增加参数 -fPIC 或者-fpic,  
-2、打包生成.so文件，gcc *.o -shared -I ./include -o libazeroth.so       
-	这个和静态库完全不一样
-发布和使用动态库：.so文件和头文件， 
-gcc main.c -I ./include ./lib/libazeroth.so -o app
-（等价写法gcc main.c -I ./include -L lib -l azeroth -o myapp  这样会发生动态库链接失败）
-动态库链接失败解决办法
-	1、把库放到/lib里面，
-	2、export LD_LIBRARY_PATH=./lib,这是把当前的lib目录添加到环境变量，这个修改是临时的，基于当前会话，
-	3、修改当前bash的配置文件（这个不推荐）  
-	4、修改动态链接器的配置文件，vi /etc/ld.so.conf 增加一行/root/itcast/t4/lib 这个动态库的路径，更新配置ldconfig -v
-动态连接器 ldd 应用程序    查看应用程序依赖的所有动态库，动态链接器会自动加载依赖的动态库，按照环境变量里的路径找，
-优缺点，类似，应用程序需要包含so.文件
-```
-## gdb调试
-### Makefile/makefile
-```
-makefile的规则，三要素：目标，依赖，命令，下面例子里的所有文件在同一个目录
-目标:依赖
-    命令
-原始版本
-app:main.c add.c divid.c
-	gcc main.c add.c divid.c -o app
-改进版，拆分为子目标
-app:main.o add.o divid.o
-	gcc main.o add.o divid.o -o app
-
-main.o:main.c
-	gcc -c main.c
-
-add.o:add.c
-	gcc -c add.c
-
-divid.o:divid.c
-	gcc -c divid.c
-
-makefile中的自动变量（只能在命令中使用）
-$<	规则中的第一个依赖
-$@	规则中的目标
-$^	规则中的所有依赖
-% 模式匹配
-
-改进版（自定义变量，不需要类型，使用变量：$(变量名称)，使用模式匹配和自动变量）
-obj=main.o add.o divid.o
-target=app
-$(target):$(obj)
-	gcc $^ -o $@
-
-%.o:%.c
-	gcc -c $< -o $@
-
-makefile中的默认的系统变量，都是大写
-CC	值为cc
-CPPFLAGS	预编译的时候需要的选项 例如 -I
-CFLAGS	编译时使用的参数 例如 -Wall -g -c
-LDFLAGS	链接库时使用的选项	-L -l
-
-makefile中的函数
-获取指定目录下的.c文件	src=$(wildcard ./*.c)
-匹配替换	obj=$(patsubst ./%.c,./%.o,$(src))  这样获取.c对于的.o
-
-改进版 使用函数
-src=$(wildcard ./*.c)
-obj=$(patsubst ./%.c,./%.o,$(src))
-target=app
-$(target):$(obj)
-	gcc $^ -o $@
-
-%.o:%.c
-	gcc -c $< -o $@
-
-clean:
-	rm $(obj) $(target) -f
-
-hello:
-	echo $(src),$(obj),$(LDFLAGS),$(CC)
-
-make默认生成第一个目标，make clean 这是指定make的目标
-```
-## gtk开发
-```
-安装依赖库 yum install libgnomeui-devel
-```
-
 # hadoop
 ## ![效果图](./hadoop集群分布.png)
 ## 环境搭建
@@ -781,28 +677,6 @@ war文件
 进入about:config页面，找到security.enterprise_roots.enabled，把值改成true
 ```
 
-# c#和java开发笔记
-## JwtToken互通
-```
-JWTToken，c#和java的com.auth0>java-jwt类库兼容
-输入：hearder(字典)，payload（字典），key(哈希算法的密钥)
-header={{alg:HS256},type:JWT}
-alg根据业务需要，后续算signCode做相应的调整
-payload中的数据根据业务需要
-
-java中的时间,Calendar.getInstance().getTime()等价于
-(DateTime.Now.ToUniversalTime()-new DateTime(1970,1,1)).TotalSeconds
-
-序列化header,然后转base64，然后做额外处理得到headerCode，
-额外处理逻辑：baser64str.Split('=')[0].Replace('+','-').Replace('/','_')
-序列化payload，然后转base64，然后额外处理，逻辑同上,得到payloadCode
-使用HMACSHA256哈希算法，
-算法的Key=key按UTF8取字节数组
-buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
-把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
-最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
-```
-
 ## git使用帮助
 ```
 安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
@@ -893,102 +767,12 @@ start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用
 测试,打开：http://192.168.56.101:8080,
 ```
 
-## T-SQL和SSMS(sqlserver management studio)
-```
-声明变量：declare @名称 类型
-声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
-
-insert 语句，表必须存在
-insert into 表 values()
-insert into 表 select语句
-insert into 表(列名称，...) values()
-insert into 表(列名称，...) select语句
-
-insert 语句，表必须不存在（#表名称 为临时表，会话结束自动删除，否则为非临时表）
-select 列
-into 表
-from ....
-
-update 语句，批量更新
-update 表 别名1
-join 表2 别名2 on 连接条件
-set 别名1.列=别名2.列
-where ....
-
-delete 语句，批量删除
-
-集合操作
-取差集：except 
-取并集：union
-取交集：intersect
-
-output 语句
-insert into 表（列） output inserted.列名 values()
-update 表 set 列1=值 output inserted.列名 where ...
-
-表分区
-第一步：添加文件组和文件
-创建分区函数：create partition function 名称（分区字段类型） as range right for values(区间值1,区间值2,,,)
-创建分区scheme:create partition scheme 名称 as partition 分区函数名称 to(文件组1,文件组2,,,)
-tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段，需要对应6个文件组，,不同的分区可以使用相同的文件组
-创建分区表：create table 表名称（列1名称 类型，列2名称 类型,...）on 分区scheme(分区字段)
-创建索引：也使用相同的 on 分区scheme(分区字段)
-
-查询具体的数据会落在哪个分区：select $partition.分区函数名 ('具体数据对应分区列的值，比如："2020-06-04"')
-返回值是分区序号，从1开始
-查询指定分区序号下的所有记录：select * from 表名 where $partition.分区函数(分区列)=分区序号
-
-删除1年以前的定分区数据
-创建临时表，结构和源表一样，使用相同的 on 分区scheme(分区字段)
-确定要删除的分区的序号，分区序号从1开始，计算序号的逻辑，借助临时表，键值结构（月份，序号）
-切换别删除分区的数据到临时表：alter table 源表 switch partition 分区序号 to 临时表 partition 分区序号
-删除临时表：drop table 临时表
-
-水平分区，表结构不变，数据落在不同的文件
-优点：文件可以落在不同的磁盘，按照分区条件查数据的时候性能大大提高
-		极大的方便不停机归档数据，如果不分区进行归档数据，有两个土办法（往归档表写，往原表删；或者：原本重命名，新建原表，往原表回写）
-
-利用临时表记录数据的变化情况（有时候权限所限，不能触发器，没有建表权限，只能临时表。触发器和非临时表更科学）
-思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
-创建临时表：
-create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
-循环查某个数据写入临时表,每5秒查一次:
-while 1=1
-begin
-	WAITFOR DELAY '00:00:5'
-	insert into #表名称(列1,列2,...,写入时间)
-	select 列a,列b,...,getdate()
-	form ...
-	where ....
-end
-
-指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-级别有：READ UNCOMMITTED;READ COMMITTED
-
-事务、事务隔离级别、锁的区别和关系，update锁，insert锁
-
-SSMS中设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
-SSMS移除缓存的账号和密码，本质就是删除一个对应的缓存文件，
-这些账号和密码并没有写到注册表中，而是在缓存文件
-缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
-```
-
 ## redis
 ```
 修改配置文件redis.windows.conf ，设置密码：requirepass 123456
 安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
 卸载：redis-server.exe  --service-uninstall--service-name redisserver1
 客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
-```
-
-## ef数据迁移
-```
-启用迁移：Enable-Migrations
-增加一个版本：Add-Migration 版本名称
-更新到最新版本：Update-Database -Verbose
-更新到指定版本（支持回退版本）:Update-Database –TargetMigration:版本名称
-获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
-宏变量，0版本名称：$InitialDatabase
 ```
 
 ## powershell
