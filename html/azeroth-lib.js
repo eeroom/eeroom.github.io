@@ -1,5 +1,4 @@
-﻿/// <reference path="D:\Code\Azeroth.Http\Http.File\jQuey/jquery-1.11.3.js" />
-//options:{maxTaskCount,url,formadataHandler, chunkSize,completeHandler,errorHandler,uploadingHandler}
+﻿//options:{maxTaskCount,url,formadataHandler, chunkSize,completeHandler,errorHandler,uploadingHandler}
 //formadataHandler=(formdata,opt)=>void
 //completeHandler,errorHandler,uploadingHandler=(opt, resdata, options)=>void
 function klzUploader(options) {
