@@ -1,5 +1,6 @@
 let axios=require('axios')
 
+
 /**
  * 注册多个请求拦截器，先注册的后执行
  * 可以多注册几个试一下
@@ -51,7 +52,23 @@ let createErrorHandler=function (params) {
     }
 }
 
+/**
+ * 替换原本的post,get方法，目的是把他们的返回值的promis对象的then方法进行了替换
+ */
+let opost= axios.default.post;
+axios.default.post=function () {
+    return new Proxy(opost(...arguments),createErrorHandler(arguments));
+}
+let oget=axios.default.get;
+axios.default.get=function () {
+    return new Proxy(oget(...arguments),createErrorHandler(arguments));
+}
+
+/**
+ * 演示回调函数中的抛异常
+ */
 axios.default.post("http://www.baidu.com",{"a":3,"b":"张三"})
     .then(res=>{
         console.log("响应数据",res.data);
+        throw new Error("没有请求到预期的数据！")
     })
