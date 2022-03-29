@@ -9,20 +9,24 @@
 ```
 ![效果图](./整数-字符-字节数组(整数数组)-字符串-二进制序列-十六进制序列.png)
 
-## byte和sbyte互转
+## byte和sbyte
 ```
-c#:byte为无符号整数，范围：[0-255][00-FF]，sbyte为有符号整数，范围[-128,127][80,7F]
-
-java:byte为有符号整数，等价于c#的sbyte，java没有提供无符号的byte类型
-已知无符号的byte值bv[0-255],获取其二进制序列对应的有符号的值：byte sbv=(byte) ((int)bv)
-已知有符号的byte值sbv[-128,127],获取其二进制序列对应的无符号的值：
-1、int bv= ((int) sbv) & 0xff;
-2、int bv= Byte.toUnsignedInt(bv)
+c#:byte为无符号整数，范围：[0-255][00-FF]，
+     sbyte为有符号整数，范围[-128,127][80,7F]
+     互相之间直接强制类型转换即可
+java:byte为有符号整数，等价于c#的sbyte
+     java没有提供无符号的byte类型，可以使用范围更大的数据类型（比如int）进行等价表示
+     无符号转对应的有符号：已知无符号的byte值unsinVal[0-255],
+          对应的有符号的值：byte sinVal=(byte) ((int)unsinVal)
+     有符号转无符号：已知有符号的byte值sinVal[-128,127],
+          对应的无符号的值(使用int类型等价表示)：int unsinVal= ((int) sinVal) & 0xff
+          或者：int unsinVal= Byte.toUnsignedInt(sinVal),本质和上面是一样的
+原理分析：
 0xff就是0x000000ff，进行&运算，导致另一个计算数的高6位全部变为0,只剩下原有最低的2位保持原序列值。
-((int) sbv) & 0xff的原理等价于下面的代码：
-byte sbv=-3;
-var str= Integer.toHexString(sbv);
-var bv2=Integer.parseInt(str.replace("ffffff","000000"),16);
+((int) sinVal) & 0xff的原理等价于下面的代码：
+byte sinVal=-3;
+var str= Integer.toHexString(sinVal);
+var unsinVal=Integer.parseInt(str.replace("ffffff","000000"),16);
 ```
 
 ## JwtToken互通
