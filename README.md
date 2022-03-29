@@ -299,8 +299,9 @@ docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 1. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
+
 ## hadoop部署模式
-![效果图](./img/hadoop集群分布.png)
+### ![效果图](./img/hadoop集群分布.png)
 ## hadoop搭建集群
 ```
 vbox新建三台机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
@@ -619,6 +620,7 @@ A上执行：ssh Administratro@192.168.56.101
 UseDNS no
 GSSAPIAuthentication no
 ```
+
 ## win2008r2Core配置sqlserver
 ```
 在servercore2008R2中不能打开sqlserver的服务管理器,需要编辑注册表值来修改sqlserver服务的配置
@@ -674,6 +676,7 @@ war文件
 ```
 进入设备管理器，重点：显示隐藏设备，把设备对应的隐藏和非隐藏都删掉，然后重启电脑解决
 ```
+
 ## git教程
 ```
 安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
