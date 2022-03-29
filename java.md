@@ -98,8 +98,8 @@ unicode字符集，代码值范围是[0x000000,0x10ffff]，使用3个字节，�
 代码区15：[0x0f0000,0x0fffff]
 代码区16：[0x100000,0x10ffff]
 ```
-![效果图](./unicode代码平面.png)
-![效果图](./unicode代码平面-BMP.png)
+![效果图](./img/unicode代码平面.png)
+![效果图](./img/unicode代码平面-BMP.png)
 ```
 gbk字符集
 
