@@ -163,7 +163,7 @@ yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机
 ```
 命令： yum groupinstall Desktop X Window System Chinese Surport
 ```
-## centos安装jdk
+## centos-jdk
 ```
 yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
 yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
@@ -262,9 +262,8 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 ```
 dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
 交叉编译:发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
-
 ```
-1. 在windows的docker客户端build一个镜像,
+1. 在windows的docker客户端build镜像
 ```
 命令： docker build -t 镜像名称 Dockerfile所在的路径
 例如：docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
