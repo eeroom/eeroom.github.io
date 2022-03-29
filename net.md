@@ -2,19 +2,19 @@
 ## 整数-字符-二进制序列-十六进制序列
 ```
 解析整数的规则：有符号的数，最高为符号位，最高位为0表示正数，最高位为1表示负数，无符号的数，不考虑符号位
-把正数按有符号数转二进制序列的时候，最高位一定是0，体现在序列字符串上，高位前导的0都省略掉了
+把正数按有符号数转二进制序列的时候，最高位一定是0，体现在序列字符串上，高位的0都省略掉了
 把负数按有符号数转二进制序列的时候，最高位一定是1
 规律：对于一个负数，增加位数来表示等价的值，把所有增加的高位补1
      对于一个正数，增加位数来表示等价的值，把所有增加的高位补0
 ```
 ![效果图](./整数-字符-字节数组(整数数组)-字符串-二进制序列-十六进制序列.png)
 
-## byte和sbyte
+## byte和sbyte互通
 ```
 c#:byte为无符号整数，范围：[0-255][00-FF]，
      sbyte为有符号整数，范围[-128,127][80,7F]
      互相之间直接强制类型转换即可
-java:byte为有符号整数，等价于c#的sbyte
+java:byte为有符号整数，范围[-128,127][80,7F]，等价于c#的sbyte
      java没有提供无符号的byte类型，可以使用范围更大的数据类型（比如int）进行等价表示
      无符号转对应的有符号：已知无符号的byte值unsinVal[0-255],
           对应的有符号的值：byte sinVal=(byte) ((int)unsinVal)
@@ -31,23 +31,21 @@ var unsinVal=Integer.parseInt(str.replace("ffffff","000000"),16);
 
 ## JwtToken互通
 ```
-JWTToken，c#和java的com.auth0>java-jwt类库兼容
-输入：hearder(字典)，payload（字典），key(哈希算法的密钥)
-header={{alg:HS256},type:JWT}
-alg根据业务需要，后续算signCode做相应的调整
-payload中的数据根据业务需要
-
-java中的时间,Calendar.getInstance().getTime()等价于
-(DateTime.Now.ToUniversalTime()-new DateTime(1970,1,1)).TotalSeconds
-
-序列化header,然后转base64，然后做额外处理得到headerCode，
-额外处理逻辑：baser64str.Split('=')[0].Replace('+','-').Replace('/','_')
-序列化payload，然后转base64，然后额外处理，逻辑同上,得到payloadCode
-使用HMACSHA256哈希算法，
-算法的Key=key按UTF8取字节数组
-buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
-把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
-最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
+JWTToken的三部分：hearder(字典)，payload（字典），key(哈希算法的密钥)
+     header:{{alg:HS256},type:JWT},alg根据业务需要,后续算signCode做相应的调整
+     payload:数据根据业务需要
+JWTToken串的计算过程：
+     序列化header,然后转base64，然后做额外处理得到headerCode，
+     额外处理逻辑：baser64str.Split('=')[0].Replace('+','-').Replace('/','_')
+     序列化payload，然后转base64，然后额外处理，逻辑同上,得到payloadCode
+     使用HMACSHA256哈希算法，
+     算法的Key=key按UTF8取字节数组
+     buffer=算法.ComputeHash(UTF8取字节数组(headerCode+"."+payloadCode))
+     把buffer直接转base64，然后额外处理，逻辑同上，得到signCode
+     最后的jwttoken=string.Join(".",headerCode,payloadCode,signCode)
+互通的基础：c#和java的com.auth0>java-jwt类库兼容
+互通关键点：
+java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversalTime()-new DateTime(1970,1,1)).TotalSeconds
 ```
 
 ## 分布式和集群
