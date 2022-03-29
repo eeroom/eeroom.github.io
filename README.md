@@ -774,6 +774,10 @@ war文件
 ```
 修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
 ```
+1. firefox关联windows证书管理器
+```
+进入about:config页面，找到security.enterprise_roots.enabled，把值改成true
+```
 
 # c#和java开发笔记
 ## JwtToken互通
