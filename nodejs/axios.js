@@ -28,30 +28,30 @@ axios.default.interceptors.response.use(response=>{
 })
 
 /**
- * 因为Promis的机制，then中回调方法产生的异常只能由后面的catch中的回调方法处理，或者由注册windows.onerror全局异常事件进行处理
- * 但是windows.onerror方式拿不到当时的状态信息：请求参数，响应结果。
- * 如果要实现主动地并且精确到接口的异常预警机制，windows.onerror行不通(只能简单的提示用户，上报异常等，但不知道具体哪个接口，当时的请求参数等)
+ * 因为Promis的机制，then中回调方法产生的异常只能由后面的catch中的回调方法处理，或者由注册windows.addEventListener("unhandledrejection")事件监听异常
+ * windows.onerror方式监听不到,这种场景下浏览器内部不会调这个方法
+ * 但是unhandledrejection方式拿不到请求当时的状态信息：请求参数，响应结果。
+ * 如果要实现主动地并且精确到接口的异常预警机制，unhandledrejection行不通(只能简单的提示用户，上报异常等，但不知道具体哪个接口，当时的请求参数等)
  * 所以这里把then方法替换掉，内部加上catch统一处理axios请求完成后的回调方法中的异常,
  * @param {*} context 包含请求参数，响应结果
  * @returns 
  */
-let createErrorHandler=function (context) {
+let createAxiosInterceptor=function (context) {
     return {
-        get:function (target,key,receiver) {
-            let fuc=Reflect.get(target,key,receiver).bind(target);
-            if(key!="then")
-                return fuc;
-            let fucProxy=function (callback) {
-                return new Proxy(fuc(res=>{
-                    context.result.push(res.data);
-                    return res;
-                }).then(callback).catch(err=>{
-                    console.log("回调异常处理,请求参数：",context.parameter);
-                    console.log("回调异常处理,响应内容：",context.result);
-                    console.log("回调异常处理,异常内容",err);
-                }),createErrorHandler(context));
-            }
-            return fucProxy;
+        apply:function (target,ctx,args) {
+            let cdata=ctx.all?{reqdata:JSON.stringify(args),result:[]}:context;
+            let promise=Reflect.apply(target,ctx,args).then(res=>{
+                cdata.result.push(res);
+                return res;
+            }).catch(err=>{
+                let {message,showmsg=false}=err;
+                console.log("axios请求和响应数据:",cdata);
+                console.log("axios回调方法异常:",err);
+                if(showmsg)
+                    alert(message);
+            })
+            promise.then=new Proxy(promise.then,createAxiosInterceptor(cdata));
+            return promise;
         }
     }
 }
@@ -59,16 +59,8 @@ let createErrorHandler=function (context) {
 /**
  * 替换原本的post,get方法，目的是把他们的返回值的promis对象的then方法进行了替换
  */
-let opost= axios.default.post;
-axios.default.post=function () {
-    let context={parameter:arguments,result:[]};
-    return new Proxy(opost(...arguments),createErrorHandler(context));
-}
-let oget=axios.default.get;
-axios.default.get=function () {
-    let context={parameter:arguments,result:[]};
-    return new Proxy(oget(...arguments),createErrorHandler(context));
-}
+axios.default.post=new Proxy(axios.default.post,createAxiosInterceptor());
+axios.default.get=new Proxy(axios.default.get,createAxiosInterceptor());
 
 /**
  * 演示回调函数中的抛异常
