@@ -157,10 +157,11 @@ gpg教程
 生成密钥对：gpg --genkey
 查看已有的密钥列表：gpg --list-keys
 每个密钥对信息的第二行那一串guid值就是keyid
-导出公钥：gpg -o 公钥导出后的保存的文件  --export key的id  [-a]
-导出私钥：gpg -o 私钥导出后的保存的文件  --export-secret-keys key的id  [-a]
+导出公钥：gpg [-a] -o 公钥导出后的保存的文件  --export key的id  
+导出私钥：gpg [-a] -o 私钥导出后的保存的文件  --export-secret-keys key的id  
 导出私钥的时候会跳出对话让我们输入私钥的密码！
-
+导出约定：-a参数的意思是指是否使用ascii armor，不论公钥还是私钥，如果指定这个参数，导出的保存文件就用.asc结尾，如果不指定就用.gpg结尾
+小技巧：如果加了-a参数，导出的文件可以直接以普通文本查看
 导入公钥：gpg --import 公钥导出后的保存的文件
 导入私钥：gpg --import 私钥导出后的保存的文件
 完整教程请查看pdf文件
