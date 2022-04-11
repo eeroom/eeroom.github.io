@@ -163,5 +163,7 @@ gpg教程
 
 导入公钥：gpg --import 公钥导出后的保存的文件
 导入私钥：gpg --import 私钥导出后的保存的文件
+完整教程请查看pdf文件
 ```
+gpg完整教程文档[FAQ:](./pdf/gpg教程.pdf)
 
