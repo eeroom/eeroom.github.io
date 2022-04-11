@@ -137,3 +137,14 @@ char类型占用2个字节，每个char实例的整数值对应unicode规范中�
 ```
 ### ![效果图](./img/unicode代码平面.png)
 ### ![效果图](./img/unicode代码平面-BMP.png)
+
+### 发布jar包到maven中心仓
+```
+引入sonatype相关的插件,参看sln项目的pom.xml和nalu项目的pom.xml
+在maven的配置文件setting.xml中配置sonatype的账号和密码，如下图
+```
+![如图](./img/sonatype的账号配置.png)
+```
+配置gpg的密钥对
+```
+
