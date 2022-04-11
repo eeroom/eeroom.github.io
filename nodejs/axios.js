@@ -1,4 +1,9 @@
 let axios=require('axios')
+
+
+let pp=require("./path")
+
+console.log("pp",pp)
 /**
  * 注册多个请求拦截器，先注册的后执行
  * 可以多注册几个试一下
