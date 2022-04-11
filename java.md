@@ -140,11 +140,27 @@ char类型占用2个字节，每个char实例的整数值对应unicode规范中�
 
 ### 发布jar包到maven中心仓
 ```
-引入sonatype相关的插件,参看sln项目的pom.xml和nalu项目的pom.xml
+注册sonatype账号，然后提第一次发jar包的issue到sonatype，按照指导完成后，sonatype会开通一个仓库给我们。
+我的jar先发到sonatype仓，然后被同步到maven中心仓
+项目的pom.xml引入sonatype和gpg相关的插件,参看sln项目的pom.xml和nalu项目的pom.xml
 在maven的配置文件setting.xml中配置sonatype的账号和密码，如下图
 ```
 ![如图](./img/sonatype的账号配置.png)
 ```
-配置gpg的密钥对
+gpg插件进行jar包加密的时候，默认会使用gpg密钥列表里的第一对密钥，可以通过增加配置，指定特定的密钥对，如下图
+```
+![如图](./img/gpg配置01.png)
+![如图](./img/gpg配置02.png)
+```
+gpg教程
+生成密钥对：gpg --genkey
+查看已有的密钥列表：gpg --list-keys
+每个密钥对信息的第二行那一串guid值就是keyid
+导出公钥：gpg -o 公钥导出后的保存的文件  --export key的id  [-a]
+导出私钥：gpg -o 私钥导出后的保存的文件  --export-secret-keys key的id  [-a]
+导出私钥的时候会跳出对话让我们输入私钥的密码！
+
+导入公钥：gpg --import 公钥导出后的保存的文件
+导入私钥：gpg --import 私钥导出后的保存的文件
 ```
 
