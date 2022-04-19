@@ -141,3 +141,18 @@ end
      获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
      宏变量，0版本名称：$InitialDatabase
 ```
+## sqlservercompact
+```
+程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
+连接字符串：Data Source=|DataDirectory|httpfile.sdf;Password=123456;Persist Security Info=True
+建表：
+create table Abc(
+id int primary key identity(1,1),
+Name nvarchar(100),
+CardId uniqueidentifier not null
+)
+
+程序集：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
+
+
+```
