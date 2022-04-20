@@ -154,5 +154,13 @@ CardId uniqueidentifier not null
 
 程序集：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
 
+创建序列：CREATE SEQUENCE 序列名称 AS 类型
+    START WITH 初始值
+    INCREMENT BY 步长
+    [CYCLE]
 
+删除序列：drop SEQUENCE 序列名称
+
+使用1：INSERT INTO TEST(ID,Name) VALUES(NEXT VALUE FOR 序列名称, 'allen')
+使用2：SELECT NEXT VALUE FOR 序列名称
 ```
