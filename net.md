@@ -164,3 +164,25 @@ CardId uniqueidentifier not null
 使用1：INSERT INTO TEST(ID,Name) VALUES(NEXT VALUE FOR 序列名称, 'allen')
 使用2：SELECT NEXT VALUE FOR 序列名称
 ```
+## oracle
+```
+表名和列名称区分大小写,sql语句中的表名和列表都会被默认转为大写
+场景:表名是小写,执行sql报错:表不存在或列不存在
+原因:sql语句中的小写表名被转成大写,然后的表名称又是小写,导致找不到表
+解决办法:sql中的表名加上双引号,oracle就不会自动把sql中表名转大写
+
+oracle安装教程：
+先只装数据库程序文件
+然后使用net configer 工具设置监听
+然后使用database configer工具安装数据库实例,调整字符集
+完成安装
+
+数据库客户端navicat lite依赖oci,所以需要安装oracle client或者odp.net,然后设置oci路径
+
+TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle client或者odp.net的根目录}/NetWork/ADMIN/tsname.ora
+{oracle client或者odp.net的根目录}/NetWork/ADMIN/Simpale/下有示例ora文件,照着改即可
+
+.net程序引用odp.net程序集,然后正常走ado.net即可
+
+待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
+```
