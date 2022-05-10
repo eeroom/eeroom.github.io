@@ -707,7 +707,7 @@ war文件
 提交修改到本地仓：git commit -am 备注说明
 可以不暂存，直接提交到本地仓
 
-推送到远程分支：git push 远程名称 本地分支
+推送到远程分支：git push 远程地址名称 本地分支
 
 github使用ssh方式提示time out的解决办法
 可能原因：网络某个节点禁止了22端口，比如某云
@@ -723,6 +723,11 @@ Port 443
 github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
 git@github.com:eeroom/hz.foundation.git
 git@github.com:adoconnection/SevenZipExtractor.git
+
+场景：把本机已有git仓推到github或者gitblit
+第一步:在github或者gitblit上创建新的空仓,不要有任何commit和push,新仓地址为xxxx
+本机继续执行:git remote add 地址名称(origin) 远程地址(xxxx)
+执行:git push -u 地址名称(origin) 本机分支名称(master)
 ```
 ## windows-activemq
 ```
