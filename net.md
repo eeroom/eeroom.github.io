@@ -195,3 +195,23 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 特别注意:如果开发机装了runtime,并且版本和sdk中的runtime版本不一致,会导致无法调试
 所以开发机sdk版本低一点没关系,客户端的runtime版本高就行,这样客户端一定可以正常执行sdk打包出来的xap包
 ```
+## ef
+```
+var dbcontext = new Model.DbContext();
+System.Linq.Expressions.Expression<Func<Model.Log, string>> exp = x => x.Name;
+var lst = new List<string>() { "zhaozehui", "aaa", "bbb" };
+var lstexp = lst.Select(value =>
+{
+     var likevalue = System.Linq.Expressions.Expression.Constant(value);
+     var likeexp = System.Linq.Expressions.Expression.Call(exp.Body, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), likevalue);
+     return System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(likeexp, exp.Parameters);
+
+}).ToList();
+var tmpbody = lstexp[0].Body;
+for (int i = 1; i < lstexp.Count; i++)
+{
+     tmpbody = System.Linq.Expressions.Expression.Or(tmpbody, lstexp[i].Body);
+}
+var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
+var lstlog= dbcontext.Log.Where(whereexp).ToList();
+```
