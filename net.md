@@ -158,7 +158,6 @@ DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发�
 DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
 自定义策略,自己实现约定接口即可
 上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
-
 MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
 修改数据库初始化策略为：
      Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
