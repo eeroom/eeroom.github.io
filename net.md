@@ -229,7 +229,7 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 特别注意:如果开发机装了runtime,并且版本和sdk中的runtime版本不一致,会导致无法调试
 所以开发机sdk版本低一点没关系,客户端的runtime版本高就行,这样客户端一定可以正常执行sdk打包出来的xap包
 ```
-## ef
+## linq to sql实现(字段 like "%value1" || 字段 like "%value2"|| 字段 like "%value3" || ... )
 ```
 var dbcontext = new Model.DbContext();
 System.Linq.Expressions.Expression<Func<Model.Log, string>> exp = x => x.Name;
