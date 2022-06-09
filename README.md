@@ -825,7 +825,7 @@ ps5.1版本后可以支持class关键字，脚步里面直接定义class，具�
 参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
 参数扩展：~扩展指令；d:
 ```
-## SSMS(sqlserver management studio)
+## sqlserver management studio(ssms)
 ```
 指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
 隔离级别包含：READ UNCOMMITTED、READ COMMITTED
