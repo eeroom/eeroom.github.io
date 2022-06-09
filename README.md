@@ -481,40 +481,6 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 set pp=%PATH%
 setx PATH 
 ```
-## windows常用命令
-```
-列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
-查看访问到指定网络地址经过的网络节点：tracert 地址
-获取windows服务的名称列表：
-sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
-taskmgr --查看进程、服务等
-regedit--修改各种配置信息
-msinfo32--查看磁盘等信息
-sconfig --工具集合，修改计算机名称等
-重启 shutdown -r -t 0
-关机 shutdown -s -t 0
-查看磁盘容量：先使用diskpart命令，进入交互模式，再使用list disk命令即可。
-交互模式下输入？可以查看帮助信息
-
-禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
-删除或者设置虚拟内存文件，步骤：
-	先wmic进入交互模式（必须），然后
-	computersystem where name="TP20201225" set AutomaticManagedPagefile=False
-	重启后
-	PageFileSet where "name='C:\\pagefile.sys'" delete
-禁用休眠，powercfg -h off 重启后生效，会自动删除休眠文件
-关闭防火墙，
-netsh firewall set opmode disable
-netsh advfirewall firewall set opmode disable
-
-设定update服务为手动启动，关闭默认共享，关闭自动播放等
-修改注册表HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
-Start=3
-
-计算机管理-远程
-	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
-	计算机管理连接192.168.56.101，就可以进行管理
-```
 ## windows解压缩
 ```
 安装7z,下载命令行版本,然后修改环境变量，把7za.exe加入到PATH
@@ -819,6 +785,40 @@ for语句同理
 
 ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
 
+```
+## windows常用命令
+```
+列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
+查看访问到指定网络地址经过的网络节点：tracert 地址
+获取windows服务的名称列表：
+sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
+taskmgr --查看进程、服务等
+regedit--修改各种配置信息
+msinfo32--查看磁盘等信息
+sconfig --工具集合，修改计算机名称等
+重启 shutdown -r -t 0
+关机 shutdown -s -t 0
+查看磁盘容量：先使用diskpart命令，进入交互模式，再使用list disk命令即可。
+交互模式下输入？可以查看帮助信息
+
+禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
+删除或者设置虚拟内存文件，步骤：
+	先wmic进入交互模式（必须），然后
+	computersystem where name="TP20201225" set AutomaticManagedPagefile=False
+	重启后
+	PageFileSet where "name='C:\\pagefile.sys'" delete
+禁用休眠，powercfg -h off 重启后生效，会自动删除休眠文件
+关闭防火墙，
+netsh firewall set opmode disable
+netsh advfirewall firewall set opmode disable
+
+设定update服务为手动启动，关闭默认共享，关闭自动播放等
+修改注册表HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
+Start=3
+
+计算机管理-远程
+	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
+	计算机管理连接192.168.56.101，就可以进行管理
 ```
 ## bat教程
 ```
