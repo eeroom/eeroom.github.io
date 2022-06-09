@@ -175,6 +175,7 @@ end
 	```
 	compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
 	```
+
 ## sqlservercompact
 ```
 程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
