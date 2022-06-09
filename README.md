@@ -822,8 +822,59 @@ ps5.1版本后可以支持class关键字，脚步里面直接定义class，具�
 ```
 ## bat教程
 ```
+命令不区分大小写
 参数：%0为第0个参数，值是bat文件本身，%1为第一个参数，为调用命令的时候传入的，例如：test.bat rt		则%1的值为rt,第2个参数类推
 参数扩展：~扩展指令；d:
+echo	用于显示此命令后的字符,打印提示信息
+pause	暂停,用户输入任意键后关闭暂停
+echo off	此命令后的所有命令都不现实命令本身,默认情况下，bat每跑一行,cmd窗口都会答应这个代码
+@	不现实当前行的命令
+@echo off	常用于bat文件开头,避免打印bat代码内容
+rem		注释，后面跟注释内容
+::		注释，后面跟注释内容
+%		参数标识符，%[1-9]表示参数,可以%0到%9，%0表示bat文件本身
+		非for语句引用变量，%变量名%		echo	%a%
+		for语句引用变量，%%变量名,变量名只能是单个字母	for %%k in (1,2,3,4)	 do echo %%k
+call	调用另一个bat文件	call test2.bat	参数1 参数2	...
+		调用一个应用程序	call notepad.exe
+		跳到指定标签处,类似于goto 语句	call 标签名
+goto	跳到指定标签处	goto 标签名
+:		定义标签	:标签名
+if		判断语句，if [not] 条件判断 (语句1) else (语句2)
+				 if [not] 条件判断 语句1
+		字符串比较运算符
+			等于：==	if "%1"=="a" (echo 参数是a) else (echo 参数不是a)
+			不等于：使用if not配合==
+		数值比较运算符
+			等于：equ
+			不等于：neq
+			小于：lss
+			小于等于：leq
+			大于：gtr
+			大于等于：geq
+		文件比较
+			文件存在：exist		if exist e:\b.txt (语句1) else (语句2)
+			文件不存在：使用if not配合 exist
+		变量是否被赋值
+			defined 变量名 	特别的：变量名不需要%前缀
+		结合errorlevel使用
+			xcopy e:\b.txt f:\
+			if errorlevel 1 echo 文件复制失败
+			if errorlevel 0 echo 文件复制成功
+for		循环语句 	for 变量 in (集合内容) do 每次循环执行的任务
+		/f	解析文本读取字符串	for /f %%i (文件路径) do echo %%i
+		delims	指定读取文本内字符串的一个或多个分隔符,只会保留分隔符前面的内容 for /f "delims=-,+" %%i (文件路径) do echo %%i
+		tokens	指定分隔后要提取数据的一列或多列	for /f "tokens=2,3 delims=-,+" %%i (文件路径) do echo %%i
+			tokens= 	提取所有列
+			tokens=m	提取第m列
+			tokens=m,n	提取第m和第n列	
+			tokens=m-n	提取[m,n]范围内的列 for /f "tokens=1-3 delims=,+" %%a in (gf.txt) do echo %%a %%b %%c
+			tokens=m*	
+			tokens=m*	等价于[m,+∞]
+			tokens=m,*	等价于[m,+∞]
+			%%a %%b %%c对应tokens提取的列,提取了多少列就用多少个变量,变量字母按从小到大的顺序
+		/l	指定循环的集合是一个 (起始值,步长,结束值)的区间	for /l %%a in (1,1,100)  do echo %%a
+		
 ```
 ## sqlserver management studio(ssms)
 ```
