@@ -129,7 +129,7 @@ begin
 end
 ```
 ## Entity Framework(ef)
-0. 数据迁移基本操作
+1. 数据迁移基本操作
 ```
 启用迁移：Enable-Migrations
 增加一个版本：Add-Migration 版本名称
@@ -149,7 +149,7 @@ end
 适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
      Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
 ```
-2. ef策略初始化数据库
+1. ef策略初始化数据库
 ```
 CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
      Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
@@ -168,7 +168,7 @@ MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动�
 非常适合用于开发阶段场景：
      表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
 ```
-3. tips
+1. tips
 ```
 compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
 ```
