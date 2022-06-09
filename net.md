@@ -192,9 +192,9 @@ CardId uniqueidentifier not null
     START WITH 初始值
     INCREMENT BY 步长
     [CYCLE]
-
 删除序列：drop SEQUENCE 序列名称
 ```
+
 ## oracle
 ```
 表名和列名称区分大小写,sql语句中的表名和列表都会被默认转为大写
