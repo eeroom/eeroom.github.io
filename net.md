@@ -185,6 +185,16 @@ CardId uniqueidentifier not null
 
 使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
 ```
+## sqlserver
+1. 序列(版本>=sqlserver2014)
+```
+创建序列：CREATE SEQUENCE 序列名称 AS 类型
+    START WITH 初始值
+    INCREMENT BY 步长
+    [CYCLE]
+
+删除序列：drop SEQUENCE 序列名称
+```
 ## oracle
 ```
 表名和列名称区分大小写,sql语句中的表名和列表都会被默认转为大写
@@ -197,14 +207,6 @@ oracle安装教程：
 然后使用net configer 工具设置监听
 然后使用database configer工具安装数据库实例,调整字符集
 完成安装
-
-
-创建序列：CREATE SEQUENCE 序列名称 AS 类型
-    START WITH 初始值
-    INCREMENT BY 步长
-    [CYCLE]
-
-删除序列：drop SEQUENCE 序列名称
 
 使用1：INSERT INTO TEST(ID,Name) VALUES(NEXT VALUE FOR 序列名称, 'allen')
 使用2：SELECT NEXT VALUE FOR 序列名称
