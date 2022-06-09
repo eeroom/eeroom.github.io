@@ -131,16 +131,50 @@ begin
 	where ....
 end
 ```
-## ef(Entity Framework)
-```
-数据迁移：
+## Entity Framework(ef)
+0. 数据迁移基本操作
+     ```
      启用迁移：Enable-Migrations
      增加一个版本：Add-Migration 版本名称
+          只需要指定版本名称,工具会自动加上日期前缀
      更新到最新版本：Update-Database -Verbose
      更新到指定版本(支持回退版本):Update-Database –TargetMigration:版本名称
      获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
      宏变量，0版本名称：$InitialDatabase
-```
+     ```
+1. 手工操作初始化数据库结构
+	```
+	前提：关闭ef的数据库初始化策略：System.Data.Entity.Database.SetInitializer<HFDbContext>(null);
+	使用工具或者代码创建数据sdf数据文件：compactview
+	把项目设定为启动项目,vs的原因,ef迁移工具会从启动项目中读取数据库连接串!
+	在包管理控制台中把项目选为默认项目，
+     更新数据机构到最新版本：Update-Database -Verbose
+	适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
+	     Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
+	```
+2. ef策略初始化数据库
+	```
+	CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
+		Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
+		这样等价上面的手工操作
+	DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发和测试场景
+	DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
+	自定义策略,自己实现约定接口即可
+	上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
+	
+	MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
+	修改数据库初始化策略为：
+		Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
+	修改迁移配置类，
+		在构造函数设置启用自动迁移：this.AutomaticMigrationsEnabled = true;
+		启用允许修改表结构：this.AutomaticMigrationDataLossAllowed = true;
+	非常适合用于开发阶段场景：
+		表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
+	```
+3. tips
+	```
+	compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
+	```
 ## sqlservercompact
 ```
 程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
