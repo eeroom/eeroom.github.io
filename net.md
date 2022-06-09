@@ -220,15 +220,6 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 
 待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
 ```
-
-## silverlight
-```
-客户端浏览器只需要装runtime即可,最新版本为:
-开发机需要装silverlight sdk(runtime+msbuild的编译配置),silverlight developer(vs集成,项目模板),和silverlight toolkits(官方额外组件库)
-特别说明:silverlight sdk已经包含runtime,不需要重复安装
-特别注意:如果开发机装了runtime,并且版本和sdk中的runtime版本不一致,会导致无法调试
-所以开发机sdk版本低一点没关系,客户端的runtime版本高就行,这样客户端一定可以正常执行sdk打包出来的xap包
-```
 ## linq to sql实现(字段 like "%value1" || 字段 like "%value2"|| 字段 like "%value3" || ... )
 ```
 var dbcontext = new Model.DbContext();
