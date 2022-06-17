@@ -172,10 +172,10 @@ yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1
 ```
 概念：云原生是一种新型技术体系，以容器、微服务、DevOps等技术为基础建立的一套云技术产品体系。
 	云原生应用也就是面向“云”而设计的应用，在使用云原生技术后，开发者无需考虑底层的技术实现，可以充分发挥云平台的弹性和分布式优势，实现快速部署、按需伸缩
-发展历程：物理服务器——虚拟化——云计算——容器——云原生
-虚拟化：宿主机（物理服务器）上划分多台物理隔离的虚拟机，安装相同或不同的操作系统
+技术体系发展历程：物理机——虚拟机——云计算——容器——云原生
+虚拟机：宿主机（物理服务器）上划分多台物理隔离的虚拟机，安装相同或不同的操作系统
 云计算：计算+存储+网络+服务化，云和传统最大的区别：按需要分配，传统场景下,资源都在自己手里，用不了就浪费
-	云计算技术分层：IaaS,PaaS,SaaS
+	云计算技术分层：IaaS（2006落地产品）,PaaS（2009落地产品）,SaaS
 	云计算技术流派：Eucalyptus,cloudstack,openstack
 容器：宿主机(物理服务器或虚拟机)上划分多个部分隔离的空间，共享操作系统
 云原生：云计算+容器+微服务+DevOps
@@ -184,6 +184,27 @@ yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1
 	容器编排之争：Docker swarm VS Kubernets VS Apache Mesos
 2015年6月Docker成立OCI组织，定义各种规范，容器运行时规范，镜像格式规范，镜像分发规范，解决容器的构建、分发和运行问题
 2015年7月Google成立CNCF(Cloud Native Computing Foundation),解决应用管理及容器编排问题
+虚拟化技术发展历程：
+	完全虚拟化：应用程序——虚拟机操作系统——虚拟机监视器——宿主操作系统——硬件
+	半虚拟化：应用程序——虚拟机操作系统——虚拟机监视器——硬件（需要修改宿主操作系统内核，代表作：xen）
+	操作系统虚拟化：应用程序——宿主操作系统——硬件（代表作：docker）
+	操作系统虚拟化是容器和云原生的基石
+```
+## docker
+```
+2013年：docker公司发布docker
+2016年：docker开源并将containerd捐赠给了CNCF
+docker组件：
+docker engine:也叫做doker daemon或dockerd，用于启动服务守护进程，dockerd启动时会启动containerd子进程
+containerd:符合OCI标准的容器运行时，强调简单性、健壮性和可移植性，可以直接单机运行一个容器
+containerd-shim:为了支持多种OCI Runtime,containerd内部使用containerd-shim(垫片),每启动一个容器都会创建一个新的containerd-shim进程，指定容器id,bundle目录
+runC:根据OCI标准创建和运行容器
+
+容器底层关键技术：
+通过namespace实现资源隔离，一个宿主机可以跑多个容器，容器之间特定资源需要隔离,IP,用户等
+通过cgroups实现资源限制，限制某个容器使用的资源量，避免容器过度使用资源
+通过联合文件系统提高存储效率，容器虽然轻量，N个容器跑起来占用的空间也会很多，需要特殊的存储方式
+
 ```
 ## docker基本命令：
 ```
