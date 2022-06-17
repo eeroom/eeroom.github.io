@@ -168,6 +168,23 @@ yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机
 yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
 yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
 ```
+## 云原生
+```
+概念：云原生是一种新型技术体系，以容器、微服务、DevOps等技术为基础建立的一套云技术产品体系。
+	云原生应用也就是面向“云”而设计的应用，在使用云原生技术后，开发者无需考虑底层的技术实现，可以充分发挥云平台的弹性和分布式优势，实现快速部署、按需伸缩
+发展历程：物理服务器——虚拟化——云计算——容器——云原生
+虚拟化：宿主机（物理服务器）上划分多台物理隔离的虚拟机，安装相同或不同的操作系统
+云计算：计算+存储+网络+服务化，云和传统最大的区别：按需要分配，传统场景下,资源都在自己手里，用不了就浪费
+	云计算技术分层：IaaS,PaaS,SaaS
+	云计算技术流派：Eucalyptus,cloudstack,openstack
+容器：宿主机(物理服务器或虚拟机)上划分多个部分隔离的空间，共享操作系统
+云原生：云计算+容器+微服务+DevOps
+发展历程中的商业竞争：
+	容器引擎之争：docker公司的docker VS CoreOS公司的rocket
+	容器编排之争：Docker swarm VS Kubernets VS Apache Mesos
+2015年6月Docker成立OCI组织，定义各种规范，容器运行时规范，镜像格式规范，镜像分发规范，解决容器的构建、分发和运行问题
+2015年7月Google成立CNCF(Cloud Native Computing Foundation),解决应用管理及容器编排问题
+```
 ## docker基本命令：
 ```
 docker -v //查看版本
