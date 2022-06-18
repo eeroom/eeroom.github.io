@@ -214,6 +214,11 @@ runC:根据OCI标准创建和运行容器
 通过cgroups实现资源限制，限制某个容器使用的资源量，避免容器过度使用资源
 通过联合文件系统提高存储效率，容器虽然轻量，N个容器跑起来占用的空间也会很多，需要特殊的存储方式
 
+安装docker1.12,准备主程序和所有依赖文件,docker1.12和centos7.2(1511)适配度高
+切换到docker的程序和依赖目录,执行：yum  localinstall ./* --nogpgcheck
+激活开机启动：systemctl enable docker
+重启服务器
+查看docker deamon程序状态：docker info
 ```
 ## docker基本命令：
 ```
