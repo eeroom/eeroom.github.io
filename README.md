@@ -158,6 +158,15 @@ yum  localinstall docker-engine-1.12.6-1.el7.centos.x86_64.rpm --nogpgcheck
 yum grouplist //列出所有的软件组 比如 genome desktop
 yum group install 某个组的名称 //安装某个组的程序，一系列程序
 yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
+yum下载的包在哪里
+cat /etc/yum.conf
+cachedir=/var/cache/yum/$basearch/$releasever
+keepcache=0
+cachedir是软件包下载后保存的目录。但默认是不保存的，因为keepcache=0。若想要保存下载的软件包，必须将keepcache设置1才可以。
+
+yum安装某个目录下的所有rpm文件：yum  localinstall 目录/* --nogpgcheck
+比如已经切换到安装程序所在目录：yum  localinstall ./* --nogpgcheck
+场景：目录下包含程序和该程序所有层级的依赖rpm文件
 ```
 ## centos安装桌面
 ```
