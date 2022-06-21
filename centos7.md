@@ -36,6 +36,23 @@ yum本地安装jdk11
 ```
 ### tomcat
 ### dotnet
+```
+绿色版安装netcore2.0.9
+    二进制包：微软官网下载tar.gz的文件
+    解压：tar zxf dotnet-sdk-2.1.202-linux-x64.tar.gz -C ./dotnet2.0.9
+    环境变量：修改/etc/profile，末尾增加两行
+        export DOTNET_HOME=解压后的存放路径，例如/root/dotnet2.0.9
+        export PATH=${DOTNET_HOME}:$PATH
+        刷新profile文件或者重启系统：source /etc/profile
+    依赖组件：libicu和libunwind，从Everything版的组件包中获取
+    查看版本：dotnet --version
+    执行程序：dotnet xxxx.dll
+    指定aspnetcore程序监听的ip和端口：默认是localhost:5000，导致windows访问不了
+        办法1：代码指定
+        办法2：代码不指定，修改环境变量：export ASPNETCORE_URLS="http://192.168.56.102:5001"
+脚本或程序包安装netcore
+    待研究，依赖网络，并且不好选择合适的旧版本，新版本又容易导致依赖组件套娃更新
+```
 ### docker
 ```
 本地安装：centos7.2和docker1.12版本的发布时间接近，Everything版中的组件满足docker直接和间接依赖的所有组件
