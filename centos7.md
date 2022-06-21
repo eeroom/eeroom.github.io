@@ -31,7 +31,9 @@ yum本地安装jdk11
     解析依赖：执行yum localinstall xxx.rpm --nogpgcheck，先不安装，只是查看yum分析出来的依赖组件
     依赖组件：从Everything版中的组件包凑齐jdk的所有组件
     安装：把jdk的rpm包和依赖包放在相同的目录，执行：yum localinstall * --nogpgcheck
+        会自动创建java执行程序到默认PATH路径下的链接，所以不需要设置环境变量
     已知问题：centos7.2安装jdk11仅需要更新一个组件，问题不大
+
 ```
 ### tomcat
 ### dotnet
