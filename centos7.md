@@ -15,6 +15,17 @@ NetInstall版：网络安装版本，联网安装系统
 ### 局域网共享
 ### 环境变量
 ### jdk
+```
+本地安装jdk11
+    二进制包：openjdk网站或者镜像站(华为云镜像等)下载
+    解压：tar zxf openjdk-11.0.2_linux-x64_bin.tar.gz -C ./openjdk
+    环境变量：修改/etc/profile，末尾增加两行
+        export JAVA_HOME=解压后的存放路径，例如/root/openjdk/jdk-11.0.2
+        export PATH=${JAVA_HOME}/bin:$PATH
+        刷新profile文件或者重启系统：source /etc/profile
+    查看jdk版本：java --version
+    执行jar包：java -jar xxx.jar
+```
 ### tomcat
 ### dotnet
 ### docker
