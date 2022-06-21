@@ -16,7 +16,7 @@ NetInstall版：网络安装版本，联网安装系统
 ### 环境变量
 ### jdk
 ```
-本地安装jdk11
+绿色版安装jdk11
     二进制包：openjdk网站或者镜像站(华为云镜像等)下载
     解压：tar zxf openjdk-11.0.2_linux-x64_bin.tar.gz -C ./openjdk
     环境变量：修改/etc/profile，末尾增加两行
@@ -25,6 +25,13 @@ NetInstall版：网络安装版本，联网安装系统
         刷新profile文件或者重启系统：source /etc/profile
     查看jdk版本：java --version
     执行jar包：java -jar xxx.jar
+    绿色版的安装优势：二进制包已经包含jdk的所有依赖，和windows上的安装方式完全一致
+yum本地安装jdk11
+    rpm包：rpm官网下载rpm包
+    解析依赖：执行yum localinstall xxx.rpm --nogpgcheck，先不安装，只是查看yum分析出来的依赖组件
+    依赖组件：从Everything版中的组件包凑齐jdk的所有组件
+    安装：把jdk的rpm包和依赖包放在相同的目录，执行：yum localinstall * --nogpgcheck
+    已知问题：centos7.2安装jdk11仅需要更新一个组件，问题不大
 ```
 ### tomcat
 ### dotnet
