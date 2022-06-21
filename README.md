@@ -16,21 +16,24 @@ TYPE=Ethernet
 ONBOOT=yes //这个默认是no,表示开机不启用该网卡
 NM_CONTROLLED=yes
 BOOTPROTO=dhcp
+
+ifconfig    ping  地址  -c次数      nslookup www.baidu.com
 ```
 ## centos7网络设置
 ```
-使用nmtui管理
-命令（tui形式）：  nmtui  
-对应的网卡配置文件：/etc/sysconfig/network-scripts/ifcfg-ens33
+nmtui:tui(文本界面)形式的管理工具,相关的有cui(命令行界面)和gui(图形界面)
+	功能：设置固定IP,开机启用等等
 网卡命名规则：
-en： ethernet以太网卡
-o：主板集成网卡
-p：PCI独立网卡
-s：热插拔网卡
-nnn数字：MAC+主板信息（生产唯一序号）
-如：ifcfg-ens33 （以太热插拔）
-DNS配置文件:/etc/resolv.conf
-ifconfig    ping  地址  -c次数      nslookup www.baidu.com
+	en： ethernet以太网卡
+	o：主板集成网卡
+	p：PCI独立网卡
+	s：热插拔网卡
+	nnn数字：MAC+主板信息（生产唯一序号）
+例如：ens333,就是以太网卡-热插拔-nnn数字
+依据网卡命名规则，会自动生成网卡的配置文件：/etc/sysconfig/network-scripts/ifcfg-ens333
+	可以使用winscp打开配置进行各项修改，里面的项和centos6的差不多
+DNS配置文件（对应windows的host文件）:/etc/resolv.conf
+ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
 ## centos常用命令
 ```
