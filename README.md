@@ -218,6 +218,7 @@ runC:根据OCI标准创建和运行容器
 通过联合文件系统提高存储效率，容器虽然轻量，N个容器跑起来占用的空间也会很多，需要特殊的存储方式
 
 安装docker1.12,准备主程序和所有依赖文件,docker1.12和centos7.2(1511)适配度高
+
 切换到docker的程序和依赖目录,执行：yum  localinstall ./* --nogpgcheck
 激活开机启动：systemctl enable docker
 重启服务器
@@ -230,17 +231,39 @@ docker info //查看信息
 ```
 ## docker镜像操作
 ```
-docker pull 镜像名称 //获取镜像，镜像名称=名称:tag
-docker tag 名称:tag 名称:新tag //修改镜像的tag
-docker rmi 镜像ID //删除镜像
-docker images //列出所有的镜像
-docker load：导入本地镜像
-docker load [OPTIONS]
--i：从tar文件读取
--q：禁止读入输出
-例如：docker load -i mytomcat_v1.tar
-docker load < /root/wch/mytomcat_v1.tar
-docker push //上次镜像
+镜像：打包好的环境和应用，对应不可变基础设施
+容器：运行镜像的势力，镜像是静态的，容器是动态的
+仓库：存放多个镜像的仓库
+	修改仓库地址，使用华为云加速地址，增加文件：/etc/
+列出本地所有镜像：docker images
+	docker images -aq
+镜像完整名称=(IP/域名)/仓库名/镜像名:tag
+	不指定IP/域名，默认为官方地址，即docker-hub
+	不指定仓库名，则为该地址下的默认仓库，docker-hub称为官方仓
+	必须指定镜像名
+	不指定tag值，默认为latest，这是一个动态值，总是指向当前的最新的tag值
+查询远程仓库的镜像：docker search 镜像名称
+下载镜像：docker pull 镜像完整名称
+	docker pull centos:7.2.1511
+	下载镜像的默认存放路径：/var/lib/docker/devicemapper
+	centos下的docker使用devicemapper存储驱动，有些系统下使用overlay驱动
+	存放的具体路径和docker使用的存储驱动有关，但都是在/var/lib/docker里面
+登陆：docker login
+	假定基于harbor的docker镜像仓库地址：docker login 192.168.56.1
+推出：docker logout
+上传镜像：docker push
+	先登录制定的镜像仓库
+	然后镜像tag：docker tag centos:7.2.1511 192.168.56.1/myimgs/centos:7.2
+	然后：docker push 192.168.56.1/myimgs/centos:7.2 
+删除镜像：docker rmi
+标记镜像：docker tag 镜像原名称(完整) 镜像新名称(完整)
+	docker tag centos:7.2.1511 centos:7.2
+	镜像完整名称：镜像名称:标签值
+	特殊标签：latest，最新版本，指定镜像名的时候，如果不明确指定tag，就是latest
+导出镜像：docker save
+	docker save centos -o /root/centos.20220621.tar
+导入镜像：docker load
+	docker load < /root/centos.20220621.tar
 ```
 ## docker镜像仓库
 ```

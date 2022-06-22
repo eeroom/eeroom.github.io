@@ -55,7 +55,15 @@ yum本地安装jdk11
 ```
 ### docker
 ```
-本地安装：centos7.2和docker1.12版本的发布时间接近，Everything版中的组件满足docker直接和间接依赖的所有组件
-
+yum本地安装docker1.12
+    centos7.2和docker1.12版本的发布时间接近，Everything版中的组件满足docker直接和间接依赖的所有组件
+    凑齐所有依赖组件，执行：yum localinstall * --nogpgcheck
+    docker的服务端主程序：/usr/bin/dockerd
+    我们可以手动执行服务端主程序启动dockerd服务
+    docker安装程序会在systemd下注册服务：/usr/lib/systemd/system/docker.service；对应windows的服务
+        服务的核心就是执行dockerd
+    docker的客户端程序：/usr/bin/docker
+启动docker服务：systemctl start docker
+设置开机启动：systemctl enable docker
 ```
 
