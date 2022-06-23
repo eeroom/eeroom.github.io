@@ -289,7 +289,7 @@ docker login 仓库ip
 ```
 查看正在运行的容器：docker ps
 新增容器：docker create 镜像名
-运行容器：docker run 镜像名称	[容器里面要执行的命令]
+运行容器（新增并运行）：docker run 镜像名称	[容器里面要执行的命令]
 	docker run centos:7.2.1511  echo seek
 	镜像本身包含其要默认执行的命令，如果在run语句中指定命令，则容器不会执行其镜像里的默认命令
 	跑容器类似于执行可执行程序，命令执行完容器就结束了，如果需要容器一直执行，需要执行持续性的任务，比如http服务器
@@ -326,6 +326,13 @@ docker login 仓库ip
 查看容器的所有配置参数：docker inspect 容器id
 启动指定容器：docker start 容器id
 
+linux内核提供6中namespace隔离
+主机名或域名：UTS,每个NameSpace都拥有独立的主机名或域名，可以把每个NameSpace认为一个独立主机
+信号量、消息队列和共享内存：IPC，每个容器依旧使用linux内核中进程交互的方法，实现进程间通信
+进程编号：PID，每个容器都拥有独立的进程树，容器是物理机的一个进程，容器中的进程是宿主机的线程
+网络设备接口，IP路由表，防火墙规则等：net，每个容器的网络隔离
+挂载点：mount，每个容器的文件系统独立
+用户和用户组：user，每个容器的用户和组隔离，每个容器都有自己的root用户
 
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
