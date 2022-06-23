@@ -44,6 +44,8 @@ cpu使用情况: top
 查看指定端口被使用情况: lsof -i:端口号     
 				netstat -apn|grep 端口号 
 				ps -au|grep 端口号
+查看进程树：pstree  
+	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
 查看指定命令对应程序所在的位置(等价于cmd的where)：which
 查询当前系统的版本:uname -r
 当前所在的位置:pwd(printf working directory) 
