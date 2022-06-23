@@ -278,6 +278,7 @@ Harbor可以快速搭建一个企业级的镜像仓库
 安装docker-compose,docker官方在单台机器的编排工具，1.24.1
 docker-compose down //停止本机的doker 容器
 docker rmi `docker images -aq`//linux执行符号，
+	docker rmi $(docker images -aq)
 docker push centos:7.6 
 配置docker不走https,vi /etc/docker/daemon.json  "insecure-registries":["192.168.56.104"]
 docker tag centos:7.6 192.168.56.104/library/centos:7.6
@@ -286,6 +287,8 @@ docker login 仓库ip
 ```
 ## docker容器操作
 ```
+查看正在运行的容器：docker ps -a
+运行容器：
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
 docker run 参数
