@@ -174,7 +174,7 @@ keepcache=0
 cachedir是软件包下载后保存的目录。但默认是不保存的，因为keepcache=0。若想要保存下载的软件包，必须将keepcache设置1才可以。
 
 yum安装某个目录下的所有rpm文件：yum  localinstall 目录/* --nogpgcheck
-比如已经切换到安装程序所在目录：yum  localinstall ./* --nogpgcheck
+比如已经切换到安装程序所在目录：yum  localinstall * --nogpgcheck
 场景：目录下包含程序和该程序所有层级的依赖rpm文件
 ```
 ## centos安装桌面
@@ -317,8 +317,9 @@ docker login 仓库ip
 			在宿主机执行docker inspect 查看容器的ip,局限：只能是宿主机机或者兄弟容器或者自己访问
 		使用宿主机id访问主页，curl 192.168.56.102:8004/index.html
 			必须要端口映射 -p 8004:80
-
-		
+	容器开机自启动：--restart=always
+	传参给镜像内部：-e 参数名称=参数值
+		参数名称由镜像决定
 容器内执行命令：docker attach 
 	退出的时候会自动停止容器，不推荐使用
 容器内执行命令：docker exec 容器名称/容器id 命令
@@ -346,8 +347,16 @@ docker login 仓库ip
 查看容器内的输出：docker logs 容器id
 查看容器的所有配置参数：docker inspect 容器id
 启动指定容器：docker start 容器id
-
-
+挂载数据卷：-v 宿主机文件（夹）：容器内文件（夹）
+	场景：容器内配置文件需要修改、容器内数据需要保存、不同容器之间共享数据
+	指定的宿主机上的文件（夹）如果不存在会自动创建，自动创建的一定是文件夹，如果需要映射文件，需要提前在路径下准备好
+	docker run -itd -p 8001:80 -v /root/www:/var/www/html azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+	可以映射多个,很多镜像里面的时区不是北京时区，导致时间不一致，映射时区文件可以解决这个问题
+	docker run -itd -p 8001:80 -v /root/www:/var/www/html -v /etc/localtime:/etc/localtime azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+	映射mysql的数据文件：-v /root/mysqldata:/var/lib/mysql
+	映射nginx的主目录：-v /root/nginxhome:/usr/share/nginx/html
+	映射httpd的主目录：-v /root/httpdhome:/var/www/html
+	映射tomcat主目录：-v /root/tomcathome:/usr/local/tomcat/webapps
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
 docker run 参数
