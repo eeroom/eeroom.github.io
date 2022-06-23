@@ -354,6 +354,7 @@ docker login 仓库ip
 	可以映射多个,很多镜像里面的时区不是北京时区，导致时间不一致，映射时区文件可以解决这个问题
 	docker run -itd -p 8001:80 -v /root/www:/var/www/html -v /etc/localtime:/etc/localtime azeroth:httpd /usr/sbin/httpd -D FOREGROUND
 	映射mysql的数据文件：-v /root/mysqldata:/var/lib/mysql
+		 docker run -d -p 3306:3306 -v /root/mysqldata:/var/lib/mysql --restart=always -e MYSQL_ROOT_PASSWORD=123456 mysql:5.6
 	映射nginx的主目录：-v /root/nginxhome:/usr/share/nginx/html
 	映射httpd的主目录：-v /root/httpdhome:/var/www/html
 	映射tomcat主目录：-v /root/tomcathome:/usr/local/tomcat/webapps
@@ -372,6 +373,57 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
 docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+## 使用Dockerfile构建镜像
+```
+指定基础镜像：FROM
+	FROM centos:7.2.1511
+	FROM 192.168.56.103/myimgs/centos:7.2
+指定作者信息(可选)：MAINTAINER
+	MAINTAINER eeroom
+添加属性信息（可选，可多个）：LABEL
+	LABEL version="1.0"
+	LABEL seek="vbc"
+执行命令：RUN
+	构建镜像过程中执行的命令，比如镜像需要安装httpd
+	RUN yum localinstall /root/httpd/* --nogpgcheck
+	优化点：有多条命令的时候，不要使用多条RUN,尽量使用&&符号和\符号连接成一行，多条RUN导致镜像创建多层
+执行命令：CMD
+	容器启动的时候要执行的命令，只能有一个CMD,有三种格式:
+	CMD ['命令','参数1','参数2']
+	CMD ['参数1','参数2']
+	CMD 命令 参数1,参数2
+执行命令：ENTRYPOINT
+	和CMD类似
+	和CMD的区别：可以有多个，最后一个生效，CMD可以被run容器的时候传提的命令覆盖，ENTRYPOINT的命令不能被覆盖
+定义变量：ARG
+	ARG a=3
+	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
+定义变量：ENV
+	ENV a=4
+	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
+拷贝文件：ADD
+	ADD 源 目标
+	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
+	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
+拷贝文件：COPY
+	COPY 源 目标
+	和ADD类似，区别：源只能是本地文件
+	优点：简单，直观，完全可以替代ADD
+挂载数据卷：VOLUME
+	VOLUME ["挂载点","挂载点"]
+暴露端口：EXPOSE
+	EXPOSE 80
+	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
+	这个指定其实只是声明，最终由-p的参数值决定端口映射
+指定用户：USER
+	USER daemon
+	可以是用户名或者UID，对应 -u 用户名
+	默认是root用户
+设置工作目录：WORKDIR 
+	WORKDIR /root
+	等价于RUN cd /root
+
 ```
 ## docker资源隔离
 ```
