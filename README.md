@@ -288,19 +288,45 @@ docker login 仓库ip
 ## docker容器操作
 ```
 查看正在运行的容器：docker ps
+新增容器：docker create 镜像名
 运行容器：docker run 镜像名称	[容器里面要执行的命令]
 	docker run centos:7.2.1511  echo seek
 	镜像本身包含其要默认执行的命令，如果在run语句中指定命令，则容器不会执行其镜像里的默认命令
 	跑容器类似于执行可执行程序，命令执行完容器就结束了，如果需要容器一直执行，需要执行持续性的任务，比如http服务器
-	docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+		docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
 	容器的输出被重定向到启动容器的终端,添加-d 参数表示不重定向容器的输出
-	docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	容器名称默认是随机生成，--name=容器名称 这个参数指定容器名称
-	使用终端与容器进行交互，-it 这个参数的副作用类似于重定向了容器的输入和输出，因为重定向了输入，类似于chi'xu
+		docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+	容器名称默认是随机生成，--name=容器名称 这个参数指定容器名称，或者--name 容器名称
+		docker run -d --name=wch1 centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+	终端与容器进行交互（阻塞式），-it 这个参数的副作用类似于重定向了容器的输入和输出，因为重定向了输入，类似于持续任务，容器会一直运行
+		docker run -it centos:7.3.1611
+		可以看到当前终端登录的是容器内的centos7.3,使用uname查看系统信息，系统内核仍然是7.2的
+		如果执行exit从容器退出，则容器停止
+容器内执行命令：docker attach 
+	退出的时候会自动停止容器，不推荐使用
+容器内执行命令：docker exec 容器名称/容器id 命令
+	docker exec wch1 touch /abc
+		这样会在容器内创建文件/abc
+容器内执行命令(交互式)：docker exec -it 容器名称/容器id /bin/bash
+	docker exec -it wch1 /bin/bash
+	然后执行ls / ；可以看到被创建的abc文件
+拷贝文件（夹）：docker cp 源文件 目标文件
+	docker cp /root/123 wch:/123
+	docker cp wch:/abc /abc
+	容器内的文件（夹）路径=容器名称：/正常路径
+终端与容器进行交互（附加式）：docker exec -it 容器名称/容器id  /bin/bash
+提交容器为镜像：docker commit 容器名称/容器id 新的镜像名称
+	场景：往容器中安装了新软件或改了配置，想保存为新的镜像
+	这是自定义镜像的方法之一，不太科学，科学做法是：在容器所属镜像的基础上直接创建新镜像
+删除容器：docker rm 容器名称/容器id
+	不能删除正在运行的容器，删除所有已经停止的容器
 停止容器：docker stop 容器id/容器name
+	停止所有正在运行的容器：docker stop $(docker ps -q)
 查看容器内的输出：docker logs 容器id
 查看容器的所有配置参数：docker inspect 容器id
 启动指定容器：docker start 容器id
+
+
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
 docker run 参数
