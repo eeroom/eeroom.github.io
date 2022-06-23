@@ -335,6 +335,10 @@ docker login 仓库ip
 提交容器为镜像：docker commit 容器名称/容器id 新的镜像名称
 	场景：往容器中安装了新软件或改了配置，想保存为新的镜像
 	这是自定义镜像的方法之一，不太科学，科学做法是：在容器所属镜像的基础上直接创建新镜像
+	以端口映射中的端口映射为例，commit为新镜像后，使用正常docker run 不能启动httpd服务，必须加参数 -D FOREGROUND ，表示程序放到前台运行
+		 docker run [-itd] -p 9001:80 azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+		 commit生成的镜像继续沿用原镜像的默认命令，不能修改默认命令为/usr/sbin/httpd
+		 容器本身就是进程，无法将容器内的服务放到后台运行，
 删除容器：docker rm 容器名称/容器id
 	不能删除正在运行的容器，删除所有已经停止的容器
 停止容器：docker stop 容器id/容器name
