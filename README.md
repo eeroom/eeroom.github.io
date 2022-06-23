@@ -326,17 +326,6 @@ docker login 仓库ip
 查看容器的所有配置参数：docker inspect 容器id
 启动指定容器：docker start 容器id
 
-linux内核提供6中namespace隔离
-主机名或域名：UTS,每个NameSpace都拥有独立的主机名或域名，可以把每个NameSpace认为一个独立主机
-信号量、消息队列和共享内存：IPC，每个容器依旧使用linux内核中进程交互的方法，实现进程间通信
-进程编号：PID，每个容器都拥有独立的进程树，容器是物理机的一个进程，容器中的进程是宿主机的线程
-网络设备接口，IP路由表，防火墙规则等：net，每个容器的网络隔离
-挂载点：mount，每个容器的文件系统独立
-用户和用户组：user，每个容器的用户和组隔离，每个容器都有自己的root用户
-特别的：
-	两个容器的网络可以共用IP地址，主机名不同，其他是隔离的
-	两个容器的Mount存储部分公用，其它是隔离的
-
 
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
@@ -353,6 +342,26 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
 docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+## docker资源隔离
+```
+linux内核提供6中namespace隔离
+主机名或域名：UTS,每个NameSpace都拥有独立的主机名或域名，可以把每个NameSpace认为一个独立主机
+信号量、消息队列和共享内存：IPC，每个容器依旧使用linux内核中进程交互的方法，实现进程间通信
+进程编号：PID，每个容器都拥有独立的进程树，容器是物理机的一个进程，容器中的进程是宿主机的线程
+网络设备接口，IP路由表，防火墙规则等：net，每个容器的网络隔离
+挂载点：mount，每个容器的文件系统独立
+用户和用户组：user，每个容器的用户和组隔离，每个容器都有自己的root用户
+特别的：
+	两个容器的网络可以共用IP地址，主机名不同，其他是隔离的
+	两个容器的Mount存储部分公用，其它是隔离的
+```
+## docker资源限制
+```
+cpu限制，通过run的参数设置
+内存限制，通过run的参数设置
+磁盘IO限制
+	dd命令写一个具有实际10M大小的文件：dd if=/dev/zero of=/root/myfile bs=1M count=10
 ```
 ## docker客户端教程
 ```
