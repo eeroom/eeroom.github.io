@@ -302,6 +302,11 @@ docker login 仓库ip
 		docker run -it centos:7.3.1611
 		可以看到当前终端登录的是容器内的centos7.3,使用uname查看系统信息，系统内核仍然是7.2的
 		如果执行exit从容器退出，则容器停止
+	端口映射，-p 
+		docker run -itd 
+		需要宿主机打开ip_forward（跨网段路由）,/etc/sysctl.conf 文件中设置net.ipv4.ip_forward=1
+		centos7.2minimal系统中默认已经打开，查看方法：sysctl -a |grep ip_forward
+		
 容器内执行命令：docker attach 
 	退出的时候会自动停止容器，不推荐使用
 容器内执行命令：docker exec 容器名称/容器id 命令
@@ -374,7 +379,6 @@ cpu限制，通过run的参数设置
 	docker最开始采用AUFS作为文件系统（分层概念），实现多个容器共享一个镜像，分层核心：最上层是读写层，其他的都是只读的镜像层
 	但是AUFS只支持Ubuntu，一直没被纳入linux内核，所以docker最开始只能支持Ubuntu，0.7版本引入存储驱动层
 	docker支持存储驱动：AUFS,OverlayFS,Btrfs,Device mapper,ZFS
-
 ```
 ## docker客户端教程
 ```
