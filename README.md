@@ -287,8 +287,20 @@ docker login 仓库ip
 ```
 ## docker容器操作
 ```
-查看正在运行的容器：docker ps -a
-运行容器：
+查看正在运行的容器：docker ps
+运行容器：docker run 镜像名称	[容器里面要执行的命令]
+	docker run centos:7.2.1511  echo seek
+	镜像本身包含其要默认执行的命令，如果在run语句中指定命令，则容器不会执行其镜像里的默认命令
+	跑容器类似于执行可执行程序，命令执行完容器就结束了，如果需要容器一直执行，需要执行持续性的任务，比如http服务器
+	docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+	容器的输出被重定向到启动容器的终端,添加-d 参数表示不重定向容器的输出
+	docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+	容器名称默认是随机生成，--name=容器名称 这个参数指定容器名称
+	使用终端与容器进行交互，-it 这个参数的副作用类似于重定向了容器的输入和输出，因为重定向了输入，类似于chi'xu
+停止容器：docker stop 容器id/容器name
+查看容器内的输出：docker logs 容器id
+查看容器的所有配置参数：docker inspect 容器id
+启动指定容器：docker start 容器id
 docker create 镜像名 //新增容器
 docker rm 容器ID //删除容器
 docker run 参数
