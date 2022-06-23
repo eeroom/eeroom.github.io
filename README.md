@@ -297,25 +297,26 @@ docker login 仓库ip
 新增容器：docker create 镜像名
 运行容器（新增并运行）：docker run 镜像名称	[容器里面要执行的命令]
 	docker run centos:7.2.1511  echo seek
-	镜像本身包含其要默认执行的命令，如果在run语句中指定命令，则容器不会执行其镜像里的默认命令
-	跑容器类似于执行可执行程序，命令执行完容器就结束了，如果需要容器一直执行，需要执行持续性的任务，比如http服务器
+	镜像本身包含默认命令，如果在run语句中不指定命令，则容器执行其镜像里的默认命令
+	跑容器类似于执行可执行程序，命令执行完容器就结束了，并且输出被重定向到宿主的终端，如果需要容器一直执行，需要执行持续性的任务
 		docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	容器的输出被重定向到启动容器的终端,添加-d 参数表示不重定向容器的输出
+	后台运行,-d 容器输出不会被重定向到宿主的终端
 		docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	容器名称默认是随机生成，--name=容器名称 这个参数指定容器名称，或者--name 容器名称
+	指定容器名称，--name=容器名称 或者 --name 容器名称
 		docker run -d --name=wch1 centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	终端与容器进行交互（阻塞式），-it 这个参数的副作用类似于重定向了容器的输入和输出，因为重定向了输入，类似于持续任务，容器会一直运行
+	交互，-it 重定向了容器的输入和输出，因为重定向了输入，类似于持续任务，在交互期间容器会一直运行，一旦执行exit退出容器，则容器关闭
 		docker run -it centos:7.3.1611
 		可以看到当前终端登录的是容器内的centos7.3,使用uname查看系统信息，系统内核仍然是7.2的
-		如果执行exit从容器退出，则容器停止
-	端口映射，-p 
-		docker run -itd 
+	端口映射，-p 宿主机端口:容器端口
+		docker run -itd -p 8004:80 centos:7.2
 		需要宿主机打开 ip_forward （跨网段路由）,/etc/sysctl.conf 文件中设置 net.ipv4.ip_forward=1
-		centos7.2minimal系统中默认已经打开，查看方法：sysctl -a |grep ip_forward
-		容器内安装 httpd,然后容器内直接使用命令：httpd	,启动服务,
-		然后在宿主机使用curl按照容器的ip地址访问容器内http服务
-			在宿主机执行docker inspect 查看容器的ip
-		
+			centos7.2minimal系统中默认已经打开，查看方法：sysctl -a |grep ip_forward
+		容器内安装 httpd,然后容器内使用httpd命令直接启动服务,修改httpd的主页内容： echo helloworld > /var/www/html/index.html
+			不能使用systemctl启动httpd服务，因为容器本身是宿主机systemd下的一个进程，容器本身没有systemd,不能使用systemctl
+		使用容器的ip访问主页，curl 172.17.0.2/index.html
+			在宿主机执行docker inspect 查看容器的ip,局限：只能是宿主机机或者兄弟容器或者自己访问
+		使用宿主机id访问主页，curl 192.168.56.102:8004/index.html
+			必须要端口映射 -p 8004:80
 
 		
 容器内执行命令：docker attach 
