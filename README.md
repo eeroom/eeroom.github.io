@@ -46,6 +46,10 @@ cpu使用情况: top
 				ps -au|grep 端口号
 查看进程树：pstree  
 	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
+查看端口占用：ss
+	系统默认自带
+查看端口使用：lsof 
+	需要安装lsof的包，查看使用80端口的程序： lsof -i:80
 查看指定命令对应程序所在的位置(等价于cmd的where)：which
 查询当前系统的版本:uname -r
 当前所在的位置:pwd(printf working directory) 
@@ -306,8 +310,13 @@ docker login 仓库ip
 		如果执行exit从容器退出，则容器停止
 	端口映射，-p 
 		docker run -itd 
-		需要宿主机打开ip_forward（跨网段路由）,/etc/sysctl.conf 文件中设置net.ipv4.ip_forward=1
+		需要宿主机打开 ip_forward （跨网段路由）,/etc/sysctl.conf 文件中设置 net.ipv4.ip_forward=1
 		centos7.2minimal系统中默认已经打开，查看方法：sysctl -a |grep ip_forward
+		容器内安装 httpd,然后容器内直接使用命令：httpd	,启动服务,
+		然后在宿主机使用curl按照容器的ip地址访问容器内http服务
+			在宿主机执行docker inspect 查看容器的ip
+		
+
 		
 容器内执行命令：docker attach 
 	退出的时候会自动停止容器，不推荐使用
