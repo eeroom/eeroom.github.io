@@ -340,12 +340,15 @@ docker login 仓库ip
 		 docker run [-itd] -p 9001:80 azeroth:httpd /usr/sbin/httpd -D FOREGROUND
 		 commit生成的镜像继续沿用原镜像的默认命令，不能修改默认命令为/usr/sbin/httpd
 		 容器本身就是进程，无法将容器内的服务放到后台运行，
+	容器里面都是以直接方式启动服务，不使用systemctl start
+	特别的，启动httpd 需要加-D FOREGROUND
+		启动nginx 需要修改/etc/nginx/nginx.conf文件，增加 daemon off;
 删除容器：docker rm 容器名称/容器id
 	不能删除正在运行的容器，删除所有已经停止的容器
 停止容器：docker stop 容器id/容器name
 	停止所有正在运行的容器：docker stop $(docker ps -q)
 查看容器内的输出：docker logs 容器id
-查看容器的所有配置参数：docker inspect 容器id
+查看容器或镜像的所有配置参数：docker inspect 容器id/镜像id
 启动指定容器：docker start 容器id
 挂载数据卷：-v 宿主机文件（夹）：容器内文件（夹）
 	场景：容器内配置文件需要修改、容器内数据需要保存、不同容器之间共享数据
@@ -374,7 +377,7 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-## 使用Dockerfile构建镜像
+## 使用dockerfile构建镜像
 ```
 指定基础镜像：FROM
 	FROM centos:7.2.1511
@@ -408,10 +411,13 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
 拷贝文件：COPY
 	COPY 源 目标
-	和ADD类似，区别：源只能是本地文件
+	和ADD类似，区别：源必须是dockerfile所在目录的一个相对路径(文件或目录)
 	优点：简单，直观，完全可以替代ADD
 挂载数据卷：VOLUME
-	VOLUME ["挂载点","挂载点"]
+	VOLUME ["挂载点1","挂载点2"]
+	等价于 -v 宿主机的/var/lib/docker/volumes下的随机目录:挂载点1
+	会被docker run 的-v命令覆盖
+	查看自动挂载的随机目录：docker inspect 容器id ,可以看到随机目录的具体值
 暴露端口：EXPOSE
 	EXPOSE 80
 	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
@@ -422,8 +428,22 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	默认是root用户
 设置工作目录：WORKDIR 
 	WORKDIR /root
+	设定的是镜像内的工作目录
 	等价于RUN cd /root
-
+构建httpd的镜像
+	FROM centos:7.2.1511
+	MAINTAINER eeroom
+	LABEL version="1.0"
+	LABEL description="first httpd"
+	WORKDIR /root
+	COPY httpd-1511/ httpd/
+	RUN yum localinstall httpd/* --nogpgcheck -y \
+		&& rm -rf  httpd \
+		&& echo "wwch" > /var/www/html/index.html
+	VOLUME ["/var/www/html"]
+	EXPOSE 80
+	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+查看镜像分层：docker history 镜像名称
 ```
 ## docker资源隔离
 ```
