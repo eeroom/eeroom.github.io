@@ -463,7 +463,20 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 		alpine不使用glibc,centos等系统用的都是glibc
 	多阶段构建
 		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积 
-	
+```
+## docker网络
+```
+单宿主机容器互联
+	--link 被互联的容器名称:别名
+	原理：容器起来之后，修改 /etc/host 文件，增加一条host记录：被互联容器的ip 	别名 被互联容器的名称 被互联容器的id
+	容器之间默认通过ip也是互通的
+	容器里面通过命令：ping 别名		可以看到结果是被互联的那个容器的ip
+NAT网络，内到外是SNAT,外到内是DNAT
+docker network ls
+	swarm集群网络
+	local本地网络：
+		bridge等价于虚拟机的桥接网络，桥接对象是宿主机的docker0网卡(172.17.0.1)
+
 
 ```
 ## 编译nginx
@@ -477,6 +490,12 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 执行：make
 执行：make install
 	会把主程序和配置文件复制到/usr/local/nginx 目录下
+
+```
+## 编译mariadb
+```
+准备依赖：g++ 编译器和ncurses-devel
+cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb  -DMYSQL_DATADIR=/root/mariadb_data  -DSYSCONFDIR=/etc  -DWITHOUT_TOKUDB=1  -DWITH_INNOBASE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STPRAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWIYH_READLINE=1  -DWIYH_SSL=system  -DVITH_ZLIB=system  -DWITH_LOBWRAP=0  -DMYSQL_UNIX_ADDR=/tmp/mysql.sock  -DDEFAULT_CHARSET=utf8  -DDEFAULT_COLLATION=utf8_general_ci
 
 ```
 ## docker资源隔离
