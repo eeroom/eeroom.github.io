@@ -445,6 +445,19 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
 查看镜像分层：docker history 镜像名称
 ```
+## 编译nginx
+```
+
+准备gcc
+安装依赖openssl-devel和pcre-devel
+官网下载tar.gz包，然后解压
+切换到压缩包根目录，执行： ./configure --with-http_stub_status_module --with-http_ssl_module
+	执行完configure,就会生成makefile文件，然后就可以执行make
+执行：make
+执行：make install
+	会把主程序和配置文件复制到/usr/local/nginx 目录下
+
+```
 ## docker资源隔离
 ```
 linux内核提供6中namespace隔离
