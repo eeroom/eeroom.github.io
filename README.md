@@ -405,9 +405,11 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	ARG a=3
 	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
 	使用方式：$变量名称
+	RUN中可以用ARG定义的变量，CMD用不了ARG定义的变量
 定义变量：ENV
 	ENV a=4
 	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
+	RUN和CMD中都可以使用ENV定义的变量
 拷贝文件：ADD
 	ADD 源 目标
 	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
@@ -446,9 +448,21 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	VOLUME ["/var/www/html"]
 	EXPOSE 80
 	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+构建tomcat的镜像
+	FROM centos:7.2.1511
+	LABEL MAINTAINER="eeroom" version="2.2"
+	ENV JAVA_HOME=/usr/local/jdk-11.0.2
+	COPY jdk-11.0.2 /usr/local/jdk-11.0.2
+	COPY apache-tomcat-8.5.81 /usr/local/apache-tomcat-8.5.81
+	VOLUME ["/usr/local/apache-tomcat-8.5.81/webapps"]
+	EXPOSE 8080
+	CMD ["/usr/local/apache-tomcat-8.5.81/bin/catalina.sh","run"]
 查看镜像分层：docker history 镜像名称
-镜像优化：基础镜像使用alpine，Tiny Core Linux 等体积小的镜像
-	alpine不使用glibc,centos等系统用的都是glibc
+镜像优化：
+	基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像
+		alpine不使用glibc,centos等系统用的都是glibc
+	多阶段构建
+		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积 
 	
 
 ```
