@@ -270,6 +270,8 @@ docker info //查看信息
 	docker save centos -o /root/centos.20220621.tar
 导入镜像：docker load
 	docker load < /root/centos.20220621.tar
+查看日志：docker log
+	如果容器起不来，利用这个查看报错原因
 ```
 ## docker镜像仓库
 ```
@@ -402,6 +404,7 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 定义变量：ARG
 	ARG a=3
 	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
+	使用方式：$变量名称
 定义变量：ENV
 	ENV a=4
 	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
@@ -444,6 +447,10 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 	EXPOSE 80
 	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
 查看镜像分层：docker history 镜像名称
+镜像优化：基础镜像使用alpine，Tiny Core Linux 等体积小的镜像
+	alpine不使用glibc,centos等系统用的都是glibc
+	
+
 ```
 ## 编译nginx
 ```
