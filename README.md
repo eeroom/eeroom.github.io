@@ -466,18 +466,48 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 ## docker网络
 ```
+节点网络：docker host之间的
+容器网络：容器本身的网络
+服务网络：
+
 单宿主机容器互联
 	--link 被互联的容器名称:别名
 	原理：容器起来之后，修改 /etc/host 文件，增加一条host记录：被互联容器的ip 	别名 被互联容器的名称 被互联容器的id
 	容器之间默认通过ip也是互通的
 	容器里面通过命令：ping 别名		可以看到结果是被互联的那个容器的ip
 NAT网络，内到外是SNAT,外到内是DNAT
-docker network ls
+docker network
+	查看所有已有的网络： ls
+	创建网络：create
 	swarm集群网络
 	local本地网络：
 		bridge等价于虚拟机的桥接网络，桥接对象是宿主机的docker0网卡(172.17.0.1)
+		host 和宿主机共享网络，和宿主机网络一模一样，没有隔离
+		none 不能与外网通讯，只能本机回环网络
+指定容器使用的网络：--network=网络名称
+	默认是名字为bridge的网络
+两个容器共享同一个ip: --network=container:被共享的容器ip
+Overlay网络是虚拟网络，是建立在Unerlay网络之上的网络。Overlay网络的节点通过虚拟的或逻辑的链接进行通信，每一个虚拟的或逻辑的链接对应于Underlay网络的一条路径(Path)，由多个前后衔接的连接组成。在VXLAN构建的网络中，我们把通过VXLAN隧道建立的基础网络称之为Underlay网络，而在VXLAN隧道之上所运行的业务网我们称为Overlay网络，VXLAN的Overlay网络使用Underlay网络的控制平面和数据平面来传递报文。
+跨host的容器互联,有各种方案
+	flannel,calico，传统路由方式
+负载三种方案：ngnix	 haproxy lvs(IPVS)
+高可用：keepalived(主备模式的高可用，双击热备)
 
+```
+## docker compose
+```
+compose版本	docker版本
+3.2					17.04.0+
+3.1					1.13.1+
+2.2					1.13.0+
+2.1					1.12.0+
+2.0					1.10.0+
 
+containerd
+	ctr
+	crictl
+
+自动化运维：ansible
 ```
 ## 编译nginx
 ```
@@ -497,6 +527,23 @@ docker network ls
 准备依赖：g++ 编译器和ncurses-devel
 cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb  -DMYSQL_DATADIR=/root/mariadb_data  -DSYSCONFDIR=/etc  -DWITHOUT_TOKUDB=1  -DWITH_INNOBASE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STPRAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWIYH_READLINE=1  -DWIYH_SSL=system  -DVITH_ZLIB=system  -DWITH_LOBWRAP=0  -DMYSQL_UNIX_ADDR=/tmp/mysql.sock  -DDEFAULT_CHARSET=utf8  -DDEFAULT_COLLATION=utf8_general_ci
 
+scripts/mysql_install_db --user=root --datadir=/var/mariadb_data
+执行这个脚本会生产配置文件 /etc/my.cnf  等价于windows上 my.ini
+	/usr/local/mariadb/support-files 目录下有my.cnf的各种参数值的配置，可以选一个复制到/etc/目录下
+启动主进程的脚本文件：/usr/local/mariadb/support-files/mysql.server
+	创建一个systmctl服务的声明文件
+	[Unit]
+	Description=mariadb server daemon
+	After=network.target
+
+	[Service]
+	User=root
+	ExecStart=/usr/local/mariadb/support-files/mysql.server start
+	ExecReload=/usr/local/mariadb/support-files/mysql.server restart
+	ExecStop=/usr/local/mariadb/support-files/mysql.server stop
+
+	[Install]
+	WantedBy=multi-user.target
 ```
 ## docker资源隔离
 ```
@@ -551,7 +598,7 @@ windows环境下 cmd 使用 set DOCKER_HOST=tcp://192.168.56.101:2375
 查看已注册的docker服务端：docker-machine ls
 创建或者注册docker服务端，根据driver:
 场景：centos7，自己安装了docker1.12,只是为了把该docker添加到windows下docker-machine列表，方便管理
-添加已有（docker安装后不要配置systemd的开机启动，否则machine重新配置docker的时候会冲突）：	docker-machine create  --driver generic --generic-ip-address 192.168.56.101  machine名称（自定义）
+添加已有（docker安装后不要配置systemd的开机启动，否则machine重新配置docker的时候会冲突）：	docker-machine create  --driver generic --generic-ip-address 192.168.56.102 whc  machine名称（自定义）
 新建和添加已有的命令是一样的
 使用PS,执行：docker-machine env machine名称，会得到一个执行命令
  docker-machine env yt | Invoke-Expression
