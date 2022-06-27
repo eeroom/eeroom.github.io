@@ -180,6 +180,14 @@ cachedir是软件包下载后保存的目录。但默认是不保存的，因为
 yum安装某个目录下的所有rpm文件：yum  localinstall 目录/* --nogpgcheck
 比如已经切换到安装程序所在目录：yum  localinstall * --nogpgcheck
 场景：目录下包含程序和该程序所有层级的依赖rpm文件
+
+本地安装源
+vbox程序中的光驱设备加载everything版的iso镜像
+创建一个目录用于读取光盘镜像的文件，例如：/root/mycdrom
+执行挂载：mount /dev/cdrom /root/mycdrom
+可以查看mycdrom中的文件确认前面的操作是否ok
+修改yum的源配置，把 /etc/yum.d/ 下的所有文件(除 )复制到 /etc/yum.d/bak 下
+	
 ```
 ## centos安装桌面
 ```
@@ -865,8 +873,20 @@ Windows6.1-KB2999226-x64.msu  解决安装vc++2015
 vc++2012 2013 2015
 NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
 安装servercore版net40或者net462或者net45
-安装PS DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
+安装PS(依赖前面启用NET20) DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
+关闭密码复杂性策略（用到powershell），才可以把密码改成123456，
+	secedit /export /cfg c:\secpol.cfg
+	echo. >c:\out.txt
+	type c:\secpol.cfg | findstr -i complex >>c:\out.txt
+	powershell -command "(GC C:\secpol.cfg) -Replace \"PasswordComplexity = 1\",\"PasswordComplexity = 0\" | Out-File C:\secpol.cfg"
+	echo. >>c:\out.txt
+	type c:\secpol.cfg | findstr -i complex >>c:\out.txt
+	secedit /configure /db c:\windows\security\local.sdb /cfg c:\secpol.cfg /areas SECURITYPOLICY
+	del /q c:\secpol.cfg
+	type c:\out.txt
+	del /q c:\out.txt
+	del %windir%\security\logs\scesrv.log
 ```
 ## iis和appcmd
 ```
