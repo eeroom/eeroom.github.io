@@ -160,7 +160,7 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
 安装文件系统 install cifs-utils
 重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=BT151 0 2 
+//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
 ```
 ## yum教程
 ```
@@ -828,7 +828,7 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
 ## windows局域网共享
 ```
-映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
+映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads 密码 /user:Deroom
 做成bat,然后开机启动，修改注册表，位置：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 类似于："diskZ"="C:\\Users\\Administrator\\diskZ.bat"
 删除指定的映射	net use Z: /del 
@@ -1181,7 +1181,7 @@ sconfig --工具集合，修改计算机名称等
 禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
 删除或者设置虚拟内存文件，步骤：
 	先wmic进入交互模式（必须），然后
-	computersystem where name="TP20201225" set AutomaticManagedPagefile=False
+	computersystem where name="WIN-6QQI002VEOV" set AutomaticManagedPagefile=False
 	重启后
 	PageFileSet where "name='C:\\pagefile.sys'" delete
 禁用休眠，powercfg -h off 重启后生效，会自动删除休眠文件
