@@ -858,6 +858,7 @@ setx PATH
 ```
 ## win2008r2core配置网站服务
 ```
+列出当前服务器的功能和状态:DISM /Online /Get-Features
 打开WoW64：Start /w ocsetup ServerCore-WOW64
 打开.NET2.0层：Start /w ocsetup NetFx2-ServerCore
 打开.NET2.0层的WoW64: Start /w ocsetup NetFx2-ServerCore-WOW64
@@ -869,12 +870,13 @@ setx PATH
 安装IIS-ASPNET
     dism /online /enable-feature /featurename:IIS-ASPNET
 net462的前置补丁：windows6.1-kb4474419-v3-x64_.msu，net462的签名验证，新软件的签名验证
-Windows6.1-KB2999226-x64.msu  解决安装vc++2015
-vc++2012 2013 2015
-NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
+Windows6.1-KB2999226-x64.msu  解决安装vc++2015 （这个补丁装完要重启，否则net45安装直接报错）
+	可选，不影响安装net45：vc++2012 2013 2015
+NDP462-DevPack-KB3151934-ENU.exe（安装过程中会报错）或者dotNetFx45_Full_x86_x64.exe
 安装servercore版net40或者net462或者net45
 安装PS(依赖前面启用NET20) DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
+	Windows Management Framework 4.0对应ps4.0
 关闭密码复杂性策略（用到powershell），才可以把密码改成123456，
 	secedit /export /cfg c:\secpol.cfg
 	echo. >c:\out.txt
@@ -927,6 +929,7 @@ vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一
 1. 安装
 ```
 创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主共享，然后复制
+	局域网共享，然后 robocopy
 顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
 切到OpenSSh目录
 powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
@@ -934,7 +937,7 @@ powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
 如果启用了防火墙，则
 netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
 设定服务自动启动
-Set-Service sshd -StartupType Automatic
+使用ps执行：Set-Service sshd -StartupType Automatic
 ```
 2. 免密登录
 ```
@@ -1196,6 +1199,13 @@ Start=3
 计算机管理-远程
 	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
 	计算机管理连接192.168.56.101，就可以进行管理
+
+压缩动态vhd文件到实际内容的大小
+	执行diskpart进入会话模式
+	执行：select vdisk file="d:\vbox\W7ThinPC.vhd"
+				attach vdisk readonly
+				compact vdisk
+				detach vdisk
 ```
 ## bat教程
 ```
