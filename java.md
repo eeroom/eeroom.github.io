@@ -167,4 +167,9 @@ gpg教程
 完整教程请查看pdf文件
 ```
 gpg完整教程文档[FAQ:](./pdf/gpg教程.pdf)
-
+### ObjectMapper序列化匿名对象
+```
+var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
+mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
+mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
+```
