@@ -252,12 +252,12 @@ delimiter **
 drop procedure if exists addHandler
 create procedure addHandler()
 begin
-     declare f_error int default 0;
-     declare continue handler for sqlexception set f_error=1;
+     declare errorFlag int default 0;
+     declare continue handler for sqlexception set errorFlag=1;
      start transaction;
      insert into student (name,age) values('张三',10);
      insert into student (name,age) values('李四',12);
-     if f_error=1 then
+     if errorFlag=1 then
           rollback;
      else
           commit;
