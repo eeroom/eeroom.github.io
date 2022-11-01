@@ -226,8 +226,18 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 
 待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
 ```
-## linq to sql实现(字段 like "%value1" || 字段 like "%value2"|| 字段 like "%value3" || ... )
+## lambda表达式树，动态创建表达式树
 ```
+var sortName = context.Request["sortName"];
+var parameterExp = System.Linq.Expressions.Expression.Parameter(typeof(Model.FileEntity), "mq");
+var getpropValueExp = System.Linq.Expressions.Expression.PropertyOrField(parameterExp, sortName);
+var getpropObjectValueExp = System.Linq.Expressions.Expression.Convert(getpropValueExp, typeof(object));
+var lex = System.Linq.Expressions.Expression.Lambda<Func<Model.FileEntity, object>>(getpropObjectValueExp, parameterExp);
+lstQuery = lstQuery.OrderBy(lex);
+```
+## lambda表达式树，动态查询
+```
+等价的sql逻辑为：字段a like "%value1" || 字段a like "%value2"|| 字段a like "%value3" || ... 
 var dbcontext = new Model.DbContext();
 System.Linq.Expressions.Expression<Func<Model.Log, string>> exp = x => x.Name;
 var lst = new List<string>() { "zhaozehui", "aaa", "bbb" };
@@ -245,4 +255,23 @@ for (int i = 1; i < lstexp.Count; i++)
 }
 var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
 var lstlog= dbcontext.Log.Where(whereexp).ToList();
+```
+## mysql存储过程,批量插入，事务，异常回滚
+```
+delimiter **
+drop procedure if exists addHandler
+create procedure addHandler()
+begin
+     declare errorFlag int default 0;
+     declare continue handler for sqlexception set errorFlag=1;
+     start transaction;
+     insert into student (name,age) values('张三',10);
+     insert into student (name,age) values('李四',12);
+     if errorFlag=1 then
+          rollback;
+     else
+          commit;
+     end if;
+end **
+call addHandler
 ```

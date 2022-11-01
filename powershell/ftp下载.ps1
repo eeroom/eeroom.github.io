@@ -6,6 +6,9 @@ $ftpPwd="";
 $remoteFileNames="aa.zp","bb.zip";
 $localDirectory="d:/download";
 
+if(!$ftpAddress.EndsWith("/")){
+    $ftpAddress+="/"
+}
 foreach($fileName in $remoteFileNames){
     [System.Console]::WriteLine("开始下载:"+$fileName);
     [System.Net.FtpWebRequest] $ftpRequest=[System.Net.FtpWebRequest]::Create($ftpAddress+$fileName);
