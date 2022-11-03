@@ -275,3 +275,9 @@ begin
 end **
 call addHandler
 ```
+## log4net
+```
+配置：
+使用：
+```
+### ![效果图](./img/log4net教程.png)
