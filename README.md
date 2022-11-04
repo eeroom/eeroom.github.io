@@ -37,11 +37,17 @@ ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
 ## centos常用命令
 ```
+lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
+	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
+	查看打开指定端口的进程: lsof -i:端口号
+	查看打开指定file的进程：lsof file全路径
+	查看指定用户打开的file：lsof -u 用户名
+	查看指定程序打开的file：lsof -c 程序名
 计算机名：/etc/hostname
 内存使用情况: free -m  
 cpu使用情况: top   
 磁盘以及分区情况:  df -h   
-查看指定端口被使用情况: lsof -i:端口号     
+     
 				netstat -apn|grep 端口号 
 				ps -au|grep 端口号
 查看进程树：pstree  
