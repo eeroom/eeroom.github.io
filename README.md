@@ -200,6 +200,22 @@ env
 	常用场景，查看PATH变量的值：env |grep PATH
 export 环境变量key=值 
 	临时修改指定环境变量的值，例如：export PATH="/tmp:$PATH" ，重新给环境变量里的PATH赋值，$PATH表示原来的PATH值，PATH值的各段用:分割
+adduser 用户名
+	创建用户, 这个本质是个脚本，后续会提示设置密码等步骤，非常方便
+deluser 用户名
+	删除用户
+useradd
+	创建用户，很多参数，鸡肋
+userdel -r 用户名
+	删除用户，这个会把用户对于的桌面文件夹删掉
+groupadd 组名
+	添加用户组 
+passwd  用户名
+	修改密码
+su 用户名
+	直接切换用户，不用logout
+logout
+	注销当前用户
 man man
 	帮助文档
 /etc/hostname
@@ -208,35 +224,8 @@ man man
 	系统配置，环境变量等等
 	永久修改PATH值，在文件末尾加一行 PATH="/tmp:$PATH"
 	执行source /etc/profile ，让新配置生效
-```
-## centos服务管理
-```
-chkconfig --list 列出所有的服务
-chkconfig  服务名称	[on/off]开机启动/开机不启动
-service 服务名成 [start/stop/restart]
-systemctl //列出正在运行的服务
-systemctl list-unit-files //所有已经安装的服务
-systemd-cgls   以树形列出正在运行的进程，它可以递归显示控制组内容
-systemctl start postfix.service  启动一个服务
-systemctl stop postfix.service	停止
-systemctl restart postfix.service	重启
-systemctl status postfix.service	查看服务的状态
-systemctl enable postfix.service	设置开机启动
-systemctl disable postfix.service	设置开机不启动
-systemctl is-enabled postfix.service	查看是否开机启动
-```
-## centos用户管理
-```
-创建用户 adduser 用户名     --这个本质是个脚本，后续会提示设置密码等步骤，非常方便
-创建用户    useradd  很多参数
-删除用户    deluser 用户名
-删除用户    userdel -r 用户名   --这个会把用户对于的桌面文件夹删掉
-添加用户组  groupadd 组名
-修改密码    passwd  用户名
-直接切换用户 su 用户名    
-查看所有的用户  利用配置文件查看    /etc/passwd
-ssh 用户名@ip 基于服务器openssh-server
-logout  登出
+/etc/passwd
+	所有的用户和相关信息
 ```
 ## 远程连接和文件服务
 ```
@@ -252,7 +241,23 @@ scp
 重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
 //192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
 ```
-## yum教程
+## systemd
+```
+chkconfig --list 列出所有的服务
+chkconfig  服务名称	[on/off]开机启动/开机不启动
+service 服务名成 [start/stop/restart]
+systemctl //列出正在运行的服务
+systemctl list-unit-files //所有已经安装的服务
+systemd-cgls   以树形列出正在运行的进程，它可以递归显示控制组内容
+systemctl start postfix.service  启动一个服务
+systemctl stop postfix.service	停止
+systemctl restart postfix.service	重启
+systemctl status postfix.service	查看服务的状态
+systemctl enable postfix.service	设置开机启动
+systemctl disable postfix.service	设置开机不启动
+systemctl is-enabled postfix.service	查看是否开机启动
+```
+## yum
 ```
 yum info mysql* available  //查询可用的程序
 yum list installed  //查看所有已经安装的程序  
@@ -277,11 +282,9 @@ vbox程序中的光驱设备加载everything版的iso镜像
 执行挂载：mount /dev/cdrom /root/mycdrom
 可以查看mycdrom中的文件确认前面的操作是否ok
 修改yum的源配置，把 /etc/yum.d/ 下的所有文件(除 )复制到 /etc/yum.d/bak 下
-	
-```
-## centos安装桌面
-```
-命令： yum groupinstall Desktop X Window System Chinese Surport
+
+centos6安装桌面
+yum groupinstall Desktop X Window System Chinese Surport
 ```
 ## centos-jdk
 ```
