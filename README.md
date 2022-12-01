@@ -1,4 +1,4 @@
-## centos6网络设置
+## 网络（centos6）
 ```
 ip信息：  ip address  
 网络主机绑定IP地址：/etc/hosts
@@ -19,7 +19,7 @@ BOOTPROTO=dhcp
 
 ifconfig    ping  地址  -c次数      nslookup www.baidu.com
 ```
-## centos7网络设置
+## 网络（centos7）
 ```
 nmtui:tui(文本界面)形式的管理工具,相关的有cui(命令行界面)和gui(图形界面)
 	功能：设置固定IP,开机启用等等
@@ -35,10 +35,58 @@ nmtui:tui(文本界面)形式的管理工具,相关的有cui(命令行界面)和
 DNS配置文件（对应windows的host文件）:/etc/resolv.conf
 ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
+## 本地磁盘和文件
+```
+linux系统的目录结构约定
+/				    根
+ |---bin    常用命令对应的执行程序
+ |---dev    设备对应的文件抽象
+ |---etc    系统及第三方程序的配置文件
+ |---home   各个用户的家目录
+ |---lib    动态类库
+ |---media  自动挂载
+ |---mnt    手动挂载
+ |---root   root用户的家目录
+ |---usr    第三方程序的安装目录
+
+分区及容量：df [-h 美化结果]
+列举目录结构：ll [-h 美化结果] [-R 递归子目录] [-a 展示所有]
+	实际上并没有名为ll的可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
+创建目录: mkdir 目录路径
+	创建多级目录，需要-p参数配合，eg. mkdir aa/bb/cc -p
+删除目录：rmdir 目录路径
+	只能删除空目录，鸡肋
+创建文件：touch 文件路径
+	touch只能创建空文件，如果需要创建包含内容的文件，可以利用echo或者dd
+	echo helloworld > hello.txt
+	dd
+删除文件或目录：rm 路径
+	如果删除目录，需要-rf参数配合，-r是指递归子目录，-f避免对每一级目录手动确认
+复制文件或目录：cp 源路径 目标路径
+	如果复制目录，需要-r参数配合，会自动创建目录路径中的各个子目录
+剪切文件或目录：mv 源路径 目标路径
+	可以用来进行重命名文件，不会自动创建目标路径中的各个子目录，如果子目录不存在则失败
+查看文本文件（cat tail head more less）
+	普通查看：cat 文件路径
+	查看末尾：tail 文件路径
+		查看结尾最新的100行并且自动监听文件内容,eg. tail -100f 文件路径 &
+查询包含指定内容的行：grep 查找内容 文件或目录路径
+	如果是在目录下的所有文件中查询需要-r参数配合
+
+创建软链接（快捷方式，指向一个硬链接）    ln -s 源文件/源目录    目标路径
+创建硬链接（并不占用磁盘空间，链接到磁盘地址） ln 源文件 目标路径
+硬链接相关，查看Inode   stat 文件
+文件或目录属性  wc 查看文本文件的行数，单词书，字节数   od 查看二进制文件
+du -h   查看目录占用
+文件的查找和检索，按文件属性    find 路径 -name（按名称查） 文件名称  (通配符*一个或多个字符，?一个字符) -size(按大小查找) + 10k(大于10k) - 10M（小于10M）  如果按大小范围就用两个size -type(安装文件类型查)
+文件详细信息解释  d(文件类型)rwx(所有者权限)r-x(所在组权限)r-x(其他用户权限)  7（硬链接数量）  root(所属用户) root(所在的组) 4096（大小）   
+drwxr-xr-x. 7 root   root      4096 Jul  3  2018 dotnet
+文件类型    普通文件-   目录d   链接符号l   块设备b 字符设备c   socket文件s 管道p
+修改文件权限 chmod  777 文件或者目录
+修改所在的组    chown 文件所有者【：文件所属组】 文件或者目录
+```
 ## centos常用命令
 ```
-列举目录结构：ll 
-	实际上并没有对应的ll这可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
 lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
 	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
 	查看打开指定端口的进程: lsof -i:端口号
@@ -48,7 +96,6 @@ lsof :查看所有打开的file，是list of open file的简称，因为文件�
 计算机名：/etc/hostname
 内存使用情况: free -m  
 cpu使用情况: top   
-磁盘以及分区情况:  df -h   			
 查看进程树：pstree  
 	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
 查看端口占用：ss
@@ -72,26 +119,10 @@ windows的关机:shutdown -s -t 0
 ```
 ## centos文件和目录
 ```
-系统目录说明
-/bin 命令对应的执行程序
-/dev    设备被抽象成文件
-/etc    系统的配置文件，第三方程序的配置信息
-/home   所有用户的目录
-/lib    动态类库，
-/media  自动挂载
-/mnt    手动挂在
-/root   管理员的一个目录
-/usr    当前用户的软件安装目录
-
 相关命令
 scp(super copy  基于ssh)
 挂载 mount  挂载U盘，挂载FTP
-ls -a列出所有  -l详细信息 -R递归子目录
-创建目录 mkdir aa/bb/cc -p表示多级目录
-创建文件    touch
-删除目录 rmdir 只能删除空目录
-删除目录或者文件    rm -r表示递归
-复制命令 cp 源文件/目录 目标文件/目录    -r递归操作（目录情况下）
+
 查看文件内容    cat more    less    head    tail
 	tail 命令主要用于显示指定文件末尾内容。常用查看日志文件
 		tail [选项] [文件]
