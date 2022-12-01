@@ -54,6 +54,8 @@ df [-h 美化结果] [-i inode相关的信息]
 ln 源路径 目标路径 [-s 符号链接]
 	创建硬链接，不占用磁盘空间，和复制文件存在本质的区别,和指针类似,特别的：文件夹不能创建硬链接
 	符号链接,等价于windows的快捷方式，文件夹可以创建符号链接
+pwd
+	当前所在的位置，printf working directory
 ll [-h 美化结果] [-R 递归子目录] [-a 展示所有] [-i inode编号]
 	列举目录结构，实际上并没有名为ll的可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
 	ll . -h的结果如下：
@@ -85,6 +87,9 @@ chmod 755 路径
 	所以，755等价于rwxr-xr-x
 chown 所有者名称或所属组名称 路径
 	修改所有者或者所属的组
+echo 字符内容
+	打印指定的字符内容
+	利用$符号，$后面跟变量名称，可以打印系统的PATH环境变量值：echo $PATH
 mkdir 目录路径 [-p 递归创建多层级目录]
 	创建目录
 rmdir 目录路径
@@ -149,50 +154,60 @@ find 路径 [-name 指定名称] [-size 文件大小] [-type 类型]
 mount 设备路径 目标文件路径
 	挂载， 挂载U盘，FTP，光驱等等
 ```
-## centos常用命令
+## 系统及配置
 ```
-lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
-	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
-	查看打开指定端口的进程: lsof -i:端口号
-	查看打开指定file的进程：lsof file全路径
-	查看指定用户打开的file：lsof -u 用户名
-	查看指定程序打开的file：lsof -c 程序名
-计算机名：/etc/hostname
-内存使用情况: free -m  
-cpu使用情况: top   
-查看进程树：pstree  
-	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
-查看端口占用：ss
-	系统默认自带
-查看端口使用：lsof 
-	需要安装lsof的包，查看使用80端口的程序： 
-	lsof -i:80
-	netstat -apn|grep 端口号 
-	ps -au|grep 端口号
-查看指定命令对应程序所在的位置(等价于cmd的where)：which
-查询当前系统的版本:uname -r
-当前所在的位置:pwd(printf working directory) 
-帮助文档 man man
-输出指定的字符:echo $PATH      
-$后面跟一个变量
-立刻关机:halt 
-立刻关机:poweroff 
-立刻关机(root用户使用):shutdown -h now 
-立刻重启(root用户使用):shutdown -r now 
-windows的关机:shutdown -s -t 0 
-```
-## centos文件和目录
-```
-相关命令
-scp(super copy  基于ssh)
-```
-## centos进程管理
-```
-ps a 当前操作系统的所有用户 u显示用户自己的信息 x没有终端的应用程序 ps aux | grep bash 利用管道检索指定的进程
-who 查看当前用户 tty1-tty6文字终端 tty7带桌面的终端 ctrl+alt+f1-f7进行切换 pts/0设备终端
-kill 结束进程 -信号 -pid -l列出所有信号
-env 环境变量 env | grep PATH
-top 任务管理器  
+poweroff
+	立刻关机
+halt
+	立刻关机，centos6好用，7不行，原因待研究
+shutdown [-h 关机] [-r 重启] [now 立刻执行]
+	关机或者重启
+shutdown [-s] [-t 秒数]
+	windows系统关机或者重启
+free [-h 美化显示]
+	内存使用情况
+top 
+	cpu使用情况
+ps [-aux BSD格式显示所有进程] [-ef 标准格式展示所有进程]
+	两种格式的区别在于显示的列不同
+	常用场景：把ps的输出作为grep的输入，然后删选判断指定的进程是否存在及其详细信息
+pstree
+  进程树
+  需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
+kill [-l 列举所有信号] [-信号] [-pid 进程id]
+	结束进程
+ss
+	列举所有在用的端口
+lsof
+	所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
+	所有端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
+	监听指定端口的进程: lsof -i:端口号
+	打开指定文件的进程：lsof 文件全路径
+	指定用户打开的所有file：lsof -u 用户名
+	指定程序打开的所有file：lsof -c 程序名
+who 
+	查看当前用户
+	tty1-tty6文字终端
+	tty7带桌面的终端
+	pts/0设备终端
+	使用ctrl+alt+f1-f7进行文字和图形互相切换
+which 程序名称
+	指定程序所在的全路径，等价于windows的where
+uname [-r] [-a]
+	系统名称、内核版本等信息
+env
+	环境变量
+	常用场景，查看PATH变量的值：env |grep PATH
+export 环境变量key=值 
+	临时修改指定环境变量的值，例如：export PATH="/tmp:$PATH" ，重新给环境变量里的PATH赋值，$PATH表示原来的PATH值，PATH值的各段用:分割
+man man
+	帮助文档
+/etc/hostname
+	计算机名称
+/etc/profile
+	系统配置，环境变量等等
+	永久修改PATH值，在文件末尾加一行 PATH="/tmp:$PATH"
+	执行source /etc/profile ，让新配置生效
 ```
 ## centos服务管理
 ```
@@ -223,16 +238,12 @@ systemctl is-enabled postfix.service	查看是否开机启动
 ssh 用户名@ip 基于服务器openssh-server
 logout  登出
 ```
-## centos环境变量
+## 远程连接和文件服务
 ```
-临时修改某个键的值 export LD_LIBRARY_PATH=./lib
-export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋值，$PATH表示原来的PATH值，PATH值用:分割
-永久修改环境变量的值 
-	第一步，修改文件/etc/profile，在末尾加上行 PATH="/tmp:$PATH"，
-	第二步，source /etc/profile 
-```
-## centos局域网共享
-```
+ssh
+	ssh连接
+scp
+	super copy，基于ssh
 局域网共享yum install samba --downloadonly --downloaddir ./download
 映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
 挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
