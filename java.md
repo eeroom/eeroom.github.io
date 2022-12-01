@@ -167,13 +167,13 @@ gpg教程
 完整教程请查看pdf文件
 ```
 gpg完整教程文档[FAQ:](./pdf/gpg教程.pdf)
-### ObjectMapper序列化匿名对象
+## ObjectMapper序列化匿名对象
 ```
 var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
-### java程序设置为systemd的服务
+## java程序设置为systemd的服务
 ```
 原理：systemd有完备的服务管理，安装systemd的规则进行配置即可
 假定把java设置为wccpeek服务，则创建服务配置文件 wccpeek.service，内容如下
