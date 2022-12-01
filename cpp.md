@@ -103,3 +103,38 @@ make默认生成第一个目标，make clean 这是指定make的目标
 ```
 安装依赖库 yum install libgnomeui-devel
 ```
+## 编译nginx
+```
+准备gcc
+安装依赖openssl-devel和pcre-devel
+官网下载tar.gz包，然后解压
+切换到压缩包根目录，执行： ./configure --with-http_stub_status_module --with-http_ssl_module
+	执行完configure,就会生成makefile文件，然后就可以执行make
+执行：make
+执行：make install
+	会把主程序和配置文件复制到/usr/local/nginx 目录下
+
+```
+## 编译mariadb
+```
+准备依赖：g++ 编译器和ncurses-devel
+cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb  -DMYSQL_DATADIR=/root/mariadb_data  -DSYSCONFDIR=/etc  -DWITHOUT_TOKUDB=1  -DWITH_INNOBASE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STPRAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWIYH_READLINE=1  -DWIYH_SSL=system  -DVITH_ZLIB=system  -DWITH_LOBWRAP=0  -DMYSQL_UNIX_ADDR=/tmp/mysql.sock  -DDEFAULT_CHARSET=utf8  -DDEFAULT_COLLATION=utf8_general_ci
+
+scripts/mysql_install_db --user=root --datadir=/var/mariadb_data
+执行这个脚本会生产配置文件 /etc/my.cnf  等价于windows上 my.ini
+	/usr/local/mariadb/support-files 目录下有my.cnf的各种参数值的配置，可以选一个复制到/etc/目录下
+启动主进程的脚本文件：/usr/local/mariadb/support-files/mysql.server
+	创建一个systmctl服务的声明文件
+	[Unit]
+	Description=mariadb server daemon
+	After=network.target
+
+	[Service]
+	User=root
+	ExecStart=/usr/local/mariadb/support-files/mysql.server start
+	ExecReload=/usr/local/mariadb/support-files/mysql.server restart
+	ExecStop=/usr/local/mariadb/support-files/mysql.server stop
+
+	[Install]
+	WantedBy=multi-user.target
+```

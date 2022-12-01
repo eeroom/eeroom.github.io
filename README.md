@@ -285,9 +285,7 @@ vbox程序中的光驱设备加载everything版的iso镜像
 
 centos6安装桌面
 yum groupinstall Desktop X Window System Chinese Surport
-```
-## centos-jdk
-```
+jdk
 yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
 yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
 ```
@@ -313,7 +311,7 @@ yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1
 	操作系统虚拟化：应用程序——宿主操作系统——硬件（代表作：docker）
 	操作系统虚拟化是容器和云原生的基石
 ```
-## docker
+## docker概述
 ```
 2013年：docker公司发布docker
 2016年：docker开源并将containerd捐赠给了CNCF
@@ -334,13 +332,10 @@ runC:根据OCI标准创建和运行容器
 激活开机启动：systemctl enable docker
 重启服务器
 查看docker deamon程序状态：docker info
-```
-## docker基本命令：
-```
 docker -v //查看版本
 docker info //查看信息
 ```
-## docker镜像操作
+## docker镜像
 ```
 镜像：打包好的环境和应用，对应不可变基础设施
 容器：运行镜像的势力，镜像是静态的，容器是动态的
@@ -377,9 +372,7 @@ docker info //查看信息
 	docker load < /root/centos.20220621.tar
 查看日志：docker log
 	如果容器起不来，利用这个查看报错原因
-```
-## docker镜像仓库
-```
+
 公网镜像仓库，dockerhub
 私网镜像仓库
 公有仓库：客户端上传需要登陆仓库，下载不需要登陆
@@ -397,8 +390,91 @@ docker push centos:7.6
 docker tag centos:7.6 192.168.56.104/library/centos:7.6
 docker push 192.168.56.104/library/centos:7.6
 docker login 仓库ip
+
+指定基础镜像：FROM
+	FROM centos:7.2.1511
+	FROM 192.168.56.103/myimgs/centos:7.2
+指定作者信息(可选)：MAINTAINER
+	MAINTAINER eeroom
+添加属性信息（可选，可多个）：LABEL
+	LABEL version="1.0"
+	LABEL seek="vbc"
+执行命令：RUN
+	构建镜像过程中执行的命令，比如镜像需要安装httpd
+	RUN yum localinstall /root/httpd/* --nogpgcheck
+	优化点：有多条命令的时候，不要使用多条RUN,尽量使用&&符号和\符号连接成一行，多条RUN导致镜像创建多层
+执行命令：CMD
+	容器启动的时候要执行的命令，只能有一个CMD,有三种格式:
+	CMD ['命令','参数1','参数2']
+	CMD ['参数1','参数2']
+	CMD 命令 参数1,参数2
+执行命令：ENTRYPOINT
+	和CMD类似
+	和CMD的区别：可以有多个，最后一个生效，CMD可以被run容器的时候传提的命令覆盖，ENTRYPOINT的命令不能被覆盖
+定义变量：ARG
+	ARG a=3
+	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
+	使用方式：$变量名称
+	RUN中可以用ARG定义的变量，CMD用不了ARG定义的变量
+定义变量：ENV
+	ENV a=4
+	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
+	RUN和CMD中都可以使用ENV定义的变量
+拷贝文件：ADD
+	ADD 源 目标
+	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
+	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
+拷贝文件：COPY
+	COPY 源 目标
+	和ADD类似，区别：源必须是dockerfile所在目录的一个相对路径(文件或目录)
+	优点：简单，直观，完全可以替代ADD
+挂载数据卷：VOLUME
+	VOLUME ["挂载点1","挂载点2"]
+	等价于 -v 宿主机的/var/lib/docker/volumes下的随机目录:挂载点1
+	会被docker run 的-v命令覆盖
+	查看自动挂载的随机目录：docker inspect 容器id ,可以看到随机目录的具体值
+暴露端口：EXPOSE
+	EXPOSE 80
+	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
+	这个指定其实只是声明，最终由-p的参数值决定端口映射
+指定用户：USER
+	USER daemon
+	可以是用户名或者UID，对应 -u 用户名
+	默认是root用户
+设置工作目录：WORKDIR 
+	WORKDIR /root
+	设定的是镜像内的工作目录
+	等价于RUN cd /root
+构建httpd的镜像
+	FROM centos:7.2.1511
+	MAINTAINER eeroom
+	LABEL version="1.0"
+	LABEL description="first httpd"
+	WORKDIR /root
+	COPY httpd-1511/ httpd/
+	RUN yum localinstall httpd/* --nogpgcheck -y \
+		&& rm -rf  httpd \
+		&& echo "wwch" > /var/www/html/index.html
+	VOLUME ["/var/www/html"]
+	EXPOSE 80
+	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+构建tomcat的镜像
+	FROM centos:7.2.1511
+	LABEL MAINTAINER="eeroom" version="2.2"
+	ENV JAVA_HOME=/usr/local/jdk-11.0.2
+	COPY jdk-11.0.2 /usr/local/jdk-11.0.2
+	COPY apache-tomcat-8.5.81 /usr/local/apache-tomcat-8.5.81
+	VOLUME ["/usr/local/apache-tomcat-8.5.81/webapps"]
+	EXPOSE 8080
+	CMD ["/usr/local/apache-tomcat-8.5.81/bin/catalina.sh","run"]
+查看镜像分层：docker history 镜像名称
+镜像优化：
+	基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像
+		alpine不使用glibc,centos等系统用的都是glibc
+	多阶段构建
+		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积
 ```
-## docker容器操作
+## docker容器
 ```
 查看正在运行的容器：docker ps
 新增容器：docker create 镜像名
@@ -484,91 +560,6 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-## 使用dockerfile构建镜像
-```
-指定基础镜像：FROM
-	FROM centos:7.2.1511
-	FROM 192.168.56.103/myimgs/centos:7.2
-指定作者信息(可选)：MAINTAINER
-	MAINTAINER eeroom
-添加属性信息（可选，可多个）：LABEL
-	LABEL version="1.0"
-	LABEL seek="vbc"
-执行命令：RUN
-	构建镜像过程中执行的命令，比如镜像需要安装httpd
-	RUN yum localinstall /root/httpd/* --nogpgcheck
-	优化点：有多条命令的时候，不要使用多条RUN,尽量使用&&符号和\符号连接成一行，多条RUN导致镜像创建多层
-执行命令：CMD
-	容器启动的时候要执行的命令，只能有一个CMD,有三种格式:
-	CMD ['命令','参数1','参数2']
-	CMD ['参数1','参数2']
-	CMD 命令 参数1,参数2
-执行命令：ENTRYPOINT
-	和CMD类似
-	和CMD的区别：可以有多个，最后一个生效，CMD可以被run容器的时候传提的命令覆盖，ENTRYPOINT的命令不能被覆盖
-定义变量：ARG
-	ARG a=3
-	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
-	使用方式：$变量名称
-	RUN中可以用ARG定义的变量，CMD用不了ARG定义的变量
-定义变量：ENV
-	ENV a=4
-	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
-	RUN和CMD中都可以使用ENV定义的变量
-拷贝文件：ADD
-	ADD 源 目标
-	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
-	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
-拷贝文件：COPY
-	COPY 源 目标
-	和ADD类似，区别：源必须是dockerfile所在目录的一个相对路径(文件或目录)
-	优点：简单，直观，完全可以替代ADD
-挂载数据卷：VOLUME
-	VOLUME ["挂载点1","挂载点2"]
-	等价于 -v 宿主机的/var/lib/docker/volumes下的随机目录:挂载点1
-	会被docker run 的-v命令覆盖
-	查看自动挂载的随机目录：docker inspect 容器id ,可以看到随机目录的具体值
-暴露端口：EXPOSE
-	EXPOSE 80
-	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
-	这个指定其实只是声明，最终由-p的参数值决定端口映射
-指定用户：USER
-	USER daemon
-	可以是用户名或者UID，对应 -u 用户名
-	默认是root用户
-设置工作目录：WORKDIR 
-	WORKDIR /root
-	设定的是镜像内的工作目录
-	等价于RUN cd /root
-构建httpd的镜像
-	FROM centos:7.2.1511
-	MAINTAINER eeroom
-	LABEL version="1.0"
-	LABEL description="first httpd"
-	WORKDIR /root
-	COPY httpd-1511/ httpd/
-	RUN yum localinstall httpd/* --nogpgcheck -y \
-		&& rm -rf  httpd \
-		&& echo "wwch" > /var/www/html/index.html
-	VOLUME ["/var/www/html"]
-	EXPOSE 80
-	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
-构建tomcat的镜像
-	FROM centos:7.2.1511
-	LABEL MAINTAINER="eeroom" version="2.2"
-	ENV JAVA_HOME=/usr/local/jdk-11.0.2
-	COPY jdk-11.0.2 /usr/local/jdk-11.0.2
-	COPY apache-tomcat-8.5.81 /usr/local/apache-tomcat-8.5.81
-	VOLUME ["/usr/local/apache-tomcat-8.5.81/webapps"]
-	EXPOSE 8080
-	CMD ["/usr/local/apache-tomcat-8.5.81/bin/catalina.sh","run"]
-查看镜像分层：docker history 镜像名称
-镜像优化：
-	基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像
-		alpine不使用glibc,centos等系统用的都是glibc
-	多阶段构建
-		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积 
-```
 ## docker网络
 ```
 节点网络：docker host之间的
@@ -613,42 +604,6 @@ containerd
 	crictl
 
 自动化运维：ansible
-```
-## 编译nginx
-```
-
-准备gcc
-安装依赖openssl-devel和pcre-devel
-官网下载tar.gz包，然后解压
-切换到压缩包根目录，执行： ./configure --with-http_stub_status_module --with-http_ssl_module
-	执行完configure,就会生成makefile文件，然后就可以执行make
-执行：make
-执行：make install
-	会把主程序和配置文件复制到/usr/local/nginx 目录下
-
-```
-## 编译mariadb
-```
-准备依赖：g++ 编译器和ncurses-devel
-cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb  -DMYSQL_DATADIR=/root/mariadb_data  -DSYSCONFDIR=/etc  -DWITHOUT_TOKUDB=1  -DWITH_INNOBASE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STPRAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWIYH_READLINE=1  -DWIYH_SSL=system  -DVITH_ZLIB=system  -DWITH_LOBWRAP=0  -DMYSQL_UNIX_ADDR=/tmp/mysql.sock  -DDEFAULT_CHARSET=utf8  -DDEFAULT_COLLATION=utf8_general_ci
-
-scripts/mysql_install_db --user=root --datadir=/var/mariadb_data
-执行这个脚本会生产配置文件 /etc/my.cnf  等价于windows上 my.ini
-	/usr/local/mariadb/support-files 目录下有my.cnf的各种参数值的配置，可以选一个复制到/etc/目录下
-启动主进程的脚本文件：/usr/local/mariadb/support-files/mysql.server
-	创建一个systmctl服务的声明文件
-	[Unit]
-	Description=mariadb server daemon
-	After=network.target
-
-	[Service]
-	User=root
-	ExecStart=/usr/local/mariadb/support-files/mysql.server start
-	ExecReload=/usr/local/mariadb/support-files/mysql.server restart
-	ExecStop=/usr/local/mariadb/support-files/mysql.server stop
-
-	[Install]
-	WantedBy=multi-user.target
 ```
 ## docker资源隔离
 ```
