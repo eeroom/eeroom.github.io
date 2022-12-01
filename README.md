@@ -37,11 +37,17 @@ ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
 ## centos常用命令
 ```
+lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
+	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
+	查看打开指定端口的进程: lsof -i:端口号
+	查看打开指定file的进程：lsof file全路径
+	查看指定用户打开的file：lsof -u 用户名
+	查看指定程序打开的file：lsof -c 程序名
 计算机名：/etc/hostname
 内存使用情况: free -m  
 cpu使用情况: top   
 磁盘以及分区情况:  df -h   
-查看指定端口被使用情况: lsof -i:端口号     
+     
 				netstat -apn|grep 端口号 
 				ps -au|grep 端口号
 查看进程树：pstree  
@@ -160,7 +166,7 @@ export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋
 挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
 安装文件系统 install cifs-utils
 重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=BT151 0 2 
+//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
 ```
 ## yum教程
 ```
@@ -828,7 +834,7 @@ hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
 ## windows局域网共享
 ```
-映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads BT151 /user:Deroom
+映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads 密码 /user:Deroom
 做成bat,然后开机启动，修改注册表，位置：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
 类似于："diskZ"="C:\\Users\\Administrator\\diskZ.bat"
 删除指定的映射	net use Z: /del 
@@ -858,6 +864,7 @@ setx PATH
 ```
 ## win2008r2core配置网站服务
 ```
+列出当前服务器的功能和状态:DISM /Online /Get-Features
 打开WoW64：Start /w ocsetup ServerCore-WOW64
 打开.NET2.0层：Start /w ocsetup NetFx2-ServerCore
 打开.NET2.0层的WoW64: Start /w ocsetup NetFx2-ServerCore-WOW64
@@ -869,12 +876,13 @@ setx PATH
 安装IIS-ASPNET
     dism /online /enable-feature /featurename:IIS-ASPNET
 net462的前置补丁：windows6.1-kb4474419-v3-x64_.msu，net462的签名验证，新软件的签名验证
-Windows6.1-KB2999226-x64.msu  解决安装vc++2015
-vc++2012 2013 2015
-NDP462-DevPack-KB3151934-ENU.exe或者dotNetFx45_Full_x86_x64.exe
+Windows6.1-KB2999226-x64.msu  解决安装vc++2015 （这个补丁装完要重启，否则net45安装直接报错）
+	可选，不影响安装net45：vc++2012 2013 2015
+NDP462-DevPack-KB3151934-ENU.exe（安装过程中会报错）或者dotNetFx45_Full_x86_x64.exe
 安装servercore版net40或者net462或者net45
 安装PS(依赖前面启用NET20) DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
 升级到ps3.0 依赖net40 或者ps4.0依赖net45
+	Windows Management Framework 4.0对应ps4.0
 关闭密码复杂性策略（用到powershell），才可以把密码改成123456，
 	secedit /export /cfg c:\secpol.cfg
 	echo. >c:\out.txt
@@ -927,6 +935,7 @@ vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一
 1. 安装
 ```
 创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主共享，然后复制
+	局域网共享，然后 robocopy
 顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
 切到OpenSSh目录
 powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
@@ -934,7 +943,7 @@ powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
 如果启用了防火墙，则
 netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
 设定服务自动启动
-Set-Service sshd -StartupType Automatic
+使用ps执行：Set-Service sshd -StartupType Automatic
 ```
 2. 免密登录
 ```
@@ -1181,7 +1190,7 @@ sconfig --工具集合，修改计算机名称等
 禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
 删除或者设置虚拟内存文件，步骤：
 	先wmic进入交互模式（必须），然后
-	computersystem where name="TP20201225" set AutomaticManagedPagefile=False
+	computersystem where name="WIN-6QQI002VEOV" set AutomaticManagedPagefile=False
 	重启后
 	PageFileSet where "name='C:\\pagefile.sys'" delete
 禁用休眠，powercfg -h off 重启后生效，会自动删除休眠文件
@@ -1196,6 +1205,13 @@ Start=3
 计算机管理-远程
 	管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
 	计算机管理连接192.168.56.101，就可以进行管理
+
+压缩动态vhd文件到实际内容的大小
+	执行diskpart进入会话模式
+	执行：select vdisk file="d:\vbox\W7ThinPC.vhd"
+				attach vdisk readonly
+				compact vdisk
+				detach vdisk
 ```
 ## bat教程
 ```
