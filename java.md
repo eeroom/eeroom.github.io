@@ -175,7 +175,7 @@ mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
 ## java程序设置为systemd的服务
 ```
-原理：systemd有完备的服务管理，安装systemd的规则进行配置即可
+原理：systemd有完备的服务管理，按照systemd的规则约定进行配置即可
 假定把java设置为wccpeek服务，则创建服务配置文件 wccpeek.service，内容如下
     [Unit]
 	Description=服务说明
