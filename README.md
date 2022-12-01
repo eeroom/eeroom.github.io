@@ -37,6 +37,8 @@ ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
 ## centos常用命令
 ```
+列举目录结构：ll 
+	实际上并没有对应的ll这可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
 lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
 	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
 	查看打开指定端口的进程: lsof -i:端口号
@@ -46,16 +48,16 @@ lsof :查看所有打开的file，是list of open file的简称，因为文件�
 计算机名：/etc/hostname
 内存使用情况: free -m  
 cpu使用情况: top   
-磁盘以及分区情况:  df -h   
-     
-				netstat -apn|grep 端口号 
-				ps -au|grep 端口号
+磁盘以及分区情况:  df -h   			
 查看进程树：pstree  
 	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
 查看端口占用：ss
 	系统默认自带
 查看端口使用：lsof 
-	需要安装lsof的包，查看使用80端口的程序： lsof -i:80
+	需要安装lsof的包，查看使用80端口的程序： 
+	lsof -i:80
+	netstat -apn|grep 端口号 
+	ps -au|grep 端口号
 查看指定命令对应程序所在的位置(等价于cmd的where)：which
 查询当前系统的版本:uname -r
 当前所在的位置:pwd(printf working directory) 
@@ -95,6 +97,7 @@ ls -a列出所有  -l详细信息 -R递归子目录
 		tail [选项] [文件]
 		显示 iis.log 文件中的最后 5 行内容，当 iis.log 文件有新内容增加，自动更新显示。可以使用如下命令
 		tail -n 5 -f iis.log &
+		或者 tail -5f 文件名称
 修改文件名/文件夹名  mv 源路径 目标路径
 创建软链接（快捷方式，指向一个硬链接）    ln -s 源文件/源目录    目标路径
 创建硬链接（并不占用磁盘空间，链接到磁盘地址） ln 源文件 目标路径
