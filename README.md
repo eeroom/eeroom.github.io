@@ -1,39 +1,49 @@
-## 网络（centos6）
+## 网络
 ```
-ip信息：  ip address  
-网络主机绑定IP地址：/etc/hosts
+ip [-s 更详细] [-h 美化] [link 网卡设备的名称，mac等] [addr ip地址的网关，掩码等] [route 路由] [rule ]
+  显示和设置网络设备，路由和隧道，是linux加强版的网络配置工具，用来替代ifconfig
+	ip link set eth0 up 开启网卡eth0
+	ip link set eth0 down 关闭网卡eth0
+nmtui
+  网卡配置，动态或静态ip,网关地址，开机自动启用等
+	tui：文本界面形式的管理工具,
+	cui：命令行界面
+	gui：图形界面
+/etc/hosts
+	主机名查询静态表，和windows系统的hosts文件作用相同
+/etc/resolv.conf
+	DNS服务器的配置
+/etc/sysconfig/network-script/ifcfg-网卡名称
+	网卡设备对应的配置文件，nmtui本质就是修改这个文件，也可以vi或者winscp远程打开后进行修改，各个配置项如下：
+    DEVICE=网卡名称  centos7中命名规则为：ifcfg-[en 以太网卡][o 主板集成网卡][p PCI独立网卡][s 热插拔网卡][nnn 3位数字,和mac和主板有关]，eg. ifcfg-en323
+		HWADDR=网卡设备MAC eg. 0a-66-21-ae-31-20
+		TYPE=类型		eg.Ethernet   
+		NM_CONTROLLED=yes   nmtui管理标识
+		BOOTPROTO=[dhcp 自动分配] [static 静态分配]
+		ONBOOT=[yes 开机启用] [no 开机不启用]
+ifconfig
+	显示和设置网络设备，centos7默认不包含了，需要自己安装，已过时
+ipconfig [/all]
+	windows系统的显示和设置网络设备
+ping ip地址或域名 [-c次数]
+	诊断网络是否可达，windows默认ping4次，linux默认无限次，需要显示指定次数，基于icmp，ping通表示网络一定可达，反过来不一定
+telnet ip地址或域名 端口
+	确认端口是否可达
+tracert [-d]
+	路由追踪，windows系统，常用场景：确定网络在哪个节点不通
+traceroute
+  路由追踪
+nslookup 域名
+curl
+  网络访问，下载的工具
+wget
+  下载工具
+nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信息]
+	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
 
 查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
 解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
-
-查看指定网卡配置信息:
-命令：cat /etc/sysconfig/network-scripts/ifcfg-eth0
-解析：ifcfg-[网卡设备名称] 对应网卡设备信息里面的NAME,比如eth0,eth1
-DEVICE=eth0 //对于网卡设备的NAME
-HWADDR=00:15:5D:38:67:03 //对于网卡设备的ATTR{address}
-TYPE=Ethernet
-ONBOOT=yes //这个默认是no,表示开机不启用该网卡
-NM_CONTROLLED=yes
-BOOTPROTO=dhcp
-
-ifconfig    ping  地址  -c次数      nslookup www.baidu.com
-```
-## 网络（centos7）
-```
-nmtui:tui(文本界面)形式的管理工具,相关的有cui(命令行界面)和gui(图形界面)
-	功能：设置固定IP,开机启用等等
-网卡命名规则：
-	en： ethernet以太网卡
-	o：主板集成网卡
-	p：PCI独立网卡
-	s：热插拔网卡
-	nnn数字：MAC+主板信息（生产唯一序号）
-例如：ens333,就是以太网卡-热插拔-nnn数字
-依据网卡命名规则，会自动生成网卡的配置文件：/etc/sysconfig/network-scripts/ifcfg-ens333
-	可以使用winscp打开配置进行各项修改，里面的项和centos6的差不多
-DNS配置文件（对应windows的host文件）:/etc/resolv.conf
-ip addr:查看当前各个网卡信息，对应于windows的ipconfig
 ```
 ## 本地磁盘和文件
 ```
@@ -233,6 +243,8 @@ ssh
 	ssh连接
 scp
 	super copy，基于ssh
+ftp
+  ftp命令行客户端
 局域网共享yum install samba --downloadonly --downloaddir ./download
 映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
 挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
