@@ -60,10 +60,10 @@ ll [-h 美化结果] [-R 递归子目录] [-a 展示所有] [-i inode编号]
 	列举目录结构，实际上并没有名为ll的可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
 	ll . -h的结果如下：
 	|----------------------------------------------------------------------------------|
-	|  type,right  | ln	|  owner  |  group |   size  |    lastmodify      |   name     |
+	|   type,right | ln |  owner  |  group |   size  |    lastmodify      |   name     |
 	|----------------------------------------------------------------------------------|
-	|  drwxr-xr-x  | 7  |	 root   |  root  |   6.4M  |    Jul  3  2019    |   ak.zip   |
-	|  drwxr-xr-x  | 7 	|	 root   |  root  |   9.2G  |    Jul  2  2018    |   win7.iso |
+	|   drwxr-xr-x | 7  |  root   |  root  |   6.4M  |    Jul 3 2019      |   ak.zip   |
+	|   drwxr-xr-x | 7  |  root   |  root  |   9.2G  |    Jul 2 2018      |  win7.iso  |
 	|----------------------------------------------------------------------------------|
 	type,right列，类型和权限
 		第1个字符表示文件类型，各个字符表示的类型为：-：普通文件，d：目录，l：符号连接，b：块设备，c：字符设备，s：socket文件，p：管道
