@@ -54,6 +54,8 @@ df [-h 美化结果] [-i inode相关的信息]
 ln 源路径 目标路径 [-s 符号链接]
 	创建硬链接，不占用磁盘空间，和复制文件存在本质的区别,和指针类似,特别的：文件夹不能创建硬链接
 	符号链接,等价于windows的快捷方式，文件夹可以创建符号链接
+pwd
+	当前所在的位置，printf working directory
 ll [-h 美化结果] [-R 递归子目录] [-a 展示所有] [-i inode编号]
 	列举目录结构，实际上并没有名为ll的可执行程序，本质是ls -l的昵称，在/etc/profile文件中添加一行：alias ll='ls -l'
 	ll . -h的结果如下：
@@ -85,6 +87,9 @@ chmod 755 路径
 	所以，755等价于rwxr-xr-x
 chown 所有者名称或所属组名称 路径
 	修改所有者或者所属的组
+echo 字符内容
+	打印指定的字符内容
+	利用$符号，$后面跟变量名称，可以打印系统的PATH环境变量值：echo $PATH
 mkdir 目录路径 [-p 递归创建多层级目录]
 	创建目录
 rmdir 目录路径
@@ -149,52 +154,94 @@ find 路径 [-name 指定名称] [-size 文件大小] [-type 类型]
 mount 设备路径 目标文件路径
 	挂载， 挂载U盘，FTP，光驱等等
 ```
-## centos常用命令
+## 系统及配置
 ```
-lsof :查看所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
-	查看所有网络端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
-	查看打开指定端口的进程: lsof -i:端口号
-	查看打开指定file的进程：lsof file全路径
-	查看指定用户打开的file：lsof -u 用户名
-	查看指定程序打开的file：lsof -c 程序名
-计算机名：/etc/hostname
-内存使用情况: free -m  
-cpu使用情况: top   
-查看进程树：pstree  
-	需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
-查看端口占用：ss
-	系统默认自带
-查看端口使用：lsof 
-	需要安装lsof的包，查看使用80端口的程序： 
-	lsof -i:80
-	netstat -apn|grep 端口号 
-	ps -au|grep 端口号
-查看指定命令对应程序所在的位置(等价于cmd的where)：which
-查询当前系统的版本:uname -r
-当前所在的位置:pwd(printf working directory) 
-帮助文档 man man
-输出指定的字符:echo $PATH      
-$后面跟一个变量
-立刻关机:halt 
-立刻关机:poweroff 
-立刻关机(root用户使用):shutdown -h now 
-立刻重启(root用户使用):shutdown -r now 
-windows的关机:shutdown -s -t 0 
+poweroff
+	立刻关机
+halt
+	立刻关机，centos6好用，7不行，原因待研究
+shutdown [-h 关机] [-r 重启] [now 立刻执行]
+	关机或者重启
+shutdown [-s] [-t 秒数]
+	windows系统关机或者重启
+free [-h 美化显示]
+	内存使用情况
+top 
+	cpu使用情况
+ps [-aux BSD格式显示所有进程] [-ef 标准格式展示所有进程]
+	两种格式的区别在于显示的列不同
+	常用场景：把ps的输出作为grep的输入，然后删选判断指定的进程是否存在及其详细信息
+pstree
+  进程树
+  需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
+kill [-l 列举所有信号] [-信号] [-pid 进程id]
+	结束进程
+ss
+	列举所有在用的端口
+lsof
+	所有打开的file，是list of open file的简称，因为文件、网络、设备等等都是file，所以即可以访问常规数据，也可以访问网络连接和硬件
+	所有端口：lsof -i [-P 显示端口值，默认是端口名称] [-4 只显示ip4的] [-6 只显示ip6的] 
+	监听指定端口的进程: lsof -i:端口号
+	打开指定文件的进程：lsof 文件全路径
+	指定用户打开的所有file：lsof -u 用户名
+	指定程序打开的所有file：lsof -c 程序名
+who 
+	查看当前用户
+	tty1-tty6文字终端
+	tty7带桌面的终端
+	pts/0设备终端
+	使用ctrl+alt+f1-f7进行文字和图形互相切换
+which 程序名称
+	指定程序所在的全路径，等价于windows的where
+uname [-r] [-a]
+	系统名称、内核版本等信息
+env
+	环境变量
+	常用场景，查看PATH变量的值：env |grep PATH
+export 环境变量key=值 
+	临时修改指定环境变量的值，例如：export PATH="/tmp:$PATH" ，重新给环境变量里的PATH赋值，$PATH表示原来的PATH值，PATH值的各段用:分割
+adduser 用户名
+	创建用户, 这个本质是个脚本，后续会提示设置密码等步骤，非常方便
+deluser 用户名
+	删除用户
+useradd
+	创建用户，很多参数，鸡肋
+userdel -r 用户名
+	删除用户，这个会把用户对于的桌面文件夹删掉
+groupadd 组名
+	添加用户组 
+passwd  用户名
+	修改密码
+su 用户名
+	直接切换用户，不用logout
+logout
+	注销当前用户
+man man
+	帮助文档
+/etc/hostname
+	计算机名称
+/etc/profile
+	系统配置，环境变量等等
+	永久修改PATH值，在文件末尾加一行 PATH="/tmp:$PATH"
+	执行source /etc/profile ，让新配置生效
+/etc/passwd
+	所有的用户和相关信息
 ```
-## centos文件和目录
+## 远程连接和文件服务
 ```
-相关命令
-scp(super copy  基于ssh)
+ssh
+	ssh连接
+scp
+	super copy，基于ssh
+局域网共享yum install samba --downloadonly --downloaddir ./download
+映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
+挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
+挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
+安装文件系统 install cifs-utils
+重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
+//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
 ```
-## centos进程管理
-```
-ps a 当前操作系统的所有用户 u显示用户自己的信息 x没有终端的应用程序 ps aux | grep bash 利用管道检索指定的进程
-who 查看当前用户 tty1-tty6文字终端 tty7带桌面的终端 ctrl+alt+f1-f7进行切换 pts/0设备终端
-kill 结束进程 -信号 -pid -l列出所有信号
-env 环境变量 env | grep PATH
-top 任务管理器  
-```
-## centos服务管理
+## systemd
 ```
 chkconfig --list 列出所有的服务
 chkconfig  服务名称	[on/off]开机启动/开机不启动
@@ -210,38 +257,7 @@ systemctl enable postfix.service	设置开机启动
 systemctl disable postfix.service	设置开机不启动
 systemctl is-enabled postfix.service	查看是否开机启动
 ```
-## centos用户管理
-```
-创建用户 adduser 用户名     --这个本质是个脚本，后续会提示设置密码等步骤，非常方便
-创建用户    useradd  很多参数
-删除用户    deluser 用户名
-删除用户    userdel -r 用户名   --这个会把用户对于的桌面文件夹删掉
-添加用户组  groupadd 组名
-修改密码    passwd  用户名
-直接切换用户 su 用户名    
-查看所有的用户  利用配置文件查看    /etc/passwd
-ssh 用户名@ip 基于服务器openssh-server
-logout  登出
-```
-## centos环境变量
-```
-临时修改某个键的值 export LD_LIBRARY_PATH=./lib
-export PATH="/tmp:$PATH"  //这个的意思是，重新给环境变量的PATH赋值，$PATH表示原来的PATH值，PATH值用:分割
-永久修改环境变量的值 
-	第一步，修改文件/etc/profile，在末尾加上行 PATH="/tmp:$PATH"，
-	第二步，source /etc/profile 
-```
-## centos局域网共享
-```
-局域网共享yum install samba --downloadonly --downloaddir ./download
-映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
-挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
-挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
-安装文件系统 install cifs-utils
-重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
-```
-## yum教程
+## yum
 ```
 yum info mysql* available  //查询可用的程序
 yum list installed  //查看所有已经安装的程序  
@@ -266,14 +282,10 @@ vbox程序中的光驱设备加载everything版的iso镜像
 执行挂载：mount /dev/cdrom /root/mycdrom
 可以查看mycdrom中的文件确认前面的操作是否ok
 修改yum的源配置，把 /etc/yum.d/ 下的所有文件(除 )复制到 /etc/yum.d/bak 下
-	
-```
-## centos安装桌面
-```
-命令： yum groupinstall Desktop X Window System Chinese Surport
-```
-## centos-jdk
-```
+
+centos6安装桌面
+yum groupinstall Desktop X Window System Chinese Surport
+jdk
 yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
 yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
 ```
@@ -299,7 +311,7 @@ yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1
 	操作系统虚拟化：应用程序——宿主操作系统——硬件（代表作：docker）
 	操作系统虚拟化是容器和云原生的基石
 ```
-## docker
+## docker概述
 ```
 2013年：docker公司发布docker
 2016年：docker开源并将containerd捐赠给了CNCF
@@ -320,13 +332,10 @@ runC:根据OCI标准创建和运行容器
 激活开机启动：systemctl enable docker
 重启服务器
 查看docker deamon程序状态：docker info
-```
-## docker基本命令：
-```
 docker -v //查看版本
 docker info //查看信息
 ```
-## docker镜像操作
+## docker镜像
 ```
 镜像：打包好的环境和应用，对应不可变基础设施
 容器：运行镜像的势力，镜像是静态的，容器是动态的
@@ -363,9 +372,7 @@ docker info //查看信息
 	docker load < /root/centos.20220621.tar
 查看日志：docker log
 	如果容器起不来，利用这个查看报错原因
-```
-## docker镜像仓库
-```
+
 公网镜像仓库，dockerhub
 私网镜像仓库
 公有仓库：客户端上传需要登陆仓库，下载不需要登陆
@@ -383,8 +390,91 @@ docker push centos:7.6
 docker tag centos:7.6 192.168.56.104/library/centos:7.6
 docker push 192.168.56.104/library/centos:7.6
 docker login 仓库ip
+
+指定基础镜像：FROM
+	FROM centos:7.2.1511
+	FROM 192.168.56.103/myimgs/centos:7.2
+指定作者信息(可选)：MAINTAINER
+	MAINTAINER eeroom
+添加属性信息（可选，可多个）：LABEL
+	LABEL version="1.0"
+	LABEL seek="vbc"
+执行命令：RUN
+	构建镜像过程中执行的命令，比如镜像需要安装httpd
+	RUN yum localinstall /root/httpd/* --nogpgcheck
+	优化点：有多条命令的时候，不要使用多条RUN,尽量使用&&符号和\符号连接成一行，多条RUN导致镜像创建多层
+执行命令：CMD
+	容器启动的时候要执行的命令，只能有一个CMD,有三种格式:
+	CMD ['命令','参数1','参数2']
+	CMD ['参数1','参数2']
+	CMD 命令 参数1,参数2
+执行命令：ENTRYPOINT
+	和CMD类似
+	和CMD的区别：可以有多个，最后一个生效，CMD可以被run容器的时候传提的命令覆盖，ENTRYPOINT的命令不能被覆盖
+定义变量：ARG
+	ARG a=3
+	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
+	使用方式：$变量名称
+	RUN中可以用ARG定义的变量，CMD用不了ARG定义的变量
+定义变量：ENV
+	ENV a=4
+	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
+	RUN和CMD中都可以使用ENV定义的变量
+拷贝文件：ADD
+	ADD 源 目标
+	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
+	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
+拷贝文件：COPY
+	COPY 源 目标
+	和ADD类似，区别：源必须是dockerfile所在目录的一个相对路径(文件或目录)
+	优点：简单，直观，完全可以替代ADD
+挂载数据卷：VOLUME
+	VOLUME ["挂载点1","挂载点2"]
+	等价于 -v 宿主机的/var/lib/docker/volumes下的随机目录:挂载点1
+	会被docker run 的-v命令覆盖
+	查看自动挂载的随机目录：docker inspect 容器id ,可以看到随机目录的具体值
+暴露端口：EXPOSE
+	EXPOSE 80
+	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
+	这个指定其实只是声明，最终由-p的参数值决定端口映射
+指定用户：USER
+	USER daemon
+	可以是用户名或者UID，对应 -u 用户名
+	默认是root用户
+设置工作目录：WORKDIR 
+	WORKDIR /root
+	设定的是镜像内的工作目录
+	等价于RUN cd /root
+构建httpd的镜像
+	FROM centos:7.2.1511
+	MAINTAINER eeroom
+	LABEL version="1.0"
+	LABEL description="first httpd"
+	WORKDIR /root
+	COPY httpd-1511/ httpd/
+	RUN yum localinstall httpd/* --nogpgcheck -y \
+		&& rm -rf  httpd \
+		&& echo "wwch" > /var/www/html/index.html
+	VOLUME ["/var/www/html"]
+	EXPOSE 80
+	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+构建tomcat的镜像
+	FROM centos:7.2.1511
+	LABEL MAINTAINER="eeroom" version="2.2"
+	ENV JAVA_HOME=/usr/local/jdk-11.0.2
+	COPY jdk-11.0.2 /usr/local/jdk-11.0.2
+	COPY apache-tomcat-8.5.81 /usr/local/apache-tomcat-8.5.81
+	VOLUME ["/usr/local/apache-tomcat-8.5.81/webapps"]
+	EXPOSE 8080
+	CMD ["/usr/local/apache-tomcat-8.5.81/bin/catalina.sh","run"]
+查看镜像分层：docker history 镜像名称
+镜像优化：
+	基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像
+		alpine不使用glibc,centos等系统用的都是glibc
+	多阶段构建
+		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积
 ```
-## docker容器操作
+## docker容器
 ```
 查看正在运行的容器：docker ps
 新增容器：docker create 镜像名
@@ -470,91 +560,6 @@ docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
 // 删除所有tag标签是none的镜像
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-## 使用dockerfile构建镜像
-```
-指定基础镜像：FROM
-	FROM centos:7.2.1511
-	FROM 192.168.56.103/myimgs/centos:7.2
-指定作者信息(可选)：MAINTAINER
-	MAINTAINER eeroom
-添加属性信息（可选，可多个）：LABEL
-	LABEL version="1.0"
-	LABEL seek="vbc"
-执行命令：RUN
-	构建镜像过程中执行的命令，比如镜像需要安装httpd
-	RUN yum localinstall /root/httpd/* --nogpgcheck
-	优化点：有多条命令的时候，不要使用多条RUN,尽量使用&&符号和\符号连接成一行，多条RUN导致镜像创建多层
-执行命令：CMD
-	容器启动的时候要执行的命令，只能有一个CMD,有三种格式:
-	CMD ['命令','参数1','参数2']
-	CMD ['参数1','参数2']
-	CMD 命令 参数1,参数2
-执行命令：ENTRYPOINT
-	和CMD类似
-	和CMD的区别：可以有多个，最后一个生效，CMD可以被run容器的时候传提的命令覆盖，ENTRYPOINT的命令不能被覆盖
-定义变量：ARG
-	ARG a=3
-	构建过程中使用的变量，参数值必须在dockfile中指定，不能从外面传入
-	使用方式：$变量名称
-	RUN中可以用ARG定义的变量，CMD用不了ARG定义的变量
-定义变量：ENV
-	ENV a=4
-	和ARG类似，区别：可以被run时的参数覆盖，对应-e a=12
-	RUN和CMD中都可以使用ENV定义的变量
-拷贝文件：ADD
-	ADD 源 目标
-	源可以是本地文件或者本地压缩文件（会自动解压），或者url地址（这时候add类似于wget）
-	目标可以是容器内的绝对路径或者相对于工作目录的相对路径
-拷贝文件：COPY
-	COPY 源 目标
-	和ADD类似，区别：源必须是dockerfile所在目录的一个相对路径(文件或目录)
-	优点：简单，直观，完全可以替代ADD
-挂载数据卷：VOLUME
-	VOLUME ["挂载点1","挂载点2"]
-	等价于 -v 宿主机的/var/lib/docker/volumes下的随机目录:挂载点1
-	会被docker run 的-v命令覆盖
-	查看自动挂载的随机目录：docker inspect 容器id ,可以看到随机目录的具体值
-暴露端口：EXPOSE
-	EXPOSE 80
-	对应容器里面的端口，对应 -p 宿主机端口:EXPOSE的端口
-	这个指定其实只是声明，最终由-p的参数值决定端口映射
-指定用户：USER
-	USER daemon
-	可以是用户名或者UID，对应 -u 用户名
-	默认是root用户
-设置工作目录：WORKDIR 
-	WORKDIR /root
-	设定的是镜像内的工作目录
-	等价于RUN cd /root
-构建httpd的镜像
-	FROM centos:7.2.1511
-	MAINTAINER eeroom
-	LABEL version="1.0"
-	LABEL description="first httpd"
-	WORKDIR /root
-	COPY httpd-1511/ httpd/
-	RUN yum localinstall httpd/* --nogpgcheck -y \
-		&& rm -rf  httpd \
-		&& echo "wwch" > /var/www/html/index.html
-	VOLUME ["/var/www/html"]
-	EXPOSE 80
-	CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
-构建tomcat的镜像
-	FROM centos:7.2.1511
-	LABEL MAINTAINER="eeroom" version="2.2"
-	ENV JAVA_HOME=/usr/local/jdk-11.0.2
-	COPY jdk-11.0.2 /usr/local/jdk-11.0.2
-	COPY apache-tomcat-8.5.81 /usr/local/apache-tomcat-8.5.81
-	VOLUME ["/usr/local/apache-tomcat-8.5.81/webapps"]
-	EXPOSE 8080
-	CMD ["/usr/local/apache-tomcat-8.5.81/bin/catalina.sh","run"]
-查看镜像分层：docker history 镜像名称
-镜像优化：
-	基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像
-		alpine不使用glibc,centos等系统用的都是glibc
-	多阶段构建
-		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积 
-```
 ## docker网络
 ```
 节点网络：docker host之间的
@@ -599,42 +604,6 @@ containerd
 	crictl
 
 自动化运维：ansible
-```
-## 编译nginx
-```
-
-准备gcc
-安装依赖openssl-devel和pcre-devel
-官网下载tar.gz包，然后解压
-切换到压缩包根目录，执行： ./configure --with-http_stub_status_module --with-http_ssl_module
-	执行完configure,就会生成makefile文件，然后就可以执行make
-执行：make
-执行：make install
-	会把主程序和配置文件复制到/usr/local/nginx 目录下
-
-```
-## 编译mariadb
-```
-准备依赖：g++ 编译器和ncurses-devel
-cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mariadb  -DMYSQL_DATADIR=/root/mariadb_data  -DSYSCONFDIR=/etc  -DWITHOUT_TOKUDB=1  -DWITH_INNOBASE_STORAGE_ENGINE=1  -DWITH_ARCHIVE_STPRAGE_ENGINE=1  -DWITH_BLACKHOLE_STORAGE_ENGINE=1  -DWIYH_READLINE=1  -DWIYH_SSL=system  -DVITH_ZLIB=system  -DWITH_LOBWRAP=0  -DMYSQL_UNIX_ADDR=/tmp/mysql.sock  -DDEFAULT_CHARSET=utf8  -DDEFAULT_COLLATION=utf8_general_ci
-
-scripts/mysql_install_db --user=root --datadir=/var/mariadb_data
-执行这个脚本会生产配置文件 /etc/my.cnf  等价于windows上 my.ini
-	/usr/local/mariadb/support-files 目录下有my.cnf的各种参数值的配置，可以选一个复制到/etc/目录下
-启动主进程的脚本文件：/usr/local/mariadb/support-files/mysql.server
-	创建一个systmctl服务的声明文件
-	[Unit]
-	Description=mariadb server daemon
-	After=network.target
-
-	[Service]
-	User=root
-	ExecStart=/usr/local/mariadb/support-files/mysql.server start
-	ExecReload=/usr/local/mariadb/support-files/mysql.server restart
-	ExecStop=/usr/local/mariadb/support-files/mysql.server stop
-
-	[Install]
-	WantedBy=multi-user.target
 ```
 ## docker资源隔离
 ```
