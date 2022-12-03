@@ -337,35 +337,25 @@ systemd-cgls
 ```
 ## yum
 ```
-yum info mysql* available  //查询可用的程序
-yum list installed  //查看所有已经安装的程序  
-yum  localinstall docker-engine-selinux-1.12.6-1.el7.centos.noarch.rpm  --nogpgcheck  //本地安装
-yum  localinstall docker-engine-1.12.6-1.el7.centos.x86_64.rpm --nogpgcheck
-yum grouplist //列出所有的软件组 比如 genome desktop
-yum group install 某个组的名称 //安装某个组的程序，一系列程序
-yum --downloadonly --downloaddir ./download  //把指定的软件下载到本机目录，不进行安装 试用单个程序或者组
-yum下载的包在哪里
-cat /etc/yum.conf
-cachedir=/var/cache/yum/$basearch/$releasever
-keepcache=0
-cachedir是软件包下载后保存的目录。但默认是不保存的，因为keepcache=0。若想要保存下载的软件包，必须将keepcache设置1才可以。
-
-yum安装某个目录下的所有rpm文件：yum  localinstall 目录/* --nogpgcheck
-比如已经切换到安装程序所在目录：yum  localinstall * --nogpgcheck
-场景：目录下包含程序和该程序所有层级的依赖rpm文件
-
-本地安装源
-vbox程序中的光驱设备加载everything版的iso镜像
-创建一个目录用于读取光盘镜像的文件，例如：/root/mycdrom
-执行挂载：mount /dev/cdrom /root/mycdrom
-可以查看mycdrom中的文件确认前面的操作是否ok
-修改yum的源配置，把 /etc/yum.d/ 下的所有文件(除 )复制到 /etc/yum.d/bak 下
-
+yum [list installed] [info mysql* available 查询] [grouplist 程序组]
+  列举已安装的程序
+yum [localinstall 本地安装] [install] 程序名称 [--nogpgcheck 不校验gpg] [--downloadonly --downloaddir /root/myapp 仅下载，不安装] 
+	安装或下载程序
+yum localinstall 目录/* --nogpgcheck
+  安装目录下的所有rpm文件，场景：目录下包含程序及其依赖
+/etc/yum.conf
+  配置文件，常用的配置项
+	cachedir=/var/cache/yum/$basearch/$releasever  软件包下载后保存的目录
+	keepcache=1   默认是0，下载的软件安装后不保存
+配置本地安装源
+  vbox程序中的光驱设备加载everything版的iso镜像
+  创建一个目录用于读取光盘镜像的文件，例如：/root/mycdrom
+  挂载光驱，执行：mount /dev/cdrom /root/mycdrom ，可以查看mycdrom中的文件确认前面的操作是否成功
+  修改yum的源配置，把 /etc/yum.d/ 下的所有文件(除 )复制到 /etc/yum.d/bak 下
+yum groupinstall 组名称
+  安装程序组，组内会有多个程序
 centos6安装桌面
-yum groupinstall Desktop X Window System Chinese Surport
-jdk
-yum install java-1.8.0-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk1.8
-yum install java-11-openjdk-devel.x86_64 --downloadonly --downloaddir /root/jdk11
+  yum groupinstall Desktop X Window System Chinese Surport
 ```
 ## 云原生
 ```
