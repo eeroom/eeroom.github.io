@@ -241,6 +241,43 @@ man man
 /etc/passwd
 	所有的用户和相关信息
 ```
+## ssh
+```
+ssh 目标机用户名@目标机地址
+  登陆，免密登录，场景：在A机器上以tom用户免密登陆B机器
+	首先确保B具有tom用户，如果没有则新创建，A无论有没有tom用户，不影响免密登陆
+  B侧作为服务端，修改sshd_config（不是ssh_config）文件，然后重启ssh服务和sshagent服务
+	  linux路径：/etc/ssh/sshd_config，取消如下3行的注释即可，默认已经有这3行记录，但被注释掉了
+		  RSAAuthentication yes
+		  PubkeyAuthentication yes
+		  AuthorizedKeysFile	.ssh/authorized_keys
+		windows路径：C:/ProgramData/ssh/sshd_config，注释如下2行即可，默认在文件末尾
+		  Match Group administrators
+		  AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
+  A侧作为客户端，生成密钥对，把公钥值放到B的指定文件中，具体操作如下
+	  执行：ssh-keygen -t rsa，交互式命令，都用默认参数值即可，多次回车确认后，生成的密钥对分别保存在id_rsa和id_rsa.pub文件中，路径： 当前用户家目录/.ssh/
+		复制id_rsa.pub中的内容，追加到B的authorized_keys文件中，路径：tom用户家目录/.ssh/authorized_keys，文件不存在就新建一个
+		上面的复制操作有完备的工具支持,在A执行：ssh-copy-id -i id_rsa.pub全路径 tom@目标机地址
+		特别的：linux的安全要求，.ssh目录权限为700，authorized_keys和私钥权限为600，如果B不符合，则自动登录不生效
+		 ssh-copy-id会自动对B的这个目录和文件进行权限配置
+登陆卡的问题
+  修改服务端的sshd_config（不是ssh_config），设置如下：
+    UseDNS no
+    GSSAPIAuthentication no
+windows安装OpenSSH
+  解压程序包到指定位置，推荐路径：C:\Program Files\OpenSSH
+	执行：powershell.exe -ExecutionPolicy Bypass -File "C:\Program Files\OpenSSH\install-sshd.ps1"
+  如果返回3行执行执行成功的记录，则安装成功，在windows服务中可以看到相关的ssh和sshagent服务
+	可能涉及防火墙设置，端口是22
+  特别的：在2008r2core中安装OpenSSH需要一些技巧
+	  如果是本地虚拟机，可以在宿主机加载虚拟机的vhd文件，然后把程序文件放到指定位置，否则，可以通过网络共享或者ftp下载，获取到程序文件
+		如果涉及解压缩包文件，需要借助7z的命令行版，包括3个文件：7za.exe,7za.dll,7zxa.dll
+		命令行开通22端口：netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
+		ps设置服务开机启动，进入ps的交互模式后，执行：Set-Service sshd -StartupType Automatic
+scp
+	super copy，基于ssh
+sftp
+```
 ## 远程连接和文件服务
 ```
 ssh
@@ -989,47 +1026,7 @@ vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一
 执行scp把分发到远程机器
 执行远程机器的ps脚本,执行后续的部署等操作
 ```
-## Windows-ssh(openssh)
-1. 安装
-```
-创建目录C:\Program Files\OpenSSH，想办法把文件放进去，win10，加载vhd，然后复制进去，或者打开宿主共享，然后复制
-	局域网共享，然后 robocopy
-顺便安装7za,把7za.exe,7za.dll,7zxa.dll放到system32目录
-切到OpenSSh目录
-powershell.exe -ExecutionPolicy Bypass -File install-sshd.ps1
-显示3行成功
-如果启用了防火墙，则
-netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
-设定服务自动启动
-使用ps执行：Set-Service sshd -StartupType Automatic
-```
-2. 免密登录
-```
-配置免密登陆，场景：A免密登陆B，
-B作为服务端，要修改sshd_config（不是ssh_config）文件，
-	修改B中C:/ProgramData/ssh/sshd_config，注释掉2行，默认是在最后
-	Match Group administrators
-		AuthorizedKeysFile __PROGRAMDATA__/ssh/administrators_authorized_keys
-	重启B的ssh和sshagent服务
-	Centos7的为/etc/ssh/sshd_config，修改内容，默认情况这三行为注释掉的，只需要取消注释，按如下设置即可
-	RSAAuthentication yes
-	PubkeyAuthentication yes
-	AuthorizedKeysFile	.ssh/authorized_keys
-A作为客户端，要做的事情为：
-A使用ssh-keygen生成公钥和私钥，参数全部默认，一路回车，在当前用户目录下的.ssh目录里面id_rsa，id_rsa.pub
-打开id_rsa.pub复制里面的内容，追加到B的authorized_keys文件，文件位置为【用户名/.ssh/authorized_keys】 比如Administrator/.ssh/authorized_keys
-centos:.ssh目录的权限为700，其下文件authorized_keys和私钥的权限为600,这是linux的安全要求，如果权限不对，自动登录将不会生效,
-如果authorized_keys文件不存在就新建,
-这里是把authorized_keys放在Administrator用户下，后续免密登陆就是使用Administrator用户，命令为：ssh Administrator@被免密登陆的机器IP
-A上执行：ssh Administratro@192.168.56.101
-```
-![效果图](./img/配置SSH免密登陆.png)
-3. ssh登陆卡
-```
-修改服务端的sshd_config（不是ssh_config），设置为如下：
-UseDNS no
-GSSAPIAuthentication no
-```
+
 
 ## win2008r2Core配置sqlserver
 ```
