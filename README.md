@@ -194,6 +194,10 @@ pstree
   需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
 kill [-l 列举所有信号] [-信号] [-pid 进程id]
 	结束进程
+chkconfig [--add 增加][--del 删除][--list 列举全部] [服务名称 [on 开机启动] [off 开机不启动]]
+  服务管理工具，启用、禁用服务等，已过时，centos7中被systemd取代
+service [--status-all 所有状态] [服务名成 [start 启动][stop 停止][restart 重启]]
+  服务管理工具，启动、停止、查看状态等，已过时
 ss
 	列举所有在用的端口
 lsof
@@ -278,32 +282,29 @@ scp
 	super copy，基于ssh
 sftp
 ```
-## 局域网共享和ftp
-ftp
-  ftp命令行客户端
-局域网共享yum install samba --downloadonly --downloaddir ./download
-映射网络驱动器 mount -t cifs -o username="administrator",password="xxx" //192.168.56.101/Downloads /LFIS_Release
-挂载windows的共享 使用smbfs文件系统 mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
-挂载windows的共享 使用cifs文件系统 mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/Downloads/ 
-安装文件系统 install cifs-utils
-重启系统的时候自动mount, 将下面命令行添加到/etc/fstab里。
-//192.168.56.1/Downloads /mnt/downloads/ cifs defaults,username=Deroom,password=密码 0 2 
+## 局域网共享和FTP
+```
+场景1：windows作为服务端启动局域网共享服务，linux作为客户端，配置步骤如下
+	安装samba，程序包名称：samba
+	[可选] 安装cifs，程序包名称：cifs-utils
+	使用smbfs文件系统挂载，执行：mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
+	使用cifs文件系统挂载，执行：mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/hostDownloads
+	特别的：上述操作都是临时挂载，重启后需要重新执行挂载，修改配置文件可以实现启动后自动挂载
+	配置文件路径：/etc/fstab
+	增加一行的内容：//192.168.56.1/Downloads /mnt/hostDownloads/ cifs defaults,username=xxx,password=xxx 0 2
+ftp ftp地址
+  ftp命令行客户端，交互式，上传、下载文件
 ```
 ## systemd
 ```
-chkconfig --list 列出所有的服务
-chkconfig  服务名称	[on/off]开机启动/开机不启动
-service 服务名成 [start/stop/restart]
-systemctl //列出正在运行的服务
-systemctl list-unit-files //所有已经安装的服务
-systemd-cgls   以树形列出正在运行的进程，它可以递归显示控制组内容
-systemctl start postfix.service  启动一个服务
-systemctl stop postfix.service	停止
-systemctl restart postfix.service	重启
-systemctl status postfix.service	查看服务的状态
-systemctl enable postfix.service	设置开机启动
-systemctl disable postfix.service	设置开机不启动
-systemctl is-enabled postfix.service	查看是否开机启动
+systemctl 
+  列出正在运行的服务
+systemctl list-unit-files 
+  所有已经安装的服务
+systemd-cgls   
+  以树形列出正在运行的进程，它可以递归显示控制组内容
+systemctl [start 启动] [stop 停止] [restart 重启] [status 状态] [enable 开机启动] [disable 开机不启动] [is-enabled 是否开机启动] 服务名称  
+  服务的基本管理操作，服务名称可以是全名称，也可以简写，不带 .service 结尾
 ```
 ## yum
 ```
