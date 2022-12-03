@@ -46,7 +46,7 @@ nslookup 域名
 nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信息]
 	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
 netsh winsock reset
-	重置网络，场景：无法访问外网，各种操作都不起作用；本机服务无法被访问，各种操作都不起作用
+	重置网络，管理员权限，场景：无法访问外网，各种操作都不起作用；本机服务无法被访问，各种操作都不起作用
 启用承载网络，操作如下：
   执行：netsh wlan set hostednetwork mode=allow ssid=xxx key=xxxxxxxxxxxx
 	执行：netsh wlan start hostednetwork
