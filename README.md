@@ -170,6 +170,10 @@ mount 设备路径 目标文件路径
 ```
 ## 系统及配置
 ```
+su 用户名
+	直接切换用户，不用logout
+logout
+	注销当前用户
 poweroff
 	立刻关机
 halt
@@ -226,10 +230,6 @@ groupadd 组名
 	添加用户组 
 passwd  用户名
 	修改密码
-su 用户名
-	直接切换用户，不用logout
-logout
-	注销当前用户
 man man
 	帮助文档
 /etc/hostname
@@ -278,12 +278,7 @@ scp
 	super copy，基于ssh
 sftp
 ```
-## 远程连接和文件服务
-```
-ssh
-	ssh连接
-scp
-	super copy，基于ssh
+## 局域网共享和ftp
 ftp
   ftp命令行客户端
 局域网共享yum install samba --downloadonly --downloaddir ./download
