@@ -15,7 +15,7 @@ nmtui
 	DNS服务器的配置
 /etc/sysconfig/network-script/ifcfg-网卡名称
 	网卡设备对应的配置文件，nmtui本质就是修改这个文件，也可以vi或者winscp远程打开后进行修改，各个配置项如下：
-    DEVICE=网卡名称  centos7中命名规则为：ifcfg-[en 以太网卡][o 主板集成网卡][p PCI独立网卡][s 热插拔网卡][nnn 3位数字,和mac和主板有关]，eg. ifcfg-en323
+    DEVICE=网卡名称  centos7中命名规则为：ifcfg-[en 以太网卡][o 主板集成网卡][p PCI独立网卡][s 热插拔网卡][nnn 3位字符,和mac和主板有关]，eg. ifcfg-en0s8
 		HWADDR=网卡设备MAC eg. 0a-66-21-ae-31-20
 		TYPE=类型		eg.Ethernet   
 		NM_CONTROLLED=yes   nmtui管理标识
@@ -45,9 +45,8 @@ nslookup 域名
 	域名查询工具
 nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信息]
 	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
-查看所有网卡设备的信息
-命令：cat /etc/udev/rules.d/70-persistent-net.rules
-解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
+/etc/udev/rules.d/70-persistent-net.rules
+  网卡设备的信息，已过时，centos7已经移除
 ```
 ## 本地磁盘和文件
 ```
