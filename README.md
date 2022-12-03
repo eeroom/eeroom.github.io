@@ -299,8 +299,8 @@ ftp ftp地址
 ```
 systemctl 
   列出正在运行的服务
-systemctl list-unit-files 
-  所有已经安装的服务
+systemctl [--version 版本] [reboot 重启] [poweroff 断电] [list-units 所有已经安装的服务] 
+  
 systemd-cgls   
   以树形列出正在运行的进程，它可以递归显示控制组内容
 systemctl [start 启动] [stop 停止] [restart 重启] [status 状态] [enable 开机启动] [disable 开机不启动] [is-enabled 是否开机启动] 服务名称  
