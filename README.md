@@ -29,18 +29,22 @@ ping ip地址或域名 [-c次数]
 	诊断网络是否可达，windows默认ping4次，linux默认无限次，需要显示指定次数，基于icmp，ping通表示网络一定可达，反过来不一定
 telnet ip地址或域名 端口
 	确认端口是否可达
-tracert [-d]
-	路由追踪，windows系统，常用场景：确定网络在哪个节点不通
-traceroute
-  路由追踪
-nslookup 域名
 curl
   网络访问，下载的工具
 wget
   下载工具
+dig
+	域名查询工具,可以从DNS域名服务器查询主机地址信息,获取到详细的域名信息,需要额外安装
+tracepath
+  路由追踪
+traceroute
+  路由追踪
+tracert [-d]
+	路由追踪，常用场景：确定网络在哪个节点不通
+nslookup 域名
+	域名查询工具
 nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信息]
 	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
-
 查看所有网卡设备的信息
 命令：cat /etc/udev/rules.d/70-persistent-net.rules
 解析:SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}="00:15:5d:38:67:03", ATTR{type}=="1",KERNEL=="eth*", NAME="eth0"
