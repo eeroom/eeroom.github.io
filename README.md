@@ -297,14 +297,43 @@ ftp ftp地址
 ```
 ## systemd
 ```
-systemctl 
-  列出正在运行的服务
-systemctl [--version 版本] [reboot 重启] [poweroff 断电] [list-units 所有已经安装的服务] 
-  
+systemd管理所有系统资源,不同的资源统称为Unit（单位）,分类如下
+  Service unit：系统服务
+  Target unit：多个 Unit 构成的一个组
+  Device Unit：硬件设备
+  Mount Unit：文件系统的挂载点
+  Automount Unit：自动挂载点
+  Path Unit：文件或路径
+  Scope Unit：不是由 Systemd 启动的外部进程
+  Slice Unit：进程组
+  Snapshot Unit：Systemd 快照，可以切回某个快照
+  Socket Unit：进程间通信的 socket
+  Swap Unit：swap 文件
+  Timer Unit：定时器
+systemctl [--version 版本] [reboot 重启] [poweroff 断电] [rescue 单用户模式] 
+  系统管理
+systemctl [list-units] [--all 全部] [--type=service 按类别筛] [--state=inactive 按状态筛] [get-default 启动的默认target] [set-default]
+  列举unit
+systemctl [start 启动] [stop 停止] [restart 重启] [status 状态] [enable 开机启动] [disable 开机不启动] [is-enabled 是否开机启动] unit名称  
+  操作unit，unit名称的后缀名，如果省略，默认后缀名为.service，所以sshd会被理解成sshd.service
+systemctl [cat unit名称 简单参数] [show unit名称 全部参数] [daemon-reload 重载所有配置] [reload unit名称] [set-property unit名称 CPUShares=500]
+  配置unit
+systemctl [list-dependencies unit名称 依赖组件] [--all 全部]
+	依赖关系
+journalctl [-u unit名称] [-f 动态最新日志]
+  日志
+systemd-analyze [blame 每个服务的启动耗时] [critical-chain [服务名称] 瀑布状的启动过程流]
+   启动耗时
+hostnamectl [set-hostname 主机名称 修改主机名称]
+  主机信息
+localectl [LANG=en_GB.utf8 设置语言] [set-keymap en_GB 设置键盘]
+  本地化信息
+timedatectl [list-timezones 所有可用的时区] [set-timezone Asia/Shanghai] [set-time YYYY-MM-DD] [set-time HH:MM:SS]
+  时区信息
+loginctl
+  登录的用户
 systemd-cgls   
-  以树形列出正在运行的进程，它可以递归显示控制组内容
-systemctl [start 启动] [stop 停止] [restart 重启] [status 状态] [enable 开机启动] [disable 开机不启动] [is-enabled 是否开机启动] 服务名称  
-  服务的基本管理操作，服务名称可以是全名称，也可以简写，不带 .service 结尾
+  递归显示cgroup的内容
 ```
 ## yum
 ```
