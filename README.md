@@ -374,7 +374,7 @@ centos6安装桌面
 发展历程中的商业竞争：
 	容器引擎之争：docker公司的docker VS CoreOS公司的rocket
 	容器编排之争：Docker swarm VS Kubernets VS Apache Mesos
-2015年6月Docker成立OCI组织，定义各种规范，容器运行时规范，镜像格式规范，镜像分发规范，解决容器的构建、分发和运行问题
+2015年6月docker成立OCI组织，定义各种规范，容器运行时规范，镜像格式规范，镜像分发规范，解决容器的构建、分发和运行问题
 2015年7月Google成立CNCF(Cloud Native Computing Foundation),解决应用管理及容器编排问题
 虚拟化技术发展历程：
 	完全虚拟化：应用程序——虚拟机操作系统——虚拟机监视器——宿主操作系统——硬件
@@ -387,24 +387,20 @@ centos6安装桌面
 2013年：docker公司发布docker
 2016年：docker开源并将containerd捐赠给了CNCF
 docker组件：
-docker engine:也叫做doker daemon或dockerd，用于启动服务守护进程，dockerd启动时会启动containerd子进程
-containerd:符合OCI标准的容器运行时，强调简单性、健壮性和可移植性，可以直接单机运行一个容器
-containerd-shim:为了支持多种OCI Runtime,containerd内部使用containerd-shim(垫片),每启动一个容器都会创建一个新的containerd-shim进程，指定容器id,bundle目录
-runC:根据OCI标准创建和运行容器
-
+  docker engine:也叫做doker daemon或dockerd，用于启动服务守护进程，dockerd启动时会启动containerd子进程
+  containerd:符合OCI标准的容器运行时，强调简单性、健壮性和可移植性，可以直接单机运行一个容器
+  containerd-shim:为了支持多种OCI Runtime,containerd内部使用containerd-shim(垫片),每启动一个容器都会创建一个新的containerd-shim进程，指定容器id,bundle目录
+  runC:根据OCI标准创建和运行容器
 容器底层关键技术：
 通过namespace实现资源隔离，一个宿主机可以跑多个容器，容器之间特定资源需要隔离,IP,用户等
 通过cgroups实现资源限制，限制某个容器使用的资源量，避免容器过度使用资源
 通过联合文件系统提高存储效率，容器虽然轻量，N个容器跑起来占用的空间也会很多，需要特殊的存储方式
 
-安装docker1.12,准备主程序和所有依赖文件,docker1.12和centos7.2(1511)适配度高
-
-切换到docker的程序和依赖目录,执行：yum  localinstall ./* --nogpgcheck
-激活开机启动：systemctl enable docker
-重启服务器
-查看docker deamon程序状态：docker info
-docker -v //查看版本
-docker info //查看信息
+安装docker程序
+	版本docker1.12,此版本和centos7.2版本发布时间相近，2015年11月，适配良好
+  [可选]设置开机启动
+docker [info 服务端信息] [-v 客户端版本]
+  docker基本信息
 ```
 ## docker镜像
 ```
