@@ -21,10 +21,10 @@ nmtui
 		NM_CONTROLLED=yes   nmtui管理标识
 		BOOTPROTO=[dhcp 自动分配] [static 静态分配]
 		ONBOOT=[yes 开机启用] [no 开机不启用]
+/etc/udev/rules.d/70-persistent-net.rules
+  网卡设备的信息，已过时，centos7已经移除
 ifconfig
-	显示和设置网络设备，centos7默认不包含了，需要自己安装，已过时
-ipconfig [/all]
-	windows系统的显示和设置网络设备
+	显示和设置网络，centos7默认不包含了，需要自己安装，已过时
 ping ip地址或域名 [-c次数]
 	诊断网络是否可达，windows默认ping4次，linux默认无限次，需要显示指定次数，基于icmp，ping通表示网络一定可达，反过来不一定
 telnet ip地址或域名 端口
@@ -37,16 +37,20 @@ dig
 	域名查询工具,可以从DNS域名服务器查询主机地址信息,获取到详细的域名信息,需要额外安装
 tracepath
   路由追踪
-traceroute
-  路由追踪
+ipconfig [/all] [/flushdns 清dns缓存]
+	显示和设置网络
 tracert [-d]
 	路由追踪，常用场景：确定网络在哪个节点不通
 nslookup 域名
 	域名查询工具
 nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信息]
 	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
-/etc/udev/rules.d/70-persistent-net.rules
-  网卡设备的信息，已过时，centos7已经移除
+netsh winsock reset
+	重置网络，场景：无法访问外网，各种操作都不起作用；本机服务无法被访问，各种操作都不起作用
+启用承载网络，操作如下：
+  执行：netsh wlan set hostednetwork mode=allow ssid=xxx key=xxxxxxxxxxxx
+	执行：netsh wlan start hostednetwork
+	在网络链接的管理界面设置网络共享，承载网络就可以提供wifi服务了
 ```
 ## 本地磁盘和文件
 ```
