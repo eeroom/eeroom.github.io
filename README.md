@@ -46,7 +46,7 @@ dig
 tracepath
   路由追踪
 traceroute
-  路由追踪，和tracepath效果一样，需要额外程序：traceroute
+  路由追踪，需要自己安装，程序名称：traceroute
 ipconfig [/all] [/flushdns 清dns缓存]
 	显示和设置网络
 tracert [-d]
