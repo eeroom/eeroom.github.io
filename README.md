@@ -29,10 +29,14 @@ ping ip地址或域名 [-c次数]
 	诊断网络是否可达，windows默认ping4次，linux默认无限次，需要显示指定次数，基于icmp，ping通表示网络一定可达，反过来不一定
 telnet ip地址或域名 端口
 	确认端口是否可达
-tcpdump [-A ASCII码方式显示数据包] [-c count 数据包数量达到后自动停止] [-d 易于阅读] [-D 列举可以静听的网卡编号] [-i interface 指定网卡 eg.eth-en0s8] [-w 保存到文件]
+tcpdump [-D 列举网卡] [-A ASCII格式] [-X 16进制] [-i 指定网卡] [-nn 域名和服务转为IP和端口] [-w 结果保存到本地文件] ['筛选表达式']
   抓取网络数据包
-	tcpdump -w xxx.cap -i eth0 -nnA 'port 80 and src host 192.168.182.111'  
-	  仅80端口和192.168.182.111发送的包才会被抓取，结果保存在xxx.cap文件中，可以用Wireshark等工具进一步分析
+	筛选表达式用单引号包裹放在命令末尾，语法如下：
+	  逻辑运算符：and or
+		指定端口：prot 端口号
+		指定主机地址：host 主机地址
+	  eg. tcpdump -w wch.cap -i eth0 -nnX 'port 80 and host 192.56.1.1'
+Wireshark教程
 curl
   网络访问，下载的工具
 wget
