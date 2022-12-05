@@ -406,6 +406,10 @@ centos6安装桌面
   通过namespace实现资源隔离，一个宿主机可以跑多个容器，容器之间特定资源需要隔离,IP,用户等
   通过cgroups实现资源限制，限制某个容器使用的资源量，避免容器过度使用资源
   通过联合文件系统提高存储效率，容器虽然轻量，N个容器跑起来占用的空间也会很多，需要特殊的存储方式
+镜像：打包好的环境和应用，对应不可变基础设施
+容器：运行镜像的势力，镜像是静态的，容器是动态的
+仓库：存放多个镜像的仓库
+	修改仓库地址，使用华为云加速地址，增加文件：/etc/
 docker版本
   |------------|---------------|-------------------------------------------------------------------|
 	|   version  |     date      |        remark                                                     |
@@ -414,31 +418,31 @@ docker版本
 	|   v1.12    |     2016      |        和centos7的1511版本完美适配，无需升级内核和依赖               |
 	|   v1.13    |     2017      |        最后一个传统版本                                            |
 	|------------|---------------|-------------------------------------------------------------------|
-docker [-v 客户端信息] [info 服务端信息]
-  docker基本信息
+docker [-H tcp://服务端ip:端口] [-v 客户端信息] [info 服务端信息] [version 服务端和客户端版本信息]
+  查看基本信息
+	默认是连接本机的服务端，通过-H可以指定任意docker服务端，但是-H参数需要每次命令都指定
+	技巧：设置环境变量 DOCKER_HOST=tcp://服务端ip:端口，作用和-H参数相同，非常方便
+/etc/docker/daemon.json
+  服务端配置文件
+	服务端默认不能被远程tcp连接，需要修改配置，内容：{"hosts":[ "unix:///var/run/docker.sock", "tcp://0.0.0.0:2375" ]}
+docker [login 镜像仓ip] [logout]
+  登陆镜像仓库；默认是连接官方镜像仓dockerhub，下载镜像无需登录，推送镜像需要登录
+docker pull [ip或域名]/仓库名/镜像名:tag  
+  下载镜像
+	不指定ip或域名，则为dockerhub
+	不指定仓库名，则为dockerhub
+	不指定tag，则为latest，这是一个动态值，总是指向当前的最新tag值
+	镜像的默认保存路径和docker使用的存储驱动有关，但都是在/var/lib/docker路径内
+	centos7中使用devicemapper存储驱动，具体路径为：/var/lib/docker/devicemapper
+	常用的存储驱动：devicemapper，overlay
+docker [images [-aq] 列出本地的镜像] [search 镜像名称 列出仓库中的镜像]
+  查询镜像
+
+	
+
 ```
 ## docker镜像
 ```
-镜像：打包好的环境和应用，对应不可变基础设施
-容器：运行镜像的势力，镜像是静态的，容器是动态的
-仓库：存放多个镜像的仓库
-	修改仓库地址，使用华为云加速地址，增加文件：/etc/
-列出本地所有镜像：docker images
-	docker images -aq
-镜像完整名称=(IP/域名)/仓库名/镜像名:tag
-	不指定IP/域名，默认为官方地址，即docker-hub
-	不指定仓库名，则为该地址下的默认仓库，docker-hub称为官方仓
-	必须指定镜像名
-	不指定tag值，默认为latest，这是一个动态值，总是指向当前的最新的tag值
-查询远程仓库的镜像：docker search 镜像名称
-下载镜像：docker pull 镜像完整名称
-	docker pull centos:7.2.1511
-	下载镜像的默认存放路径：/var/lib/docker/devicemapper
-	centos下的docker使用devicemapper存储驱动，有些系统下使用overlay驱动
-	存放的具体路径和docker使用的存储驱动有关，但都是在/var/lib/docker里面
-登陆：docker login
-	假定基于harbor的docker镜像仓库地址：docker login 192.168.56.1
-推出：docker logout
 上传镜像：docker push
 	先登录制定的镜像仓库
 	然后镜像tag：docker tag centos:7.2.1511 192.168.56.1/myimgs/centos:7.2
