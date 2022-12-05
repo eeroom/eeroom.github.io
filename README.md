@@ -427,46 +427,51 @@ docker [-H tcp://服务端ip:端口] [-v 客户端信息] [info 服务端信息]
 	服务端默认不能被远程tcp连接，需要修改配置，内容：{"hosts":[ "unix:///var/run/docker.sock", "tcp://0.0.0.0:2375" ]}
 docker [login 镜像仓ip] [logout]
   登陆镜像仓库；默认是连接官方镜像仓dockerhub，下载镜像无需登录，推送镜像需要登录
-docker pull [ip或域名]/仓库名/镜像名:tag  
+docker pull [ip或域名][/仓库名]/镜像名[:tag]  
   下载镜像
-	不指定ip或域名，则为dockerhub
-	不指定仓库名，则为dockerhub
-	不指定tag，则为latest，这是一个动态值，总是指向当前的最新tag值
-	镜像的默认保存路径和docker使用的存储驱动有关，但都是在/var/lib/docker路径内
-	centos7中使用devicemapper存储驱动，具体路径为：/var/lib/docker/devicemapper
+	ip或域名:可选，不指定则代表dockerhub
+	仓库名：可选，不指定则代表dockerhub
+	tag：可选，不指定tag，则为latest，这是一个动态值，总是指向当前的最新tag值
+	镜像的默认保存路径和存储驱动有关，但都在/var/lib/docker路径内，centos7中使用devicemapper存储驱动，具体路径为：/var/lib/docker/devicemapper
 	常用的存储驱动：devicemapper，overlay
 docker [images [-aq] 列出本地的镜像] [search 镜像名称 列出仓库中的镜像]
   查询镜像
+docker rmi 镜像名称
+  删除，删除所有镜像：docker rmi $(docker images -aq)
+	
+docker tag 原镜像名 新镜像名
+  标记镜像，类似于文件复制，参数均为镜像全名称：[ip或域名][/仓库名]/镜像名[:tag]
+docker push [ip或域名][/仓库名]/镜像名[:tag]
+  把镜像推送到远程镜像仓，一般需要先登录
+	ip或域名：对应远程镜像仓的ip或域名
+	仓库名：对应远程镜像仓里面的仓库名
+	场景：把官方镜像推送到自己的镜像仓，操作步骤如下：
+	  下载官方镜像到本地
+		tag此镜像，确保新镜像名中的ip或域名、仓库名和自己的镜像仓互相对应
+		推送新镜像
+公网镜像仓库:dockerhub，私网镜像仓库分为：
+  公有仓库：客户端上传需要登陆仓库，下载不需要登陆
+  私有仓库：客户端上传与下载都要登陆仓库
+	从dockerhub下载的公开镜像不能直接上传到私网镜像，需要重新tag,然后上传
+	Harbor可以快速搭建一个企业级的私网镜像仓
+docker save 镜像名称 -o 保存路径
+  导出镜像到本地，eg. docker save centos -o /root/centos.20220621.tar
+docker load < 导出镜像的保存路径
+  导入镜像，eg. docker load < /root/centos.20220621.tar
+docker-compose [down]
+  官方的单台机器的编排工具，v1.24.1
+
+
+	
 
 	
 
 ```
 ## docker镜像
 ```
-上传镜像：docker push
-	先登录制定的镜像仓库
-	然后镜像tag：docker tag centos:7.2.1511 192.168.56.1/myimgs/centos:7.2
-	然后：docker push 192.168.56.1/myimgs/centos:7.2 
-删除镜像：docker rmi
-标记镜像：docker tag 镜像原名称(完整) 镜像新名称(完整)
-	docker tag centos:7.2.1511 centos:7.2
-	镜像完整名称：镜像名称:标签值
-	特殊标签：latest，最新版本，指定镜像名的时候，如果不明确指定tag，就是latest
-导出镜像：docker save
-	docker save centos -o /root/centos.20220621.tar
-导入镜像：docker load
-	docker load < /root/centos.20220621.tar
 查看日志：docker log
 	如果容器起不来，利用这个查看报错原因
 
-公网镜像仓库，dockerhub
-私网镜像仓库
-公有仓库：客户端上传需要登陆仓库，下载不需要登陆
-私有仓库：客户端上传与下载都要登陆仓库
-docker login //登陆仓库
-从dockerhub下载的公开镜像不能直接上传到私网镜像，需要重新tag,然后上传
-Harbor可以快速搭建一个企业级的镜像仓库
-修改linux的主机名称，hostnamectl set-hostname 主机名称
 安装docker-compose,docker官方在单台机器的编排工具，1.24.1
 docker-compose down //停止本机的doker 容器
 docker rmi `docker images -aq`//linux执行符号，
