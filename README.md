@@ -29,6 +29,10 @@ ping ip地址或域名 [-c次数]
 	诊断网络是否可达，windows默认ping4次，linux默认无限次，需要显示指定次数，基于icmp，ping通表示网络一定可达，反过来不一定
 telnet ip地址或域名 端口
 	确认端口是否可达
+tcpdump [-A ASCII码方式显示数据包] [-c count 数据包数量达到后自动停止] [-d 易于阅读] [-D 列举可以静听的网卡编号] [-i interface 指定网卡 eg.eth-en0s8] [-w 保存到文件]
+  抓取网络数据包
+	tcpdump -w xxx.cap -i eth0 -nnA 'port 80 and src host 192.168.182.111'  
+	  仅80端口和192.168.182.111发送的包才会被抓取，结果保存在xxx.cap文件中，可以用Wireshark等工具进一步分析
 curl
   网络访问，下载的工具
 wget
@@ -47,6 +51,7 @@ nltest [/dsgetsite 查询所在的域] [/dsgetdc:域名称 查询指定域的信
 	windows域管理和诊断工具，常用场景：域认证不稳定或不通过的时候，用来诊断问题原因
 netsh winsock reset
 	重置网络，管理员权限，场景：无法访问外网，各种操作都不起作用；本机服务无法被访问，各种操作都不起作用
+net stop npcap
 启用承载网络，操作如下：
   执行：netsh wlan set hostednetwork mode=allow ssid=xxx key=xxxxxxxxxxxx
 	执行：netsh wlan start hostednetwork
