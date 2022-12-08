@@ -705,54 +705,6 @@ docker-machine env machine名称
 docker-machine rm
   移除machine
 ```
-## doker部署netcore程序
-1. `设定dockfile文件为编译输出`
-```
-修改项目文件，增加一行：<None Include="Dockerfile" CopyToPublishDirectory="Always" />
-目的：dockerfile文件始终复制到发布后的目录
-```
-1. 在windows环境下publish项目
-```
-dotnet publish  //用这个就可以，为当前目录中的项目创建一个 依赖于运行时的跨平台二进制文件：
-交叉编译:发布到linux64 dotnet 命令为：dotnet publish -r linux-x64 //不需要这样编译
-```
-1. 在windows的docker客户端build镜像
-```
-命令： docker build -t 镜像名称 Dockerfile所在的路径
-例如：docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
-Dockerfile内容：
-FROM microsoft/aspnetcore:2.0
-#指定一个workdir，目录随便
-WORKDIR /app
-#把相对dockerfile所在目录的相对路径的文件 复制到 workdir相对路径的位置
-COPY . .
-#声明系统运行需要用到的端口，只是声明，方便创建容器的人知道需要处理哪些端口映射
-expose 80
-#等价于cmd的dotnet命令 
-ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
-```
-1. 在windows的docker客户端run一个容器
-```
-docker run -it --rm -p 容器外部端口:容器内部端口 --name 容器名称 镜像名称
-docker run -it --rm -p 5000:80 --name wch123 wch
-```
-1. 访问容器所在的linux的地址
-```
-http://192.168.56.101:5000/api/values
-```
-1. 制作bat脚本
-```
-步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
-脚步内容：
-dotnet publish
-docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
-docker stop wch123
-docker rm wch123
-docker run -d -it --rm -p 5000:80 --name wch123 wch
-docker images|grep none|awk '{print $3 }'|xargs docker rmi
-```
-1. 微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
-
 ## hadoop部署模式
 ### ![效果图](./img/hadoop集群分布.png)
 ## hadoop搭建集群

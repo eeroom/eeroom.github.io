@@ -281,3 +281,37 @@ call addHandler
 使用：
 ```
 ### ![效果图](./img/log4net教程.png)
+## docker发布和部署netcore程序
+```
+dockerfile内容如下：
+FROM microsoft/aspnetcore:2.0
+#指定一个workdir，目录随便
+WORKDIR /app
+#把相对dockerfile所在目录的相对路径的文件 复制到 workdir相对路径的位置
+COPY . .
+#声明系统运行需要用到的端口，只是声明，方便创建容器的人知道需要处理哪些端口映射
+expose 80
+#等价于cmd的dotnet命令 
+ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
+
+解决方案的项目文件设定dockfile文件为编译输出，这样可以把dockerfile文件总是复制到发布后的目录，方法如下：
+  修改项目文件，增加一行：<None Include="Dockerfile" CopyToPublishDirectory="Always" />
+dotnet publish [-r linux-x64 交叉编译,通常不需要]  
+  发布，生成依赖于运行时的跨平台二进制文件
+windows的docker客户端连接docker服务端
+  配置一个环境变量，避免每次指定-H参数
+docker build -t 镜像名称 dockerfile的路径
+  eg. docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+docker run -it --rm -p 5000:80 --name=wch123 wch
+  docker run -it --rm -p 容器外部端口:容器内部端口 --name=容器名称 镜像名称
+访问：http://192.168.56.101:5000/api/values
+步骤总结为：发布程序，build镜像，创建容器及运行，删掉tag是none的镜像（也就是老版本的镜像）
+脚步内容：
+dotnet publish
+docker build -t wch .\bin\Debug\netcoreapp2.0\publish\
+docker stop wch123
+docker rm wch123
+docker run -d -it --rm -p 5000:80 --name wch123 wch
+docker images|grep none|awk '{print $3 }'|xargs docker rmi
+```
+微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
