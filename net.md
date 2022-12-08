@@ -314,4 +314,4 @@ docker rm wch123
 docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
-微软文档[FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
+微软文档[dotnet publish的FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
