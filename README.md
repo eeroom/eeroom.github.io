@@ -393,7 +393,7 @@ centos6安装桌面
 	操作系统虚拟化：应用程序——宿主操作系统——硬件（代表作：docker）
 	操作系统虚拟化是容器和云原生的基石
 ```
-## docker概述
+## docker
 ```
 2013年：docker公司发布docker
 2016年：docker开源并将containerd捐赠给了CNCF
@@ -414,9 +414,9 @@ docker版本
   |------------|---------------|-------------------------------------------------------------------|
 	|   version  |     date      |        remark                                                     |
 	|------------|---------------|-------------------------------------------------------------------|
-	|   v1.8     |     201508    |        centos6不升级内核情况下，可用的最高版本                       |
-	|   v1.12    |     2016      |        和centos7的1511版本完美适配，无需升级内核和依赖               |
-	|   v1.13    |     2017      |        最后一个传统版本                                            |
+	|   v1.8     |     201508    |        centos6不升级内核情况下，可用的最高版本                        |
+	|   v1.12    |     2016      |        和centos7的1511版本完美适配，无需升级内核和依赖                |
+	|   v1.13    |     2017      |        最后一个传统版本                                             |
 	|------------|---------------|-------------------------------------------------------------------|
 docker [-H tcp://服务端ip:端口] [-v 客户端信息] [info 服务端信息] [version 服务端和客户端版本信息]
   查看基本信息
@@ -425,6 +425,7 @@ docker [-H tcp://服务端ip:端口] [-v 客户端信息] [info 服务端信息]
 /etc/docker/daemon.json
   服务端配置文件
 	服务端默认不能被远程tcp连接，需要修改配置，内容：{"hosts":[ "unix:///var/run/docker.sock", "tcp://0.0.0.0:2375" ]}
+	默认走https，配置为不走https，内容："insecure-registries":["192.168.56.104"]
 docker [login 镜像仓ip] [logout]
   登陆镜像仓库；默认是连接官方镜像仓dockerhub，下载镜像无需登录，推送镜像需要登录
 docker pull [ip或域名][/仓库名]/镜像名[:tag]  
@@ -437,8 +438,8 @@ docker pull [ip或域名][/仓库名]/镜像名[:tag]
 docker [images [-aq] 列出本地的镜像] [search 镜像名称 列出仓库中的镜像]
   查询镜像
 docker rmi 镜像名称
-  删除，删除所有镜像：docker rmi $(docker images -aq)
-	
+  删除，删除所有镜像：docker rmi $(docker images -aq)，
+	或者利用linux执行符号：docker rmi `docker images -aq`
 docker tag 原镜像名 新镜像名
   标记镜像，类似于文件复制，参数均为镜像全名称：[ip或域名][/仓库名]/镜像名[:tag]
 docker push [ip或域名][/仓库名]/镜像名[:tag]
@@ -458,30 +459,71 @@ docker save 镜像名称 -o 保存路径
   导出镜像到本地，eg. docker save centos -o /root/centos.20220621.tar
 docker load < 导出镜像的保存路径
   导入镜像，eg. docker load < /root/centos.20220621.tar
-docker-compose [down]
+docker-compose [down 停止容器]
   官方的单台机器的编排工具，v1.24.1
-
-
-	
-
-	
-
+docker ps
+  正在运行的容器
+docker create 镜像名
+  新增容器
+docker run [-d 后台] [--name=名称] [-it 交互] [-p 宿主端口:容器端口] [-v 宿主路径:容器路径] [--restart=always] [-e 参数名=参数值] 镜像名称	[命令]
+  新增容器并运行，镜像本身包含默认命令，如果在run语句中不指定命令，则容器执行其镜像里的默认命令
+	跑容器类似于执行可执行程序，命令执行完容器就结束了，并且输出被重定向到宿主的终端，如果需要容器一直执行，需要执行持续性的任务
+	后台运行,则容器输出不会被重定向到宿主的终端
+	指定容器名称，--name=容器名称 或者 --name 容器名称
+	交互模式重定向了容器的输入和输出，因为重定向了输入，类似于持续任务，在交互期间容器会一直运行，一旦执行exit退出容器，则容器关闭
+	端口映射需要宿主机打开 ip_forward （跨网段路由）,/etc/sysctl.conf 文件中设置 net.ipv4.ip_forward=1，centos7.2minimal系统中默认已经打开
+	eg.
+	docker run centos:7.2.1511  echo seek
+  docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+  docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+  docker run -d --name=wch1 centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
+  docker run -it centos:7.3.1611
+  docker run -itd -p 8004:80 centos:7.2
+	容器本身是宿主机systemd下的一个进程，本身没有systemd,所以不能使用systemctl，需要直接运行服务对应的可执行程序，并且不能放到后台运行
+	httpd和ngix等默认都是后台运行，需要额外的参数或配置
+	docker run [-itd] -p 9001:80 azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+  修改httpd的主页内容： echo helloworld > /var/www/html/index.html
+	从容器内访问：http://172.17.0.2/index.html，使用docker inspect 查看容器内部的ip
+	从宿主机访问：http://192.168.56.102:9001/index.html
+	启动nginx 需要修改/etc/nginx/nginx.conf文件，增加 daemon off
+  挂载数据卷，场景：容器内配置文件需要修改、容器内数据需要保存、不同容器之间共享数据等等
+	指定的宿主机上的路径如果不存在会自动创建，自动创建的一定是文件夹，如果需要映射文件，需要提前在路径下准备好
+	docker run -itd -p 8001:80 -v /root/www:/var/www/html azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+	可以映射多个,很多镜像里面的时区不是北京时区，导致时间不一致，映射时区文件可以解决这个问题
+	docker run -itd -p 8001:80 -v /root/www:/var/www/html -v /etc/localtime:/etc/localtime azeroth:httpd /usr/sbin/httpd -D FOREGROUND
+	映射mysql的数据文件
+	docker run -d -p 3306:3306 -v /root/mysqldata:/var/lib/mysql --restart=always -e MYSQL_ROOT_PASSWORD=123456 mysql:5.6
+	映射nginx的主目录：-v /root/nginxhome:/usr/share/nginx/html
+	映射httpd的主目录：-v /root/httpdhome:/var/www/html
+	映射tomcat主目录：-v /root/tomcathome:/usr/local/tomcat/webapps
+	传参给镜像内部：-e 参数名称=参数值，参数名称由镜像决定
+docker attach
+  容器内执行命令，退出的时候会自动停止容器，不推荐使用
+docker exec [-it 交互式] 容器名称/容器id 命令
+  在容器内执行命令，eg. docker exec wch1 touch /abc
+docker cp 源路径 目标路径
+  拷贝文件、文件夹，目标路径格式：容器名称:/xxx/xxx
+docker commit 容器名称/容器id 新的镜像名称
+  提交容器为镜像，生成的镜像继续沿用原镜像的默认命令，不能修改默认命令
+	场景：往容器中安装了新软件或改了配置，想保存为新的镜像
+	这是自定义镜像的方法之一，不太科学，科学做法是：在容器所属镜像的基础上直接创建新镜像
+docker rm 容器名称/容器id
+  删除容器，不能删除正在运行的容器，删除所有已经停止的容器
+docker stop 容器id/容器name
+  停止容器，停止所有正在运行的容器：docker stop $(docker ps -q)
+docker logs 容器id
+  查看容器内日志、输出，如果容器起不来，利用这个查看报错原因
+docker inspect 容器id/镜像id
+  查看容器或镜像的所有配置参数
+docker start 容器id
+  启动指定容器
+docker rm 容器ID
+  删除容器
+	删除所有停止的容器：docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
+	删除所有tag标签是none的镜像：docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 ## docker镜像
 ```
-查看日志：docker log
-	如果容器起不来，利用这个查看报错原因
-
-安装docker-compose,docker官方在单台机器的编排工具，1.24.1
-docker-compose down //停止本机的doker 容器
-docker rmi `docker images -aq`//linux执行符号，
-	docker rmi $(docker images -aq)
-docker push centos:7.6 
-配置docker不走https,vi /etc/docker/daemon.json  "insecure-registries":["192.168.56.104"]
-docker tag centos:7.6 192.168.56.104/library/centos:7.6
-docker push 192.168.56.104/library/centos:7.6
-docker login 仓库ip
-
 指定基础镜像：FROM
 	FROM centos:7.2.1511
 	FROM 192.168.56.103/myimgs/centos:7.2
@@ -565,92 +607,6 @@ docker login 仓库ip
 	多阶段构建
 		多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积
 ```
-## docker容器
-```
-查看正在运行的容器：docker ps
-新增容器：docker create 镜像名
-运行容器（新增并运行）：docker run 镜像名称	[容器里面要执行的命令]
-	docker run centos:7.2.1511  echo seek
-	镜像本身包含默认命令，如果在run语句中不指定命令，则容器执行其镜像里的默认命令
-	跑容器类似于执行可执行程序，命令执行完容器就结束了，并且输出被重定向到宿主的终端，如果需要容器一直执行，需要执行持续性的任务
-		docker run centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	后台运行,-d 容器输出不会被重定向到宿主的终端
-		docker run -d centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	指定容器名称，--name=容器名称 或者 --name 容器名称
-		docker run -d --name=wch1 centos:7.2 /bin/bash -c 'while true;do echo wch;sleep 1;done'
-	交互，-it 重定向了容器的输入和输出，因为重定向了输入，类似于持续任务，在交互期间容器会一直运行，一旦执行exit退出容器，则容器关闭
-		docker run -it centos:7.3.1611
-		可以看到当前终端登录的是容器内的centos7.3,使用uname查看系统信息，系统内核仍然是7.2的
-	端口映射，-p 宿主机端口:容器端口
-		docker run -itd -p 8004:80 centos:7.2
-		需要宿主机打开 ip_forward （跨网段路由）,/etc/sysctl.conf 文件中设置 net.ipv4.ip_forward=1
-			centos7.2minimal系统中默认已经打开，查看方法：sysctl -a |grep ip_forward
-		容器内安装 httpd,然后容器内使用httpd命令直接启动服务,修改httpd的主页内容： echo helloworld > /var/www/html/index.html
-			不能使用systemctl启动httpd服务，因为容器本身是宿主机systemd下的一个进程，容器本身没有systemd,不能使用systemctl
-		使用容器的ip访问主页，curl 172.17.0.2/index.html
-			在宿主机执行docker inspect 查看容器的ip,局限：只能是宿主机机或者兄弟容器或者自己访问
-		使用宿主机id访问主页，curl 192.168.56.102:8004/index.html
-			必须要端口映射 -p 8004:80
-	容器开机自启动：--restart=always
-	传参给镜像内部：-e 参数名称=参数值
-		参数名称由镜像决定
-容器内执行命令：docker attach 
-	退出的时候会自动停止容器，不推荐使用
-容器内执行命令：docker exec 容器名称/容器id 命令
-	docker exec wch1 touch /abc
-		这样会在容器内创建文件/abc
-容器内执行命令(交互式)：docker exec -it 容器名称/容器id /bin/bash
-	docker exec -it wch1 /bin/bash
-	然后执行ls / ；可以看到被创建的abc文件
-拷贝文件（夹）：docker cp 源文件 目标文件
-	docker cp /root/123 wch:/123
-	docker cp wch:/abc /abc
-	容器内的文件（夹）路径=容器名称：/正常路径
-终端与容器进行交互（附加式）：docker exec -it 容器名称/容器id  /bin/bash
-提交容器为镜像：docker commit 容器名称/容器id 新的镜像名称
-	场景：往容器中安装了新软件或改了配置，想保存为新的镜像
-	这是自定义镜像的方法之一，不太科学，科学做法是：在容器所属镜像的基础上直接创建新镜像
-	以端口映射中的端口映射为例，commit为新镜像后，使用正常docker run 不能启动httpd服务，必须加参数 -D FOREGROUND ，表示程序放到前台运行
-		 docker run [-itd] -p 9001:80 azeroth:httpd /usr/sbin/httpd -D FOREGROUND
-		 commit生成的镜像继续沿用原镜像的默认命令，不能修改默认命令为/usr/sbin/httpd
-		 容器本身就是进程，无法将容器内的服务放到后台运行，
-	容器里面都是以直接方式启动服务，不使用systemctl start
-	特别的，启动httpd 需要加-D FOREGROUND
-		启动nginx 需要修改/etc/nginx/nginx.conf文件，增加 daemon off;
-删除容器：docker rm 容器名称/容器id
-	不能删除正在运行的容器，删除所有已经停止的容器
-停止容器：docker stop 容器id/容器name
-	停止所有正在运行的容器：docker stop $(docker ps -q)
-查看容器内的输出：docker logs 容器id
-查看容器或镜像的所有配置参数：docker inspect 容器id/镜像id
-启动指定容器：docker start 容器id
-挂载数据卷：-v 宿主机文件（夹）：容器内文件（夹）
-	场景：容器内配置文件需要修改、容器内数据需要保存、不同容器之间共享数据
-	指定的宿主机上的文件（夹）如果不存在会自动创建，自动创建的一定是文件夹，如果需要映射文件，需要提前在路径下准备好
-	docker run -itd -p 8001:80 -v /root/www:/var/www/html azeroth:httpd /usr/sbin/httpd -D FOREGROUND
-	可以映射多个,很多镜像里面的时区不是北京时区，导致时间不一致，映射时区文件可以解决这个问题
-	docker run -itd -p 8001:80 -v /root/www:/var/www/html -v /etc/localtime:/etc/localtime azeroth:httpd /usr/sbin/httpd -D FOREGROUND
-	映射mysql的数据文件：-v /root/mysqldata:/var/lib/mysql
-		 docker run -d -p 3306:3306 -v /root/mysqldata:/var/lib/mysql --restart=always -e MYSQL_ROOT_PASSWORD=123456 mysql:5.6
-	映射nginx的主目录：-v /root/nginxhome:/usr/share/nginx/html
-	映射httpd的主目录：-v /root/httpdhome:/var/www/html
-	映射tomcat主目录：-v /root/tomcathome:/usr/local/tomcat/webapps
-docker create 镜像名 //新增容器
-docker rm 容器ID //删除容器
-docker run 参数
---name 自定义容器名称
--d 容器后台运行
--p 当前系统端口：容器端口 端口映射（容器内部端口映射外部）
--v 当前系统目录：容器目录 目录映射
-例子：docker run -it --name 容器名称 repository:tag /bin/bash //以交互方式启动
-docker exec -i -t 通过docker ps查看的name名 /bin/bash
-// 停止所有容器
-docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker stop
-// 删除所有停止的容器
-docker ps -a | grep "Exited" | awk '{print $1 }'|xargs docker rm
-// 删除所有tag标签是none的镜像
-docker images|grep none|awk '{print $3 }'|xargs docker rmi
-```
 ## docker网络
 ```
 节点网络：docker host之间的
@@ -698,7 +654,7 @@ containerd
 ```
 ## docker资源隔离
 ```
-linux内核提供6中namespace隔离
+linux内核提供6种namespace隔离
 主机名或域名：UTS,每个NameSpace都拥有独立的主机名或域名，可以把每个NameSpace认为一个独立主机
 信号量、消息队列和共享内存：IPC，每个容器依旧使用linux内核中进程交互的方法，实现进程间通信
 进程编号：PID，每个容器都拥有独立的进程树，容器是物理机的一个进程，容器中的进程是宿主机的线程
