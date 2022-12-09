@@ -299,14 +299,20 @@ sftp
 ```
 ## 局域网共享和FTP
 ```
-场景1：windows作为服务端启动局域网共享服务，linux作为客户端，配置步骤如下
+场景：linux挂载windows的共享目录，linux作为客户端，配置步骤如下
   安装samba，程序包名称：samba
   [可选] 安装cifs，程序包名称：cifs-utils
   使用smbfs文件系统挂载，执行：mount -t smbfs -o username=xxx,password=xxx,-l //192.168.56.1/Downloads /mnt/hostDownloads
   使用cifs文件系统挂载，执行：mount -t cifs -o username="xxx",password="xxx" //192.168.56.1/Downloads /mnt/hostDownloads
   特别的：上述操作都是临时挂载，重启后需要重新执行挂载，修改配置文件可以实现启动后自动挂载
-  配置文件路径：/etc/fstab
-  增加一行的内容：//192.168.56.1/Downloads /mnt/hostDownloads/ cifs defaults,username=xxx,password=xxx 0 2
+  启动后自动挂载，修改配置文件，路径：/etc/fstab，增加如下内容：
+  //192.168.56.1/Downloads /mnt/hostDownloads/ cifs defaults,username=xxx,password=xxx 0 2
+场景：2008r2core映射windows的共享目录
+  执行：net use Z: \\192.168.56.1\Downloads 密码 /user:Deroom
+  映射共享目录到Z盘
+  启动后自动映射，需要把上述命令做成bat文件，系统启动后自动运行此bat
+  修改注册表，路径：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run，添加一行:"diskZ"="C:\\Users\\Administrator\\diskZ.bat"
+  删除指定的映射,执行：net use Z: /del 
 ftp ftp地址
   ftp命令行客户端，交互式，上传、下载文件
 ```
@@ -863,25 +869,9 @@ Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 ```
-## windows局域网共享
-```
-映射网络上共享目录到指定盘符：net use Z: \\192.168.56.1\Downloads 密码 /user:Deroom
-做成bat,然后开机启动，修改注册表，位置：HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
-类似于："diskZ"="C:\\Users\\Administrator\\diskZ.bat"
-删除指定的映射  net use Z: /del 
-```
 ## windows环境变量
 ```
-通过注册表修改环境变量，位置：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
 
-临时设置环境变量
-查看所有环境变量 ls env:
-查看某个环境变量 ls env:path
-设置某个值 $Env:path=$Env:Path+";C:\Go\bin"
-
-永久设置环境变量
-set pp=%PATH%
-setx PATH 
 ```
 ## windows解压缩
 ```
