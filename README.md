@@ -709,9 +709,10 @@ docker-machine rm
 ## hadoop
 ```
 部署模式
+  单机模式：独立模式，默认情况下即为该模式，用于开发和调试，不对配置文件进行修改，使用本地的文件系统，而不是分布式的文件系统
   伪分布模式：在1个机器上运行HDFS的NameNode和DataNode、YARN的ResourceManager和NodeManager，但分别启动单独的java进程，主要用于调试
   集群模式：使用N台主机组成一个Hadoop集群，主节点和从节点会分开部署在不同的机器上，主要用于生产环境部署
-搭建3个节点的集群模式，角色分配如下：
+搭建集群模式，不含3个角色，角色和步骤如下：
   |----------------|-----------------------------------------|
   |      node      |         role                            |
   |----------------|-----------------------------------------|
@@ -719,21 +720,24 @@ docker-machine rm
   |      node-02   | DateNode NodeManager  SecondaryNameNode |
   |      node-03   |   NameNode NodeManager                  |
   |----------------|-----------------------------------------|
-集群模式搭建步骤：
 vbox创建三台虚拟机，分别命名为：hadoopNameNode,hadoopDataNode1,hadoopDataNode2
-修改名称，位置：/etc/hostname
-修改hosts文件，把各台的名称和ip对应上，位置：/etc/hosts
+修改名称，路径：/etc/hostname
+修改hosts文件，把各台的名称和ip对应上，路径：/etc/hosts
+配置互相之间的免密登陆
 复制jdk1.8到/usr/java/jdk1.8.0_231-amd64，配置环境变量，如下
 export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
 export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export PATH=$PATH:$JAVA_HOME/bin
-上传hadoop程序到hadoopNameNode，位置：/export/server/，然后解压到当前目录，tar zxvf hadoop-2.7.4.tar.gz
+上传hadoop程序到hadoopNameNode，位置：/export/server/，解压到当前目录，执行：tar zxvf hadoop-2.7.4.tar.gz
 配置文件说明
 xxx-default.xml，hadoop默认的配置选项,如果用户没有修改，那么这里面的选项将会生效
 xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中配置的值优先级大于default中的配置项的值
 修改配置文件
-路径：/export/server/hadoop2.7.4/etc/hadoop/hadoop-env.sh
-  修改点： export JAVA_HOME={JAVA_HOME}，修改为：export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
+路径：/export/server/hadoop2.7.4/etc/hadoop/hadoop-env.sh，如下配置
+  export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
+路径：/export/server/hadoop2.7.4/etc/hadoop/slaves，增加2行
+  hadoopDataNode1
+  hadoopDataNode2
 路径：/export/server/hadoop2.7.4/etc/hadoop/core-site.xml，如下配置
   <configuration>
     <property>
@@ -757,14 +761,14 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
     </property>
   </configuration>
 路径：/export/server/hadoop2.7.4/etc/hadoop/mapred-site.xml.template
-重命名：mv mapred-site.xml.template mapred-site.xml，然后如下配置
+  重命名：mv mapred-site.xml.template mapred-site.xml，如下配置
   <configuration>
     <property>
       <name>mapreduce.framework.name</name>
       <value>yarn</value>
     </property>
   </configuration>
-路径：/export/server/hadoop2.7.4/etc/hadoop/yarn-site.xml
+路径：/export/server/hadoop2.7.4/etc/hadoop/yarn-site.xml，如下配置
   <configuration>
     <property>
       <name>yarn.resourcemanager.hostname</name>
@@ -787,83 +791,77 @@ scp -r /etc/profile root@hadoopDataNode1:/etc/
 scp -r /etc/profile root@hadoopDataNode2:/etc/
 刷新各台机器的环境变量
 source /etc/profile
-```
 
-## HDFS ON Windows
-```
-windows下搭建HDFS，不依赖cygwin，
-解压hadoop的tar.gz包，使用管理员权限解压
-找到对应的hadoop-winutils,按照对应的说明进行替换
-增加环境变量，HADOOP_HOME
-增加/bin和/sbin到PATH，方便后续执行命令
-涉及的命令，hdfs.cmd,start-hdfs.cmd
-如果环境变量配置的jdk不是1.8，修改etc\hadoop\hadoop-env.cmd文件，设置JAVA_HOME为1.8版本的jdk
-修改配置文件:conf/hadoop-site.xml:
-<configuration>
-  <property>
-    <name>fs.default.name</name>
-    <value>hdfs://localhost:9000/</value>
-  </property>
-  <property>
-    <name>mapred.job.tracker</name>
-    <value>localhost:9001</value>
-  </property>
-  <property>
-    <name>dfs.replication</name>
-    <value>1</value>
-  </property>
-  <property>
-    <name>hadoop.tmp.dir</name>
-    <value>file:/D:/01Tools/hadoopdata</value>
-  </property>
-</configuration>
-修改配置文件：hdfs-site.xml
-<configuration>
-  <property>
-    <name>dfs.namenode.name.dir</name>
-    <value>file:/D:/01Tools/hadoopdata/namenode</value>
-  </property>
-  <property>
-    <name>dfs.datanode.data.dir</name>
-    <value>file:/D:/01Tools/hadoopdata/datanode</value>
-  </property>
-</configuration>
-格式化文件系统：hdfs namenode -format
-启动HDFS文件系统：start-dfs.cmd
-停止HDFS文件系统：stop-dfs.cmd
-查看HDFS系统的信息：http://localhost:50070
-创建目录：hdfs dfs -mkdir -p hdfs://localhost:9000/a/b/c
-上传文件：hdfs dfs -put d:\wifi密码.txt hdfs://localhost:9000/a/b/c/
-其它操作：hdfs查看帮助
+搭建部署伪分布模式步骤(windows版)
+解压hadoop-2.7.1.tar.gz，就是普通的java程序，和linux版相同，执行：tar zxvf hadoop-2.7.1.tar.gz
+使用对应的版本的hadoop-winutils，替换同名文件
+配置环境变量
+  HADOOP_HOME=D:\01Tools\hadoop-2.7.1
+  PATH=%HADOOP_HOME%\bin
+  PATH=%HADOOP_HOME%\sbin
+修改配置文件
+路径：D:\01Tools\hadoop-2.7.1\etc\hadoop\hadoop-env.cmd，设置JAVA_HOME的路径，jdk11和jdk1.8都可以
+路径：D:\01Tools\hadoop-2.7.1\etc\hadoop\core-site.xml，如下配置
+  <configuration>
+    <property>
+      <name>fs.default.name</name>
+      <value>hdfs://localhost:9000/</value>
+    </property>
+    <property>
+      <name>mapred.job.tracker</name>
+      <value>localhost:9001</value>
+    </property>
+    <property>
+      <name>dfs.replication</name>
+      <value>1</value>
+    </property>
+    <property>
+      <name>hadoop.tmp.dir</name>
+      <value>file:/D:/01Tools/hadoopdata</value>
+    </property>
+  </configuration>
+路径：D:\01Tools\hadoop-2.7.1\etc\hadoop\hdfs-site.xml，如下配置
+  <configuration>
+    <property>
+      <name>dfs.namenode.name.dir</name>
+      <value>file:/D:/01Tools/hadoopdata/namenode</value>
+    </property>
+    <property>
+      <name>dfs.datanode.data.dir</name>
+      <value>file:/D:/01Tools/hadoopdata/datanode</value>
+    </property>
+  </configuration>
+运行和调试，hadoop集群=HDFS集群+YARN集群
+hdfs namenode -format
+  格式化文件系统，配置完成后，第一次启动hdfs前必须进行格式化，后续启动不涉及
+start-dfs.cmd
+  启动HDFS文件系统
+  启动后查看HDFS系统信息的地址：http://localhost:50070
+stop-dfs.cmd
+  停止HDFS文件系统
+start-dfs.sh
+  启动HDFS系统
+  在namenode上执行可以直接启动hdfs集群，前提：namenode到其他机器免密登陆，slaves文件中添加集群中的机器
+start-yarn.sh
+  启动yarn，在namenode上执行，启动后查看yarn集群信息的地址：http://192.168.56.61:8088
+jps
+  查看状态
+hadoop jar hadoop-mapreduce-examples-2.7.4.jar pi 20 50
+  执行mapreduce
+hdfs dfs -mkdir -p hdfs://localhost:9000/a/b/c
+  创建目录
+hdfs dfs -put d:\wifi密码.txt hdfs://localhost:9000/a/b/c/
+  上传文件
 
-把start-dfs.cmd安装为windows服务：
+安装start-dfs.cmd为windows服务
 复制srvany.exe到D:\01Tools\hadoop-2.7.1;
 执行：instsrv.exe apache_HDFS D:\01Tools\hadoop-2.7.1\srvany.exe；
 修改注册表：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\apache_HDFS
-增加项：Parameters
-增加字符串：Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
+增加一项：Parameters
+Parameters中增加以下3行字符串：
+Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
-```
-## hadoop运行和调试
-```
-启动hadoop集群，需要启动HDFS集群，YARN集群
-首次启动HDFS集群，需要对其进行格式化（初始化），格式化只能进行一次，和yarn没有关系,集群启动成功以后，不要再进行格式化
-在namenode所在的机器上进行hdfs格式化
-格式化命令：hdfs namenode -format，执行后需要等待
-
-脚本启动hdfs集群，也可以单点一个个启动，
-前提条件，namenode到其他机器免密登陆，配置文件slaves配置好了
-脚本：/export/server/hadoop2.7.4/sbin/start-dfs.sh，也有配套的停止脚本
-脚本启动yarn集群
-脚本：/export/server/hadoop2.7.4/sbin/start-yarn.sh
-
-查看状态 jps
-单节点逐个启动
-集群启动成功后，提供web查看[http://192.168.56.61:50070](http://192.168.56.61:50070)[http://192.168.56.61:8088](http://192.168.56.61:8088)
-
-执行一个mapreduce
-hadoop jar  hadoop-mapreduce-examples-2.7.4.jar pi 20 50
 ```
 ## windows局域网共享
 ```
