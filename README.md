@@ -235,8 +235,28 @@ uname [-r] [-a]
 env
   环境变量
   常用场景，查看PATH变量的值：env |grep PATH
-export 环境变量key=值 
-  临时修改指定环境变量的值，例如：export PATH="/tmp:$PATH" ，重新给环境变量里的PATH赋值，$PATH表示原来的PATH值，PATH值的各段用:分割
+export 变量名=变量值
+  设置变量，因为当前终端会读取系统环境变量的配置文件，形成当前终端的变量字典
+  export可以修改或添加变量字典中的项，如果变量名不存在，则新增，但不会回写到环境变量的配置文件
+  利用$变量名可以获取到该变量的值，例如：
+  echo $PATH
+  export PATH="/tmp:$PATH"
+  重新给PATH变量赋值，$PATH表示原来的PATH值，linux中PATH值的各段用:分割
+set 变量名=变量值
+  设置变量，因为当前cmd会读取所有系统和用户的环境变量值，形成当前cmd的变量字典
+  set可以修改或添加变量字典中的项，如果变量名不存在，则新增，但不会回写到系统和用户的环境变量配置
+  利用%变量名%可以获取到该变量的值，比如：
+  echo %myname%
+  set PATH="D:\te st;%PATH%"
+  重新给PATH变量赋值，%PATH%表示原来的PATH值，windows中PATH值的各段用;分割
+setx 变量名 变量值 [/m 系统环境变量，默认是用户环境变量]
+  设置变量,仅回写到系统或用户的环境变量配置，不会修改当前cmd的变量字典
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
+  环境变量，注册表路径
+ls env:[环境变量的key 比如path]
+  查看所有或者指定key的环境变量值，仅powershell
+$Env:path=$Env:Path+";C:\Go\bin"
+  设置指定key的环境变量值，仅powershell
 adduser 用户名
   创建用户, 这个本质是个脚本，后续会提示设置密码等步骤，非常方便
 deluser 用户名
@@ -868,10 +888,6 @@ Parameters中增加以下3行字符串：
 Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
-```
-## windows环境变量
-```
-
 ```
 ## windows解压缩
 ```
