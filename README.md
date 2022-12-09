@@ -22,7 +22,8 @@ nmtui
     BOOTPROTO=[dhcp 自动分配] [static 静态分配]
     ONBOOT=[yes 开机启用] [no 开机不启用]
 /etc/udev/rules.d/70-persistent-net.rules
-  网卡设备的信息，已过时，centos7已经移除
+  网卡设备的信息，已过时，centos7已经移除，
+  场景：centos6，多台虚拟机基于差分磁盘场景，母盘系统中的mac和新虚拟机硬件的mac不一致，导致网络不通，需要修改此文件保持mac一致，或者删掉该文件重启
 ifconfig
   显示和设置网络，centos7默认不包含了，需要自己安装，已过时
 ping ip地址或域名 [-c次数]
@@ -705,91 +706,89 @@ docker-machine env machine名称
 docker-machine rm
   移除machine
 ```
-## hadoop部署模式
-### ![效果图](./img/hadoop集群分布.png)
-## hadoop搭建集群
+## hadoop
 ```
-vbox新建三台机器后，centos7会自动配置网卡，比centos6方便，centos6需要更新网卡配置文件里的mac地址才能访问网络
-准备三台机器，hadoopNameNode,hadoopDataNode1,hadoopNameNode2
-修改机器的名称 /etc/hostname
-修改机器的hosts文件 /etc/hosts
-安装jdk1.8，yum localinstall以后不会设置环境变量，因为已经配置的PATH，所有可以直接运行java和javac，但是仍然需要设置相关环境变量，其他程序依赖这个这几个环境变量的值
-JDK全局环境变量配置
+部署模式
+  伪分布模式：在1个机器上运行HDFS的NameNode和DataNode、YARN的ResourceManager和NodeManager，但分别启动单独的java进程，主要用于调试
+  集群模式：使用N台主机组成一个Hadoop集群，主节点和从节点会分开部署在不同的机器上，主要用于生产环境部署
+搭建3个节点的集群模式，角色分配如下：
+  |----------------|-----------------------------------------|
+  |      node      |         role                            |
+  |----------------|-----------------------------------------|
+  |      node-01   |   NameNode DateNode  ResourceManager    |
+  |      node-02   | DateNode NodeManager  SecondaryNameNode |
+  |      node-03   |   NameNode NodeManager                  |
+  |----------------|-----------------------------------------|
+集群模式搭建步骤：
+vbox创建三台虚拟机，分别命名为：hadoopNameNode,hadoopDataNode1,hadoopDataNode2
+修改名称，位置：/etc/hostname
+修改hosts文件，把各台的名称和ip对应上，位置：/etc/hosts
+复制jdk1.8到/usr/java/jdk1.8.0_231-amd64，配置环境变量，如下
 export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
 export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 export PATH=$PATH:$JAVA_HOME/bin
-把hadoop安装程序上传到hadoopNameNode ，目录/export/server/,直接解压到当前目录，tar zxvf hadoop-2.7.4.tar.gz
-配置文件修改
-/export/server/hadoop2.7.4/etc/hadoop//hadoop-env.sh，找到 export JAVA_HOME={JAVA_HOME}，修改为export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
-/export/server/hadoop2.7.4/etc/hadoop/core-site.xml，
-<configuration>
-  <property>
-    <name>fs.defaultFS</name>
-    <value>hdfs://hadoopNameNode:9000</value>
-  </property>
-  <property>
-    <name>hadoop.tmp.dir</name>
-    <value>/home/hadoop2.7.4_data</value>
-  </property>
-</configuration>
-
-hdfs-site.xml，
-<configuration>
-  <property>
-    <name>dfs.replication</name>
-    <value>2</value>
-  </property>
-  <property>
-    <name>dfs.namenode.secondary.http-address</name>
-    <value>hadoopDataNode1:50090</value>
-  </property>
-</configuration>
-
-mv mapred-site.xml.template mapred-site.xml
-<configuration>
-  <property>
-    <name>mapreduce.framework.name</name>
-    <value>yarn</value>
-  </property>
-</configuration>
-
-yarn-site.xml
-<configuration>
-  <property>
-    <name>yarn.resourcemanager.hostname</name>
-    <value>hadoopNameNode</value>
-  </property>
-  <property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce_shuffle</value>
-  </property>
-</configuration>
-
-slaves
-hadoopNameNode
-hadoopDataNode1
-hadoopDataNode2
-
-把hadoop的程序路径配置到环境变量
+上传hadoop程序到hadoopNameNode，位置：/export/server/，然后解压到当前目录，tar zxvf hadoop-2.7.4.tar.gz
+配置文件说明
+xxx-default.xml，hadoop默认的配置选项,如果用户没有修改，那么这里面的选项将会生效
+xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中配置的值优先级大于default中的配置项的值
+修改配置文件
+路径：/export/server/hadoop2.7.4/etc/hadoop/hadoop-env.sh
+  修改点： export JAVA_HOME={JAVA_HOME}，修改为：export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
+路径：/export/server/hadoop2.7.4/etc/hadoop/core-site.xml，如下配置
+  <configuration>
+    <property>
+      <name>fs.defaultFS</name>
+      <value>hdfs://hadoopNameNode:9000</value>
+    </property>
+    <property>
+      <name>hadoop.tmp.dir</name>
+      <value>/home/hadoop2.7.4_data</value>
+    </property>
+  </configuration>
+路径：/export/server/hadoop2.7.4/etc/hadoop/hdfs-site.xml，如下配置
+  <configuration>
+    <property>
+      <name>dfs.replication</name>
+      <value>2</value>
+    </property>
+    <property>
+      <name>dfs.namenode.secondary.http-address</name>
+      <value>hadoopDataNode1:50090</value>
+    </property>
+  </configuration>
+路径：/export/server/hadoop2.7.4/etc/hadoop/mapred-site.xml.template
+重命名：mv mapred-site.xml.template mapred-site.xml，然后如下配置
+  <configuration>
+    <property>
+      <name>mapreduce.framework.name</name>
+      <value>yarn</value>
+    </property>
+  </configuration>
+路径：/export/server/hadoop2.7.4/etc/hadoop/yarn-site.xml
+  <configuration>
+    <property>
+      <name>yarn.resourcemanager.hostname</name>
+      <value>hadoopNameNode</value>
+    </property>
+    <property>
+      <name>yarn.nodemanager.aux-services</name>
+      <value>mapreduce_shuffle</value>
+    </property>
+  </configuration>
+配置hadoop相关的环境变量
 export HADOOP_HOME=/export/server/hadoop2.7.4
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
-
-虚拟机内存不要低于2048，512和1024MB的情况下，hadoop可以正常启动起来，但是执行demo程序，resourcemanager就出错终止运行了
-
-下发配置好的文件到其他机器 scp -r /export/server/hadoop2.7.4 root@hadoopDataNode1:/export/server/hadoop2.7.4/
+特别的：虚拟机内存<=1024MB的情况下，hadoop可以正常启动起来，但是执行demo程序，resourcemanager会报错终止运行
+下发配置文件
+scp -r /export/server/hadoop2.7.4 root@hadoopDataNode1:/export/server/hadoop2.7.4/
 scp -r /export/server/hadoop2.7.4 root@hadoopDataNode2:/export/server/hadoop2.7.4/
-下发环境变量配置文件
-scp -r /etc/profile root@hadoopDataNode2:/etc/
+下发环境变量
 scp -r /etc/profile root@hadoopDataNode1:/etc/
-
-刷新环境变量 source /etc/profile
-
-配置文件说明
-***-default.xml 这里面配置了hadoop默认的配置选项
-如果用户没有修改，那么这里面的选项将会生效
-***-site.xml 这里面配置了用户需要自定义的配置选项
-site中配置的值优先级大于default中的配置项的值
+scp -r /etc/profile root@hadoopDataNode2:/etc/
+刷新各台机器的环境变量
+source /etc/profile
 ```
+
 ## HDFS ON Windows
 ```
 windows下搭建HDFS，不依赖cygwin，
