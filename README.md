@@ -1060,6 +1060,60 @@ http://192.168.56.101:8080/jenkins
   修改插件源，管理页面依次打开，插件》高级》修改插件源的地址
   新源地址：https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
 ```
+## activemq
+```
+windows安装activemp
+解压到目录：c:/dw/apache-activemq-5.15.10-bin/
+bin/win64/InstallService.bat
+  以管理员运行cmd，安装windows服务
+bin/win64/UninstallService.bat
+  以管理员运行cmd，卸载windows服务
+net start activemq
+  启动服务
+http://localhost:8161/admin
+  默认管理页面，用户名：admin，密码：admin
+配置文件说明
+
+异步消息的两类模型
+  点对点：每个消息只有一个接收者可以取到，可以有多个接受者，通常称为消息队列
+  发布订阅：消息被发送到一个主题，主题所有订阅者都可以取到消息，可以有多个接收者
+```
+## windows-mariadb
+```
+安装windows服务的方法，下载解压版，比如：mariadb-10.2.26-winx64.zip
+解压，切换到目录bin/，管理员运行cmd,
+tips:确保存放数据的目录的上级目录已经创建ok，这里需要d:\已存在，但是d:\mariadb-data不存在
+创建数据库实例：mysql_install_db.exe --datadir=d:\mariadb-data --service=mariadb_001 --password=123456
+这个命令会自动在数据目录下创建配置文件my.ini
+删除数据库实例：停止服务，删除对应的服务，删除数据目录
+sc delete mariadb_hzducha
+验证安装是否ok:使用客户端连接测试
+配置文件和mysql_install_db.exe参数说明：
+```
+### ![mysql_install_db.exe参数说明](./img/mariadb的配置图01.png)
+## windows-tomcat
+```
+安装tomcat9
+解压到目录：c:/dw
+配置环境变量，重启
+CLASS_PATH=.;%JAVA_HOME%\lib;
+CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
+到tomcat的bin目录，执行：service.bat install
+把服务设定为开机启动
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
+Start=2
+start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
+或者Set-Service Tomcat9 -StartupType Automatic
+启动服务net start Tomcat9
+测试,打开：http://192.168.56.101:8080,
+```
+## windows-redis
+```
+修改配置文件redis.windows.conf ，设置密码：requirepass 123456
+安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
+卸载：redis-server.exe  --service-uninstall--service-name redisserver1
+客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
+```
 ## Windows疑难杂症
 1. ie打不开
 ```
@@ -1126,53 +1180,7 @@ git@github.com:adoconnection/SevenZipExtractor.git
 本机继续执行:git remote add 地址名称(origin) 远程地址(xxxx)
 执行:git push -u 地址名称(origin) 本机分支名称(master)
 ```
-## windows-activemq
-```
-安装windows服务的方法，下载解压版，比如：apache-activemq-5.15.10-bin.zip
-解压，切换到目录bin/win64，管理员运行cmd,执行：InstallService.bat，卸载：UninstallService.bat
-验证安装是否ok:打开http://localhost:8161/admin，用户名：admin,密码：admin
-配置文件说明：
 
-异步消息的两类模型
-点对点消息模型（消息队列），每个消息只有一个接收者可以取到，可以有多个接受者
-发布订阅消息模型，消息被发送到一个主题，主题所有订阅者都可以取到消息，可以有多个接收者
-```
-## windows-mariadb
-```
-安装windows服务的方法，下载解压版，比如：mariadb-10.2.26-winx64.zip
-解压，切换到目录bin/，管理员运行cmd,
-tips:确保存放数据的目录的上级目录已经创建ok，这里需要d:\已存在，但是d:\mariadb-data不存在
-创建数据库实例：mysql_install_db.exe --datadir=d:\mariadb-data --service=mariadb_001 --password=123456
-这个命令会自动在数据目录下创建配置文件my.ini
-删除数据库实例：停止服务，删除对应的服务，删除数据目录
-sc delete mariadb_hzducha
-验证安装是否ok:使用客户端连接测试
-配置文件和mysql_install_db.exe参数说明：
-```
-### ![mysql_install_db.exe参数说明](./img/mariadb的配置图01.png)
-## windows-tomcat
-```
-安装tomcat9
-解压到目录：c:/dw
-配置环境变量，重启
-CLASS_PATH=.;%JAVA_HOME%\lib;
-CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
-到tomcat的bin目录，执行：service.bat install
-把服务设定为开机启动
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
-Start=2
-start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
-或者Set-Service Tomcat9 -StartupType Automatic
-启动服务net start Tomcat9
-测试,打开：http://192.168.56.101:8080,
-```
-## windows-redis
-```
-修改配置文件redis.windows.conf ，设置密码：requirepass 123456
-安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
-卸载：redis-server.exe  --service-uninstall--service-name redisserver1
-客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
-```
 ## powershell教程
 ```
 定义变量：$变量名称
