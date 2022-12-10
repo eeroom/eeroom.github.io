@@ -1377,4 +1377,14 @@ SET IMPLICIT_TRANSACTIONS ON
   更新变量值：pm.environment.set(变量名,值)
   打印变量的值：console.log(变量名,变量值)
   特别的：右侧提供了一些常用代码段，点击即可获得代码段，然后做一些修改即可满足实际需求
+关闭自动弹出更新提示框，步骤如下：
+  创建空的node项目，执行：npm init
+  复制C:/Users/用户/AppData/Local/Postman/app-5.5.0/resources/app.asar到项目根目录
+  安装asar文件的解压工具，执行：npm install asar  
+  在package.json中增加一个执行命令，"asar":"asar extract app.asar ./app"
+  解压app.asar，执行：npm run asar
+  修改app/js/requester.js，查找关键字checkForUpdates，在这个函数的第一行增加return语句，达到屏蔽更新的目的
+  把app这个文件夹复制到postman的安装目录的resources目录下
+  把app.asar改成别的文件名做为备份，原理：postman既会自动加载app.asar，也会自动加载app文件夹，优先级未研究
+  本质上：postman是基于chrome的定制版程序，定制的功能就是app.asar文件中的js文件，chrome会加载和执行这些js
 ```
