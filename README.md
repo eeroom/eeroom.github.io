@@ -1011,35 +1011,26 @@ msbuild xxx.sln/xxx.csproj /p:VisualStudioVersion=14.0
 msbuild Mytech.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml
   发布项目
 ```
-
-
-## win2008r2Core配置sqlserver
+## tomcat
 ```
-在servercore2008R2中不能打开sqlserver的服务管理器,需要编辑注册表值来修改sqlserver服务的配置
-配置sqlserverexpress，允许客户端通过tcp连接服务端，固定监听tcp1433端口
-  修改注册表：HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp
-  "Enabled"=dword:00000001
-  "ListenOnAllIPs"=dword:00000001
-  HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp\IPAll
-  "TcpPort"="1433"
-特别注意：32位的安装程序安装到64位，注册表要修改Wow6432Node下的。64位安装程序到64位系统则不用Wow6432Node，32位安装程序到32位系统也不用Wow6432Node
-登陆：BT@151
-数据库：123456
-配置数据库允许sqlserver认证，安装的时候如果没有选择允许，命令行sql登陆，执行相应的sql语句，允许sa登录
-在数据库所在机器使用sqlcmd连接数据库，然后执行sql语句，允许sa账号登陆
-配置自动开启SQLBrowser，重启生效。这个服务监听udp1434。配合sqlserver服务的动态端口监听，
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\SQLBrowser
-Start=2
-```
-## windows-jdk
-```
-安装java的sdk
-使用解压缩版文件，非安装版，winscp上传到指定目录
-使用7za解压缩到c:/dw
-配置环境变量，重启生效
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment
-JAVA_HOME=C:\dw\jdk-11.0.2
-增加path的值
+windows安装tomcat9
+解压到目录：c:/dw
+配置环境变量，如下：
+  CLASS_PATH=.;%JAVA_HOME%\lib;
+  CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
+service.bat install
+  安装为windows服务
+开机启动，修改注册表
+  路径：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
+  修改如下：
+    Start=2
+  Start的枚举值：0-引导，1-系统，2-自动，3-手动，4-禁用 
+Set-Service Tomcat9 -StartupType Automatic
+  开机启动，依赖powershell
+net start Tomcat9
+  启动服务
+http://192.168.56.101:8080
+  默认访问地址
 ```
 ## windows-jenkins
 ```
