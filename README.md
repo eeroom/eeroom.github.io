@@ -887,7 +887,7 @@ hdfs dfs -mkdir -p hdfs://localhost:9000/a/b/c
 hdfs dfs -put d:\wifi密码.txt hdfs://localhost:9000/a/b/c/
   上传文件
 
-安装start-dfs.cmd为windows服务
+安装start-dfs.cmd为服务
 复制srvany.exe到D:\01Tools\hadoop-2.7.1;
 执行：instsrv.exe apache_HDFS D:\01Tools\hadoop-2.7.1\srvany.exe；
 修改注册表：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\apache_HDFS
@@ -1029,7 +1029,7 @@ windows安装tomcat9
   CLASS_PATH=.;%JAVA_HOME%\lib;
   CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
 service.bat install
-  安装为windows服务
+  安装服务
 开机启动，修改注册表
   路径：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
   修改如下：
@@ -1065,9 +1065,9 @@ http://192.168.56.101:8080/jenkins
 windows安装activemp
 解压到目录：c:/dw/apache-activemq-5.15.10-bin/
 bin/win64/InstallService.bat
-  以管理员运行cmd，安装windows服务
+  以管理员运行cmd，安装服务
 bin/win64/UninstallService.bat
-  以管理员运行cmd，卸载windows服务
+  以管理员运行cmd，卸载服务
 net start activemq
   启动服务
 http://localhost:8161/admin
@@ -1083,7 +1083,7 @@ http://localhost:8161/admin
 windows安装mariadb
 解压到目录，目录：D:\01Tools\mariadb-10.2.26-winx64
 bin/mysql_install_db.exe --datadir=d:\dbdata\mariadb-data --service=mariadb_001 --password=123456
-  创建数据库实例mariadb_001，并且安装同名的windows服务
+  创建数据库实例mariadb_001，并且安装同名的服务
   自动生成此实例的配置文件，路径：d:\dbdata\mariadb-data\my.ini
   特别的：必须d:\dbdata已存在，并且d:\dbdata\mariadb-data不存在
   mysql_install_db.exe的所有参数说明:
@@ -1106,15 +1106,24 @@ sc start mariadb_001
 sc stop mariadb_001
   停止数据库实例
 sc delete mariadb_001
-  删除windows服务
+  删除服务
   特别的：删除实例对应的服务后，如果需要移除改实例的数据文件，直接删除该实例所在的目录即可
 ```
-## windows-redis
+## redis
 ```
-修改配置文件redis.windows.conf ，设置密码：requirepass 123456
-安装：redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
-卸载：redis-server.exe  --service-uninstall--service-name redisserver1
-客户端：redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
+windows安装redis
+解压到目录：D:\01Tools\Redis-x64-3.2.100
+redis.windows.conf
+  配置文件
+  设置登录密码，修改如下：
+  requirepass 123456
+redis-server.exe --service-install redis.windows-service --service-name redisserver1 --loglevel verbose
+  安装服务
+redis-server.exe  --service-uninstall--service-name redisserver1
+  卸载服务
+redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
+  客户端连接
+  windows图形客户端：Another Redis DeskTop Manager
 ```
 ## Windows疑难杂症
 1. ie打不开
