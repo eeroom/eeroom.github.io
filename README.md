@@ -949,6 +949,27 @@ dism /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell
   del /q c:\out.txt
   del %windir%\security\logs\scesrv.log
   场景：把登陆密码改成123456
+
+安装sqlserver2008r2express
+依赖.net40或以上版本
+安装成功后，无法打开sqlserver的服务管理器，缺少图形化配置管理界面
+配置监听tcp1433端口，允许远程连接，修改注册表
+  路径：HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp
+  修改如下：
+    "Enabled"=dword:00000001
+    "ListenOnAllIPs"=dword:00000001
+  路径：HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Microsoft SQL Server\MSSQL10.QLEXPRESS\MSSQLServer\SuperSocketNetLib\Tcp\IPAll
+  修改如下：
+    "TcpPort"="1433"
+  特别的：32位的程序安装到64位系统，注册表要修改Wow6432Node节点下的，64位程序安装到64位系统则不用Wow6432Node，32位程序安装到32位系统也不用Wow6432Node
+配置数据库允许sqlserver认证，即支持sa登陆
+  安装过程中选择允许
+  如果安装过程中仅配置为本地登录，则使用sqlcmd登陆数据库，执行sql语句，允许sa登陆
+配置自动开启SQLBrowser，修改注册表
+  路径：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\SQLBrowser
+  修改如下：
+    Start=2
+  监听udp1434，配合sqlserver服务的动态端口监听
 ```
 ## iis和appcmd
 ```
