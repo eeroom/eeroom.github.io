@@ -287,6 +287,14 @@ man man
   执行source /etc/profile ，让新配置生效
 /etc/passwd
   所有的用户和相关信息
+ie打不开，打开无反应
+  注册表修改权限
+  路径：HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main
+  右键点击Main，选择权限，启用继承
+firefox关联windows证书管理器
+  进入about:config页面，修改配置项：security.enterprise_roots.enabled=true
+声音或者网卡等名称被加上数字1、2结尾
+  设备管理器，菜单》查看》显示隐藏设备，勾选上，然后把设备对应的隐藏设备和非隐藏设备都删掉，最后重启
 ```
 ## ssh
 ```
@@ -1125,71 +1133,62 @@ redis-cli.exe -h 127.0.0.1 -p 6379 -a 123456
   客户端连接
   windows图形客户端：Another Redis DeskTop Manager
 ```
-## Windows疑难杂症
-1. ie打不开
+## git
 ```
-修改注册表权限，HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main右键点击Main，选择权限，启用继承
-```
-1. firefox关联windows证书管理器
-```
-进入about:config页面，找到security.enterprise_roots.enabled，把值改成true
-```
-1. 声音或者网卡等名称被加上数字1、2结尾
-```
-进入设备管理器，重点：显示隐藏设备，把设备对应的隐藏和非隐藏都删掉，然后重启电脑解决
-```
+安装git
+华为镜像站下载Git-2.21.0-64-bit.tar.bz2
+解压到目录：C:\dw\Git-2.21.0-64-bit
+setx PATH "C:\dw\Git-2.21.0-64-bit\bin;%PATH%" /m
+  git目录增加到PATH变量中
 
-## git教程
-```
-安装git,华为镜像站下载Git-2.21.0-64-bit.tar.bz2
-放在c:/dw，解压缩，设置环境变量C:\dw\Git-2.21.0-64-bit\bin
+git remote
+  查看本地仓已经关联的所有远程地址
+git remote add 本地显示名称 远程地址
+  本地仓关联一个远程地址
+git branch --all
+  查看当前的所有分支
+git branch -vv
+  查看当前的所有分支的关联关系
+git branch -d 分支名称
+  删除本地分支
+git checkout -b 本地显示名称 远程名称/分支
+  签出分支
+git checkout 分支名称
+  切换分支
+git branch -u 远程名称/分支
+  重新设置本地分支对应的远程分支
+git fetch 远程名称
+  获取并刷新远程仓库信息
+git pull 远程名称
+  获取并且合并到本地当前分支
+git add 文件名称
+  提交改动到暂存区，*表示所有改动的文件
+git commit -am 备注说明
+  提交修改到本地仓，可以不暂存，直接提交到本地仓
+git log
+  查看提交记录，提交id
+git reset [--hard] 提交id
+  回退，如果指定的提交id已经推送到了远程仓库，则需要--hard参数
+git push [-f] [远程仓库名称] [本地分支名称]
+  推送当前分支到远程仓，如果执行了回退操作，则需要-f参数
+  特别的：远程分支名称和本地当前分支名称需要一致，否则会导致远程仓库创建新的分支
 
-查看仓库已经关联的所有远程地址：git remote
-增加一个远程地址：git remote add 本地显示名称 远程地址
+github使用ssh方式出现time out
+可能原因：22端口被禁，比如某云
+解决办法：使用443端口进行ssh，步骤如下：
+  ssh -T -p 443 git@ssh.github.com
+  如果命令返回结果ok，则该办法可行，继续后续操作
+  创建或修改配置文件，路径：%当前用户目录%\.ssh\config，内容如下：
+    Host github.com
+    Hostname ssh.github.com
+    Port 443
+  重新打开git的bash
+github的ssh方式的地址：git@github.com:eeroom/hz.foundation.git
 
-查看当前的所有分支：git branch --all
-查看当前的所有分支的关联：git branch -vv
-删除本地分支：git branch -d 分支名称
-签出分支：git checkout -b 本地显示名称 远程名称/分支
-切换分支：git checkout 分支名称
-重新设置本地分支的上游分支：git branch -u 远程名称/分支
-
-获取远程分支信息：git fetch 远程名称
-获取并且合并到本地当前分支：git pull 远程名称
-
-查看提交记录：git log
-重置当前点：git reset 提交id
-
-回退到某次提交的操作：git reset --hard 提交id
-然后：git push -f 远程仓库名称 本地分支名称
-确保远程上的分支名称和本地当前分支名称一致；如果不一致，执行（git push -f 远程仓库名称 远程分支名称）会失败；执行（git push -f 远程仓库名称 本地分支名称）会导致远程仓库创建新的分支；
-待研究正确使用方法
-
-把改动提交到暂存区：git add 文件名称；*表示所有改动的文件
-提交修改到本地仓：git commit -am 备注说明
-可以不暂存，直接提交到本地仓
-
-推送到远程分支：git push 远程地址名称 本地分支
-
-github使用ssh方式提示time out的解决办法
-可能原因：网络某个节点禁止了22端口，比如某云
-解决：尝试使用443端口进行ssh,检测可行性的命令：ssh -T -p 443 git@ssh.github.com
-如果可行，在当前用户目录下的.ssh目录下建立一个config文件，普通文本格式
-内容：
-Host github.com
-Hostname ssh.github.com
-Port 443
-
-重新打开ssh的bash,进行ssh操作
-
-github的ssh方式的地址：git@github.com:eeroom/Azeroth.Core.git
-git@github.com:eeroom/hz.foundation.git
-git@github.com:adoconnection/SevenZipExtractor.git
-
-场景：把本机已有git仓推到github或者gitblit
-第一步:在github或者gitblit上创建新的空仓,不要有任何commit和push,新仓地址为xxxx
-本机继续执行:git remote add 地址名称(origin) 远程地址(xxxx)
-执行:git push -u 地址名称(origin) 本机分支名称(master)
+推送已有的本地仓到github或者gitblit的远程仓库，步骤如下：
+  登陆github或者gitblit，创建一个新的空仓，不要有任何commit和push，新仓地址为：git@github.com:eeroom/xxx.git
+  git remote add 地址名称(origin) 远程地址(git@github.com:eeroom/xxx.git)
+  git push -u 地址名称(origin) 本机分支名称(master)
 ```
 
 ## powershell教程
