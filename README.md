@@ -1078,34 +1078,36 @@ http://localhost:8161/admin
   点对点：每个消息只有一个接收者可以取到，可以有多个接受者，通常称为消息队列
   发布订阅：消息被发送到一个主题，主题所有订阅者都可以取到消息，可以有多个接收者
 ```
-## windows-mariadb
+## mariadb
 ```
-安装windows服务的方法，下载解压版，比如：mariadb-10.2.26-winx64.zip
-解压，切换到目录bin/，管理员运行cmd,
-tips:确保存放数据的目录的上级目录已经创建ok，这里需要d:\已存在，但是d:\mariadb-data不存在
-创建数据库实例：mysql_install_db.exe --datadir=d:\mariadb-data --service=mariadb_001 --password=123456
-这个命令会自动在数据目录下创建配置文件my.ini
-删除数据库实例：停止服务，删除对应的服务，删除数据目录
-sc delete mariadb_hzducha
-验证安装是否ok:使用客户端连接测试
-配置文件和mysql_install_db.exe参数说明：
-```
-### ![mysql_install_db.exe参数说明](./img/mariadb的配置图01.png)
-## windows-tomcat
-```
-安装tomcat9
-解压到目录：c:/dw
-配置环境变量，重启
-CLASS_PATH=.;%JAVA_HOME%\lib;
-CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
-到tomcat的bin目录，执行：service.bat install
-把服务设定为开机启动
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Tomcat9
-Start=2
-start值得说明：0 引导；1 系统；2 自动；3 手动；4 禁用 
-或者Set-Service Tomcat9 -StartupType Automatic
-启动服务net start Tomcat9
-测试,打开：http://192.168.56.101:8080,
+windows安装mariadb
+解压到目录，目录：D:\01Tools\mariadb-10.2.26-winx64
+bin/mysql_install_db.exe --datadir=d:\dbdata\mariadb-data --service=mariadb_001 --password=123456
+  创建数据库实例mariadb_001，并且安装同名的windows服务
+  自动生成此实例的配置文件，路径：d:\dbdata\mariadb-data\my.ini
+  特别的：必须d:\dbdata已存在，并且d:\dbdata\mariadb-data不存在
+  mysql_install_db.exe的所有参数说明:
+  |-----------------------------------|--------------------------------------------------|
+  |    Parameter                      |             Description                          |
+  |-----------------------------------|--------------------------------------------------|
+  |  -? , --help                      |  Display help message and exit                   |
+  |  -d , --datadir=name              |  Data directory of the new database              |
+  |  -S , --service=name              |  Name of the Windows Service                     |
+  |  -p , --password=nam              |  Password of the root user                       |
+  |  -p , --port=#                    |  mysqld port                                     |
+  |  -W , --sockert=name              |  named pipe name                                 |
+  |  -D , --default-user              |  Create default user                             |
+  |  -R , --allow-remote-root-accesss |  Allow remote access frome network for user root |
+  |  -N , --skip-networking           |  Do not use TCP connections,use pipe instead     |
+  |  -i , --innodb-page-size          |  innodb page size,since MariaDB 10.2.5           |
+  |-----------------------------------|--------------------------------------------------|
+sc start mariadb_001
+  启动数据库实例
+sc stop mariadb_001
+  停止数据库实例
+sc delete mariadb_001
+  删除windows服务
+  特别的：删除实例对应的服务后，如果需要移除改实例的数据文件，直接删除该实例所在的目录即可
 ```
 ## windows-redis
 ```
