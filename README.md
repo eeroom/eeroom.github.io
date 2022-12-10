@@ -969,23 +969,26 @@ C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml
   applicationHost.config的元数据，体现了所有的参数名称、参数值的类型
   技巧：本地通过iis的图形配置界面完成配置，然后appcmd导出该配置为xml文件，最后在部署环境使用appcmd导入xml即可完成配置
 ```
-## windows-MSBuild
+## msbuild和visual studio
 ```
-.netframework包含完整的msbuild程序
-配置环境变量，增加path,C:\Windows\Microsoft.NET\Framework64\v4.0.30319
-msbuild不依赖visual studio
-vs调用msbuild编译项目，并且vs按照项目类别把各类别对应的一些编译参数放在配置文件中，位置在：C:\Program Files (x86)\MSBuild，只有安装了vs才会有，在开发机上复制这个目录下的文件到server2008R2Core的同样位置。
-调用msbuild的编译命令为：msbuild 解决方案.sln/项目.csproj 参数的配置文件。例如：msbuild JenkinsDemo.sln /p:VisualStudioVersion=14.0
-如果复制的是vs2015的配置，参数为/p:VisualStudioVersion=14.0，这个参数会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v14.0下面找
-如果参数为/p:VisualStudioVersion=11.0，就会去C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v11.0下面找
-对应关系为：
-  vs2010===11.0
-  vs2012===12.0
-  vs2015===14.0
-调用msbuild的发布命令为：msbuild Mytech.csproj /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml /p:VisualStudioVersion=14.0
-7z打包
-执行scp把分发到远程机器
-执行远程机器的ps脚本,执行后续的部署等操作
+.net包含相应版本的msbuild，路径：C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
+visual studio依赖msbuild，安装过程中会自动安装msbuild，路径：C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe
+  特别的：vs把各种编程语言及其各类型项目的编译参数、msbuild配置做成对应的xxx.props和xxx.targets文件
+  特别的：如果构建机仅安装.net，不安装vs，但需要基于vs的项目文件进行编译，就必须把上述的props和targets等文件都复制到构建机的msbuild所在目录下，并且保持目录结构
+msbuild xxx.sln/xxx.csproj /p:VisualStudioVersion=14.0
+  msbuild编译vs的解决方案或者项目，sln和csproj本质就是符合msbuild的配置文件格式要求的xml文件
+  编译某个项目最终的参数配置=csproj文件+props文件+targets文件，不同版本的vs会有相对应版本的props和targets文件
+  如果编译时csproj、props、targets是基于相同版本的vs，则兼容性是最好的，否则，可能出现编译参数不支持，配置值无法解析等情况
+  /p:VisualStudioVersion=14.0的作用就是指定读取props和targets等文件的版本，高版本targets通常可以适配低版本的csproj,对应关系如下
+  |-------------------------|-----------------------------------------------|-------------------------|
+  | /p:VisualStudioVersion  |         props,targets                         |     support csproj      |
+  |-------------------------|-----------------------------------------------|-------------------------|
+  |       11.0              |  %MSBuild-PATH%\Microsoft\VisualStudio\v11.0\ |   vs2010                |
+  |       12.0              |  %MSBuild-PATH%\Microsoft\VisualStudio\v12.0\ |   vs2012 vs2010         |
+  |       14.0              |  %MSBuild-PATH%\Microsoft\VisualStudio\v14.0\ |   vs2015 vs2012 vs2010  |
+  |-------------------------|-----------------------------------------------|-------------------------|
+msbuild Mytech.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml
+  发布项目
 ```
 
 
