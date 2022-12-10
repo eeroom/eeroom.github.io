@@ -150,7 +150,7 @@ tar [z gz算法] [j bzip2算法] [x 解压] [c 压缩] [v 提示信息] [f 压�
 7za [x 解压] [a 压缩] [-tzip zip格式] [-r 压缩文件移除根目录] 压缩包路径 [源路径] [-o目标路径]
   解压文件：7za x d:/abc/wode.7z -oD:/我的文件
   压缩文件：7za a wode.7z d:/dcq ,默认为7z格式，参数少
-zip -q -r dcq.zip d:/mm/aa/
+zip [-r 递归子目录和文件] dcq.zip d:/mm/aa/
   压缩文件
 unzip dcq.zip
   解压文件
