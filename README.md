@@ -1190,12 +1190,13 @@ github的ssh方式的地址：git@github.com:eeroom/hz.foundation.git
   git remote add 地址名称(origin) 远程地址(git@github.com:eeroom/xxx.git)
   git push -u 地址名称(origin) 本机分支名称(master)
 ```
-
 ## powershell教程
 ```
-定义变量：$变量名称
-定义强类型变量：[类型名称]$变量名称
-全局变量：
+$变量名称
+  定义变量
+[类型名称]$变量名称
+  定义强类型变量
+全局变量
 $ErrorActionPreference="Stop" 遇到异常停止执行,需要在脚步第一行
 $null 等价于c#的null
 $PSVersionTable 查看ps的版本信息
@@ -1227,13 +1228,12 @@ for语句同理
 静态方法：[类型全名称]::方法名称(参数1,参数2,,,)
 实例方法：实例.方法名称(参数1,参数2,,,)
 
-可以直接执行第三方的exe,比如cmd里常用的命令，用法，exe的全路径 参数....
+可以直接执行第三方的exe，比如cmd里常用的命令，用法:xxx.exe 参数1 参数2....
 
-控制台输入直接使用c#的
-控制台输出可以使用c#的，或者write-host
+控制台输入直接使用c#的Console.ReadLine()
+控制台输出可以使用c#的Console.WriteLine()，或者write-host
 
 ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
-
 ```
 ## windows常用命令
 ```
