@@ -143,9 +143,16 @@ grep 指定的内容 文件或目录路径 [-r 从目录下的所有文件中进
   使用场景非常广泛，通常利用管道符号|，把其他命令的输出作为grep的输入，然后进行筛选，获取需要的信息
 gzip
   解压缩
-tar [z gz算法] [j bzip2算法] [x 解压缩] [c 压缩] [v 提示信息] [f 压缩包文件名]  [-C 压缩到指定目录]
+tar [z gz算法] [j bzip2算法] [x 解压] [c 压缩] [v 提示信息] [f 压缩包文件名]  [-C 压缩到指定目录]
   解压文件：tar zxvf xxx.tar.gz     默认解压后文件都被放在当前目录下
   压缩文件：tar zcvf xxx.tar.gz .   表示把当前目录的所有文件打成xxx.tar.gz文件，生成后的文件也在当前目录
+7za [x 解压] [a 压缩] [-tzip zip格式] [-r 压缩文件移除根目录] 压缩包路径 [源路径] [-o目标路径]
+  解压文件：7za x d:/abc/wode.7z -oD:/我的文件
+  压缩文件：7za a wode.7z d:/dcq ,默认为7z格式，参数少
+zip -q -r dcq.zip d:/mm/aa/
+  压缩文件
+unzip dcq.zip
+  解压文件
 vi 文件路径
   编辑模式←→命令模式←→末行模式
   打开文件后，默认进入命令模式，各个模式的切换方式如下，特别的：末行模式和编辑模式不能直接切换，需要借助命令模式中转
@@ -309,8 +316,8 @@ windows安装OpenSSH
   如果返回3行执行执行成功的记录，则安装成功，在windows服务中可以看到相关的ssh和sshagent服务
   可能涉及防火墙设置，端口是22
   特别的：在2008r2core中安装OpenSSH需要一些技巧
-    如果是本地虚拟机，可以在宿主机加载虚拟机的vhd文件，然后把程序文件放到指定位置，否则，可以通过网络共享或者ftp下载，获取到程序文件
-    如果涉及解压缩包文件，需要借助7z的命令行版，包括3个文件：7za.exe,7za.dll,7zxa.dll
+    如果是本地虚拟机，可以在宿主机加载虚拟机的vhd文件，然后把程序文件放到指定位置，也可以通过网络共享或者ftp下载
+    如果涉及解压缩文件，可以利用局域网共享或ftp把命令行版7z、zip、tar等放到2008r2core中
     命令行开通22端口：netsh advfirewall firewall add rule name=sshd dir=in action=allow protocol=TCP localport=22
     ps设置服务开机启动，进入ps的交互模式后，执行：Set-Service sshd -StartupType Automatic
 scp
