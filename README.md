@@ -63,6 +63,10 @@ net stop npcap
   执行：netsh wlan set hostednetwork mode=allow ssid=xxx key=xxxxxxxxxxxx
   执行：netsh wlan start hostednetwork
   在网络链接的管理界面设置网络共享，承载网络就可以提供wifi服务了
+netsh firewall set opmode disable
+  关闭防火墙
+netsh advfirewall firewall set opmode disable
+  关闭防火墙
 ```
 ## 本地磁盘和文件
 ```
@@ -190,6 +194,8 @@ find 路径 [-name 指定名称] [-size 文件大小] [-type 类型]
   size条件，+10k表示大于10k,-10M表示小于10M，如果按大小范围，就指定2个size条件
 mount 设备路径 目标文件路径
   挂载， 挂载U盘，FTP，光驱等等
+dir /s /b
+  列出指定目录下的所有文件（包含子目录）的完整路径
 ```
 ## 系统及配置
 ```
@@ -203,7 +209,7 @@ halt
   立刻关机，centos6好用，7不行，原因待研究
 shutdown [-h 关机] [-r 重启] [now 立刻执行]
   关机或者重启
-shutdown [-s] [-t 秒数]
+shutdown [-s 关机] [-r 重启] [-t 秒数]
   windows系统关机或者重启
 free [-h 美化显示]
   内存使用情况
@@ -295,6 +301,41 @@ firefox关联windows证书管理器
   进入about:config页面，修改配置项：security.enterprise_roots.enabled=true
 声音或者网卡等名称被加上数字1、2结尾
   设备管理器，菜单》查看》显示隐藏设备，勾选上，然后把设备对应的隐藏设备和非隐藏设备都删掉，最后重启
+sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
+  获取windows服务的名称列表并且保存到文件中
+taskmgr
+  查看进程、服务等
+regedit
+  注册表程序
+msinfo32
+  系统信息，磁盘、硬件等信息
+sconfig
+  修改计算机名称等，2008r2core版本专用 
+diskpart
+  查看磁盘容量，压缩vhd等，执行后进入交互模式，然后执行以下命令:
+  list disk
+    查看磁盘容量
+  select vdisk file="d:\vbox\W7ThinPC.vhd"
+  attach vdisk readonly
+  compact vdisk
+  detach vdisk
+    执行完以上4行，即完成对指定vhd文件的压缩
+  特别的：输入?可以查看帮助信息
+禁用虚拟内存及删除虚拟内存文件，步骤如下
+  修改注册表，路径：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive
+  设置此项的值为1
+  执行：wmic,进入交互模式，然后再执行：computersystem where name="WIN-6QQI002VEOV" set AutomaticManagedPagefile=False
+  重启
+  执行：PageFileSet where "name='C:\\pagefile.sys'" delete
+powercfg -h off
+  禁用休眠，重启后生效并且自动删除休眠文件
+设置自动更新为手动，关闭默认共享，关闭自动播放等，修改注册表
+  路径：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
+  设置如下：
+    Start=3
+控制面板》系统和安全》管理工具》计算机管理》菜单》操作》连接到另一台计算机
+  场景：win10的计算机管理远程登陆2008r2core，进行管理配置
+  win10中配置目标机的凭据，windows凭据或者普通凭据，具体用哪种待研究
 ```
 ## ssh
 ```
@@ -1234,47 +1275,6 @@ for语句同理
 控制台输出可以使用c#的Console.WriteLine()，或者write-host
 
 ps5.1版本后可以支持class关键字，脚步里面直接定义class，具体用法参照《https请求-双向认证.ps1》
-```
-## windows常用命令
-```
-列出指定目录下的所有文件（包含子目录）的完整路径：dir /s /b
-查看访问到指定网络地址经过的网络节点：tracert 地址
-获取windows服务的名称列表：
-sc query state=all |findstr /s /i /m "\<SERVICE_NAME:" >d:/scnamelist.txt
-taskmgr --查看进程、服务等
-regedit--修改各种配置信息
-msinfo32--查看磁盘等信息
-sconfig --工具集合，修改计算机名称等
-重启 shutdown -r -t 0
-关机 shutdown -s -t 0
-查看磁盘容量：先使用diskpart命令，进入交互模式，再使用list disk命令即可。
-交互模式下输入？可以查看帮助信息
-
-禁用虚拟内存：HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\DisablePagingExecutive 设置为1
-删除或者设置虚拟内存文件，步骤：
-  先wmic进入交互模式（必须），然后
-  computersystem where name="WIN-6QQI002VEOV" set AutomaticManagedPagefile=False
-  重启后
-  PageFileSet where "name='C:\\pagefile.sys'" delete
-禁用休眠，powercfg -h off 重启后生效，会自动删除休眠文件
-关闭防火墙，
-netsh firewall set opmode disable
-netsh advfirewall firewall set opmode disable
-
-设定update服务为手动启动，关闭默认共享，关闭自动播放等
-修改注册表HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\wuauserv
-Start=3
-
-计算机管理-远程
-  管理机配置凭据，windows和普通凭据，具体用哪个地方的待研究，
-  计算机管理连接192.168.56.101，就可以进行管理
-
-压缩动态vhd文件到实际内容的大小
-  执行diskpart进入会话模式
-  执行：select vdisk file="d:\vbox\W7ThinPC.vhd"
-        attach vdisk readonly
-        compact vdisk
-        detach vdisk
 ```
 ## bat教程
 ```
