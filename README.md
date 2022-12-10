@@ -1066,9 +1066,9 @@ windows安装jdk
 解压到目录：C:\dw\jdk-11.0.2
 setx JAVA_HOME "C:\dw\jdk-11.0.2" /m
   设置环境变量
-setx PATH "%JAVA_HOME%\bin;%PATH%"
+setx PATH "^%JAVA_HOME^%\bin;%PATH%" /m
   设置环境变量
-  特别的：setx仅回写系统或用户变量，不会更新当前会话的变量字典，所以需要新开cmd才能获取上一步设置的%JAVA_HOME%
+  特别的：如果直接使用%JAVA_HOME%，cmd会读取该变量值替换进去然后更新PATH变量，使用^%JAVA_HOME^%可以避免变量值替换
 ```
 ## tomcat
 ```
