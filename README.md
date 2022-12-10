@@ -897,28 +897,46 @@ Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 ```
-## win2008r2core配置网站服务
+## win2008r2core
 ```
-列出当前服务器的功能和状态:DISM /Online /Get-Features
-打开WoW64：Start /w ocsetup ServerCore-WOW64
-打开.NET2.0层：Start /w ocsetup NetFx2-ServerCore
-打开.NET2.0层的WoW64: Start /w ocsetup NetFx2-ServerCore-WOW64
-安装IIS
-  dism /online /enable-feature /featurename:IIS-WebServerRole
-    dism /online /enable-feature /featurename:IIS-ISAPIFilter
-    dism /online /enable-feature /featurename:IIS-ISAPIExtensions
-    dism /online /enable-feature /featurename:IIS-NetFxExtensibility
-安装IIS-ASPNET
-    dism /online /enable-feature /featurename:IIS-ASPNET
-net462的前置补丁：windows6.1-kb4474419-v3-x64_.msu，net462的签名验证，新软件的签名验证
-Windows6.1-KB2999226-x64.msu  解决安装vc++2015 （这个补丁装完要重启，否则net45安装直接报错）
-  可选，不影响安装net45：vc++2012 2013 2015
-NDP462-DevPack-KB3151934-ENU.exe（安装过程中会报错）或者dotNetFx45_Full_x86_x64.exe
-安装servercore版net40或者net462或者net45
-安装PS(依赖前面启用NET20) DISM /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell 
-升级到ps3.0 依赖net40 或者ps4.0依赖net45
-  Windows Management Framework 4.0对应ps4.0
-关闭密码复杂性策略（用到powershell），才可以把密码改成123456，
+安装iis及其asp.net支持的步骤如下：
+dism /Online /Get-Features
+  列出当前服务器的功能和状态，dism是部署映像服务和管理工具
+start /w ocsetup ServerCore-WOW64
+  启用WoW64
+start /w ocsetup NetFx2-ServerCore
+  启用.NET2.0
+start /w ocsetup NetFx2-ServerCore-WOW64
+  启用.NET2.0的WoW64支持
+dism /online /enable-feature /featurename:IIS-WebServerRole
+dism /online /enable-feature /featurename:IIS-ISAPIFilter
+dism /online /enable-feature /featurename:IIS-ISAPIExtensions
+dism /online /enable-feature /featurename:IIS-NetFxExtensibility
+  启用iis，依赖wow64和.net2.0及其wow64支持
+dism /online /enable-feature /featurename:IIS-ASPNET
+  启用iis-aspnet
+
+安装net45的步骤如下：
+安装补丁：windows6.1-kb4474419-v3-x64_.msu，net462安装包签名验证依赖此补丁
+安装补丁：Windows6.1-KB2999226-x64.msu，重启，否则安装net45报错
+  安装vc++2015类库依赖此补丁
+可选安装：vc++2015,vc++2013,vc++2012
+安装:dotNetFx45_Full_x86_x64.exe或者net40的2008r2core专用版
+  特别的：NDP462-DevPack-KB3151934-ENU.exe安装过程中会报错
+
+安装powershell
+dism /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell
+  依赖.net
+后续的没有独立的升级包，ps作为Windows Management Framework的一部分，安装WMF就会升级对应的ps版本
+版本对应关系及依赖如下
+|--------------------------------|-----------|--------------------|
+| Windows Management Framework   |      ps   |      denpendency   |
+|--------------------------------|-----------|--------------------|
+|              3.0               |    3.0    |      net40         |
+|              4.0               |    4.0    |      net45         |
+|--------------------------------|-----------|--------------------|
+
+关闭密码复杂性策略，依赖powershell,步骤如下：
   secedit /export /cfg c:\secpol.cfg
   echo. >c:\out.txt
   type c:\secpol.cfg | findstr -i complex >>c:\out.txt
@@ -930,6 +948,7 @@ NDP462-DevPack-KB3151934-ENU.exe（安装过程中会报错）或者dotNetFx45_F
   type c:\out.txt
   del /q c:\out.txt
   del %windir%\security\logs\scesrv.log
+  场景：把登陆密码改成123456
 ```
 ## iis和appcmd
 ```
