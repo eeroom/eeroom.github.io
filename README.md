@@ -896,16 +896,6 @@ Application=D:\01Tools\hadoop-2.7.1\sbin\start-dfs.cmd
 AppParameters=
 AppDirectory=D:\01Tools\hadoop-2.7.1\sbin\
 ```
-## windows解压缩
-```
-安装7z,下载命令行版本,然后修改环境变量，把7za.exe加入到PATH
-压缩：7za a 压缩包全名称含路径 源文件路径
-默认为7z格式，参数最少，比如：7za a wode.7z d:/dcq   
-指定zip,比如：7za a -tzip a wode.zip d:/dcq
-压缩的文件移除根目录级：7za a -r wode.7z d:/dcq
-解压缩：7za x 压缩包全路径 -o目标文件夹
-解压缩比如：7za x d:/abc/wode.7z -od:/目标
-```
 ## win2008r2core配置网站服务
 ```
 列出当前服务器的功能和状态:DISM /Online /Get-Features
