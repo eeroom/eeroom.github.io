@@ -1351,29 +1351,30 @@ for [/f 解析文本] [/l 集合区间] 变量 in (集合内容) do 每次循环
       特别的：%%a %%b %%c对应tokens提取的列,提取了多少列就用多少个变量,变量字母按从小到大的顺序
   集合区间，/l指定循环的集合是一个(起始值,步长,结束值)的区间,例如：for /l %%a in (1,1,100)  do echo %%a
 ```
-## sqlserver management studio(ssms)
+## ssms
 ```
-指定事务隔离级别：SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-隔离级别包含：READ UNCOMMITTED、READ COMMITTED
-
-todo    事务、事务隔离级别、锁的区别和关系，update锁，insert锁
-
-设置隐式事务：SET IMPLICIT_TRANSACTIONS ON
-
-移除登陆窗口缓存的账号和密码，账号和密码数据保存在缓存文件中，所以删除这个缓存文件即可
-缓存文件路径：当前用户目录》AppData》Roaming》Microsoft》SQL Server Management Studio》SSMS版本》SqlStudio.bin
+sqlserver management studio
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+  指定事务隔离级别
+  隔离级别主要有：READ UNCOMMITTED、READ COMMITTED
+事务、事务隔离级别、锁的区别和关系，update锁，insert锁
+  待研究
+SET IMPLICIT_TRANSACTIONS ON
+  设置隐式事务
+清理登陆界面缓存的账号和密码，步骤如下：
+  缓存的账号和密码被保存在特定目录的文件中，路径：%当前用户目录%\AppData\Roaming\Microsoft\SQL Server Management Studio\%版本%\
+  删除文件：SqlStudio.bin
 ```
 ## postman
 ```
-设置postman的环境变量，本质就是键值对集合，在url地址，请求头，body中都可以使用{{环境变量的key}}来获取变量值
-
-自定义js处理脚步：
-  发送请求之前（Pre-request Script）、获取响应之后（Tests）
-  右侧提供了一些常用代码段，点击即可获得代码段，然后做一些修改来满足实际需求
+设置变量
+  本质就是一些键值对，在url地址，请求头，body中都可以使用这些变量
+{{变量名称}}
+  变量标识符
+自定义js处理脚本，场景：首先调用登陆接口，认证成功后更新token值，后续的接口使用更新后的token值
+  执行时机：发送请求之前（Pre-request Script）、获取响应之后（Tests）
   响应内容：pm.response，pm.response.text(),pm.response.json()
-  更新环境变量的值：pm.environment.set('key',值)
-  打印变量的值：console.log("变量名",变量值)
-
-常见场景：
-  定义环境变量：用户名，密码，token，首先调用登陆接口，认证成功后更新token值，后续的接口使用更新后的token值
+  更新变量值：pm.environment.set(变量名,值)
+  打印变量的值：console.log(变量名,变量值)
+  特别的：右侧提供了一些常用代码段，点击即可获得代码段，然后做一些修改即可满足实际需求
 ```
