@@ -1057,8 +1057,8 @@ msbuild xxx.sln/xxx.csproj /p:VisualStudioVersion=14.0
   |       12.0              |  %MSBuild-PATH%\Microsoft\VisualStudio\v12.0\ |   vs2012 vs2010         |
   |       14.0              |  %MSBuild-PATH%\Microsoft\VisualStudio\v14.0\ |   vs2015 vs2012 vs2010  |
   |-------------------------|-----------------------------------------------|-------------------------|
-msbuild Mytech.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml
-  发布项目
+msbuild xxx.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml
+  发布项目，指定targets的版本，指定发布的配置文件
 ```
 ## jdk
 ```
