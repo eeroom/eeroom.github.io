@@ -1013,6 +1013,7 @@ msbuild Mytech.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:Publi
 ```
 ## jdk
 ```
+windows安装jdk
 解压到目录：C:\dw\jdk-11.0.2
 setx JAVA_HOME "C:\dw\jdk-11.0.2" /m
   设置环境变量
@@ -1041,19 +1042,23 @@ net start Tomcat9
 http://192.168.56.101:8080
   默认访问地址
 ```
-## windows-jenkins
+## jenkins
 ```
-安装jenkins，把jenkins.war放到tomcat的webapps目录下，重启服务
+安装jenkins
+jenkins.war推到tomcat的webapps目录下
 net stop Tomcat9
 net start Tomcat9
-安装jenkins
-war文件
-安装后amdin在用户管理修改密码
-如果忘记admin的密码
-打开/C:/Windows/ServiceProfiles/LocalService/.jenkins/users/admin/config.xml,找到密码部分， 修改为#jbcrypt:$2a$10$MiIVR0rr/UhQBqT.bBq0QehTiQVqgNpUGyWW2nJObaVAM/2xSQdSq
-然后重启，使用123456登陆
-插件相关
-插件》高级》修改插件源的地址，使用https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
+  重启tomcat服务
+http://192.168.56.101:8080/jenkins
+  首次打开，按照提示配置admin用户的密码等
+忘记登陆密码，重置密码为123456
+  打开配置文件，路径：/C:/Windows/ServiceProfiles/LocalService/.jenkins/users/admin/config.xml
+  找到密码部分，替换为如下值
+  #jbcrypt:$2a$10$MiIVR0rr/UhQBqT.bBq0QehTiQVqgNpUGyWW2nJObaVAM/2xSQdSq
+  重启tomcat
+插件
+  修改插件源，管理页面依次打开，插件》高级》修改插件源的地址
+  新源地址：https://mirrors.huaweicloud.com/jenkins/updates/update-center.json
 ```
 ## Windows疑难杂症
 1. ie打不开
