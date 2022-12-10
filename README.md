@@ -1011,10 +1011,19 @@ msbuild xxx.sln/xxx.csproj /p:VisualStudioVersion=14.0
 msbuild Mytech.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishProfile=uk001.pubxml
   发布项目
 ```
+## jdk
+```
+解压到目录：C:\dw\jdk-11.0.2
+setx JAVA_HOME "C:\dw\jdk-11.0.2" /m
+  设置环境变量
+setx PATH "%JAVA_HOME%\bin;%PATH%"
+  设置环境变量
+  特别的：setx仅回写系统或用户变量，不会更新当前会话的变量字典，所以需要新开cmd才能获取上一步设置的%JAVA_HOME%
+```
 ## tomcat
 ```
 windows安装tomcat9
-解压到目录：c:/dw
+解压到目录：c:/dw/apache-tomcat-9.0.39
 配置环境变量，如下：
   CLASS_PATH=.;%JAVA_HOME%\lib;
   CATALINA_HOME=C:\dw\apache-tomcat-9.0.39
