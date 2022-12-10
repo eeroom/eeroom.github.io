@@ -952,20 +952,22 @@ dism /Online /Enable-Feature /FeatureName:MicrosoftWindowsPowerShell
 ```
 ## iis和appcmd
 ```
-c:\windows\system32\inetsrv\appcmd.exe
-总的命令格式：APPCMD (命令) (对象类型) <标识符> </参数1:值1 ...>
-删除虚拟目录：
-appcmd delete vdir 虚拟路径
-查看所有的参数：appcmd list sites /text:*
+appcmd 命令 对象类型 [标识符] [/参数:值]
+  设置iis的站点、应用程序池、虚拟目录参数，从配置文件导入程序池、站点等等
+  appcmd的路径：c:\windows\system32\inetsrv\appcmd.exe
+appcmd delete vdir 虚拟目录标识
+  删除虚拟目录，虚拟目录标识就是虚拟路径
 appcmd list apppool /text:*
-修改网站的应用程序池
+  查看所有的参数
 appcmd set site "Default web site" -[path='/'].applicationPool:"ASP.NET v4.0"
-查看某个对象的操作参数
+  修改网站的应用程序池
 appcmd set site "Default web site" /?
-appcmd可以配置iis应用程序池和iis应用程序的所有参数，从配置文件导入新程序池或者新站点，修改配置，等等操作
-所有参数结合2个配置文件可以得出
-C:\Windows\System32\inetsrv\config\applicationHost.config,这个实际起作用的配置文件，iis运行时的配置文件继承这个，再结合用户的web.config
-C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml,这个文件是配置文件的元数据，所有的参数的名称和类型都可以查，特别是枚举类型，技巧：通过开发机图像界面配置iis，然后appcmd导出xml，然后作为脚本的一部分,在部署环境利用appcm导入xml里面的配置
+  查看某个对象的操作参数
+C:\Windows\System32\inetsrv\config\applicationHost.config
+  iis会读取此配置文件数据作为各个站点的默认配置，各个站点的web.config会覆盖同名的默认配置
+C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml
+  applicationHost.config的元数据，体现了所有的参数名称、参数值的类型
+  技巧：本地通过iis的图形配置界面完成配置，然后appcmd导出该配置为xml文件，最后在部署环境使用appcmd导入xml即可完成配置
 ```
 ## windows-MSBuild
 ```
