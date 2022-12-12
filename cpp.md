@@ -138,3 +138,71 @@ scripts/mysql_install_db --user=root --datadir=/var/mariadb_data
 	[Install]
 	WantedBy=multi-user.target
 ```
+## msys2
+```
+如果自己搜索过如何在windows上安装gcc的话，一定听说过MinGW。GCC本身是Linux上的编译器套件，不能在windows上运行，而mingw则是gcc在windows上的移植。
+最早的mingw项目只支持编译32位程序，后来分支出的mingw-w64项目则同时支持编译32/64位程序。
+网上其它教程的mingw一般都来源于MinGW原项目（gcc版本9.2.0-2，只能编译32位程序），或者MinGW-w64的SourceForge（以前可执行文件会放在这上面，但是现在只更新源代码，所以gcc版本停留在8.1.0），版本都相对比较古旧，不推荐到这两处地方下载mingw。
+mingw-w64项目目前的状况比较复杂，有多个发行分支，具体可以参看官网的下载页。目前windows上最新、最靠谱的发行分支就是MSYS2（gcc版本12.1.0-2）。
+MSYS2(Minimal SYStem 2)是与mingw-w64配套的命令行环境，它为windows提供了类似linux的命令和包管理器pacman，可以直接在命令行查找、安装和卸载各种第三方库和开发工具。
+pacman同时是ArchLinux的包管理器（就像MacOS上的homebrew和Ubuntu上的apt一样），具体使用办法可以查阅ArchWiki(中文)
+实际上MinGW也有一个配套的MSYS，但它没有包管理器
+git bash实际上是一个删减版的MSYS2，在安装文件夹下可以看到MSYS2的目录结构，但它也没有包管理
+MSYS2实际上是由6个独立的子环境组成的。每个子环境会有一个单独的文件夹，和一个专门的命令行界面入口，具体区别见下。一般来说，直接使用UCRT64就行。
+|-----------|----------|-------------|----------------|---------------|---------------------|
+|    name   | Prefix   |   Toolchain |  Architecture  |  C Library    |   C++ Library       |
+|-----------|----------|-------------|----------------|---------------|---------------------|
+|   MSYS    |  /usr    |   gcc       |    x86_64      |    cygwin     |   libstdc++         |
+| MingGW32  | /mingw32 |   gcc       |    i686        |    msvcrt     |   libstdc++         |
+| MingGW64  | /mingw64 |   gcc       |    x86_64      |    msvcrt     |   libstdc++         |
+| UCRT64    | /ucrt64  |   gcc       |    x86_64      |    ucrt       |   libstdc++         |
+| Clang32   | /clang32 |   llvm      |    i686        |    ucrt       |   libc++            |
+| Clang64   | /clang64 |   llvm      |    x86_64      |    ucrt       |   libc++            |
+|-----------|----------|-------------|----------------|---------------|---------------------|
+
+解压msys2-base-x86_64-20221028.tar.xz到目录：D:\01Tools\msys2-base-x86_64-20221028
+默认情况下，除了/usr文件夹以外，其它的子环境文件夹里应该还都是空的。
+一般来说，每个子环境下都有bin（含编译器的可执行文件等）/include（标准库和安装的第三方库头文件）/lib（动态库和静态库等）等文件夹，如果遇到问题可以去相应的路径查看。
+MSYS环境是基础环境，包含各种linux命令行工具（例如pacman等），其它子环境都继承于它。但在这个子环境里编译的程序依赖于MSYS2的动态库，因此直接把编译出来的.exe发给其他人的话会无法运行，需要带上/usr/bin文件夹下的MSYS-2.0.dll等依赖库才行。一般不建议使用。（需要完整linux环境的请考虑WSL或者虚拟机）
+MINGW64环境编译的程序不依赖MSYS2，只依赖于windows自带的C语言库msvcrt，较为通用。
+UCRT64与MINGW64类似，但依赖于比较新的C语言库ucrt，这个库win10/11自带，也是目前微软家的Visual Studio使用的库，但win7/XP可能需要手动安装。未来将会替代MINGW64。
+CLANG64环境使用LLVM工具链而非GCC工具链，所有配套环境都是基于LLVM的（比如这个环境里的gcc.exe其实是clang.exe的重命名）。
+MINGW32和CLANG32顾名思义，使用32位的mingw/clang工具链，如果没有特殊需求基本不用考虑，用64位版本就好。
+最早只有MSYS，MINGW64和MINGW32三个子环境，子环境数量由于开发的需要正在增加，将来可能还会加入CLANGARM64(可用于Android程序编译)
+
+pacman -Sy
+  更新远程仓库的包列表，本质就是下载包列表的数据库文件
+pacman -Sl
+  显示软件仓库所有软件的列表
+pacman -Ss
+  搜索包
+pacman -Qs 关键字
+  搜索已安装的软件包
+pacman -Qi 软件包
+  查看某个软件包详细信息
+pacman -Ql 软件名
+  列出软件包所有文件安装路径
+pacman -S 包名
+  安装软件，可以同时安装多个包，只需以空格分隔包名即可。
+pacman -U  xxx.pkg.tar.gz
+  安装本地软件包
+pacman -R[v 详情] 软件名
+  卸载软件，不卸载依赖
+pacman -Rs 软件名
+  卸载软件，同时卸载依赖
+pacman -Rsc 软件名
+  卸载软件，并卸载依赖该软件的其它程序
+pacman -Sg
+  列出软件仓库上所有软件包组
+pacman -Qg
+  列出本地已经安装的软件包组和子软件包
+pacman -Sg 软件包组
+  查看软件包组所包含的软件包
+pacman -Qg 软件包组
+  查看软件包组所包含的软件包
+pacman -Sc
+  清理未安装的软件包文件
+pacman -Scc
+  清理所有的缓存文件
+
+```
