@@ -205,4 +205,6 @@ pacman -Sc
 pacman -Scc
   清理所有的缓存文件
 
+GTK
+gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
 ```
