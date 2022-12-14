@@ -432,6 +432,22 @@ loginctl
   登录的用户
 systemd-cgls   
   递归显示cgroup的内容
+  
+配置自定义systemd服务，场景：配置可执行的jar包wccpeek.jar为开机自启动的服务
+创建服务配置文件 wccpeek.service，内容如下
+[Unit]
+Description=服务说明
+After=network.target
+[Service]
+Type=simple
+#假定jar包的路径为：/usr/program/oam/wccpeek.jar
+WorkingDirectory=/usr/program/oam/
+User=root
+ExecStart=/usr/program/jdk11.02/java -jar -Xmx2048m -Xms2048m wccpeek.jar
+[Install]
+WantedBy=multi-user.target
+把wccpeek.service文件复制到指定目录，执行：cp wccpeek.service /etc/systemd/system
+注册服务为开机启动，执行：systemctl enable wccpeek
 ```
 ## yum
 ```

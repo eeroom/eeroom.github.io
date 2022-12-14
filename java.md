@@ -173,27 +173,3 @@ var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
-## java程序设置为systemd的服务
-```
-原理：systemd有完备的服务管理，按照systemd的规则约定进行配置即可
-假定把java设置为wccpeek服务，则创建服务配置文件 wccpeek.service，内容如下
-    [Unit]
-	Description=服务说明
-	After=network.target
-
-	[Service]
-    Type=simple
-    WorkingDirectory=jar文件所在的路径
-	User=root
-	ExecStart=java全路径 -jar -Xmx2048m -Xms2048m jar文件名
-	ExecReload=重启命令，可选
-	ExecStop=停止命令，可选，不指定的话，systemd仍然可以正常停止程序
-
-	[Install]
-	WantedBy=multi-user.target
-把wccpeek.service文件复制到指定目录，执行：cp wccpeek.service /etc/systemd/system
-注册服务为开机启动，执行：systemctl enable wccpeek
-重启服务器或者刷新systemd的配置，执行：systemctl daemon-reload
-启动服务，执行：systemctl start wccpeek
-停止服务，执行：systemctl stop wccpeek
-```
