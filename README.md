@@ -1054,6 +1054,11 @@ C:\Windows\System32\inetsrv\config\applicationHost.config
 C:\Windows\System32\inetsrv\config\schema\IIS_schema.xml
   applicationHost.config的元数据，体现了所有的参数名称、参数值的类型
   技巧：本地通过iis的图形配置界面完成配置，然后appcmd导出该配置为xml文件，最后在部署环境使用appcmd导入xml即可完成配置
+ftp用户隔离
+  工作组模式下
+  用户名目录(禁用全局虚拟目录)：在ftp根目录创建目录LocalUser，LocalUser是iis约定的，然后创建各个和用户名同名的普通目录
+  用户名目录(启用全局虚拟目录)：在ftp根目录创建目录LocalUser，LocalUser是iis约定的，然后创建各个和用户名同名的虚拟目录
+  域控模式下
 ```
 ## msbuild和visual studio
 ```
