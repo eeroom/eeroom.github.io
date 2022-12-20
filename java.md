@@ -173,3 +173,191 @@ var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
+## 笔记
+```
+java虚拟机=java解释器+jit即时编译
+1996年  java1.0   应用场景:浏览器上java applet，类型于silverligth,flash，后期直接被禁用
+1997    java1.1     内部类
+1998     java1.2    strictfp修饰符
+            java1.3
+            java1.4(java sdk)    特性：断言，应用场景：服务端应用，生成html页面
+2004    java5.0         特性：泛型，元数据，枚举，foreach循环，自动装箱，注解
+            java6      增强类库
+2009    oracle收购sun
+2011     java7(jdk1.7)        简单改进
+2014     java8（jdk1.8）         特性：lambda，流和日期时间库 
+2017      java9       特性：模块化，版本号混乱终结了，java版本号和内部版本号维持一致，oracle jdk不再包含32和64位的jdk，仅包含64位jdk。openjdk的版本待研究
+2018           每6个月一个大版本
+
+JShell，jdk包含一个jshell的可执行文件，和java可执行文件在相同目录
+
+xxx.java->xxx.class
+源代码->字节码
+源码的文件名必须和文件内的公共类名称保持一致
+
+8中基本类型，primitive type
+byte   1字节   [-128,127]
+short  2字节   [-32786,32767]
+int    4字节   [-20亿,20亿]
+long   8字节   []
+float  4字节   有效位数6到7位，所以非常接近0的值（小数点后面大于7个0），float会直接保存为0
+double 8字节   有效位数15
+char   2字节   
+
+三个特殊的浮点数，正无穷，负无穷，NaN
+算术二元运算，首先会把两个数据的数据类型转成一致，然后再进行计算
+如果除数是0，则异常
+如果除数是0d或者0f，结果是NaN或者无穷
+0d/0d=NaN
+0f/0f=NaN
+NaN==NaN的结果是false，js的浮点数也类似
+判断一个值是否是NaN的正确做法：Double.isNaN(值)
+
+'A'的Unicode码点是65，等价写法'\u0041'
+常用的转义
+\b  退格  \u0008
+\t  制表  \u0009
+\r  回车  \u000d
+\n  换行  \u000a
+\"  "     \u0022
+\'  '     \u0027
+\\  \     \u005c
+\u  16进制表示字符
+    [     \u005B
+    ]     \u005D
+
+转义会在代码解析之前处理，类似于宏的预处理，"\u0022+\u0022" 编译前被转为""+""，运行时的结果为""
+public static void main(String\u005B\u005D args) 可以编译通过，ide会报红
+注释里面如果出现\u，就可能产生编译报错，ide不会报红，// \u000a is a new line ，\u000a是换行符，导致编译报错
+\u后边必须接4个16进制数，否则报错，在注释中也存在这个情况
+
+1991年       Unicode1.0
+Unicode字符超过35536个，16位char类型以及不能满足描述所有Unicode字符
+Unicode码点分为17个代码平面
+
+java采用16位Unicode字符集
+UTF-16编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，每个字符用16位表示，通常称为代码单元，char类型描述了UTF-16编码中的一个代码单元
+UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于那一类（8位表示的值，16位表示的值，24位表示的值）,UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
+
+变量，常量就是值不变的变量
+Character.isJavaIdentifierStart()
+Character.isJavaIdentifierPart()
+可以判断某个字符是否可以作为变量的开头或者其他部分
+变量必须被赋值后才可以被使用，否则编译报错，
+c#中区分值类型和引用类型，java没有这个划分
+
+StringBuilder 和c#的StringBuilder是等价的，优先使用，java5引入
+StringBuffer，是StringBuilder的前身，和 StringBuilder 的区别，允许多线程进行添加和删除，两者的api是一致的
+
+输入和输出
+System.out.println()
+var scanner=new Scanner(System.in)
+var value=scanner.nextLine()
+和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
+var console=System.console();
+var value= console.readLine("请输入用户名:");
+var pwd=console.readPassword("请输入密码:");
+console.printf(new String(pwd));
+和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
+特别的，在idea直接运行console是null，由cmd启动则正常，readPassword可以隐藏输入的字符
+
+格式化输出
+String msg=String.format("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
+System.out.println("姓名：%2$s，年龄：%1$d，%1$d",121,"张三")
+%[索引值$][,(5.2f 转换浮点数][d 转换整数][s 转换字符串][c 转换日期时间]
+特别的，索引值从1开始
+
+简单读取和写入文本文件
+var scanner=new Scanner(Path.of("D:\\vs2019启动没反应.txt"),"GBK");
+try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应UTF-8.txt"),"UTF-8")){
+    while (scanner.hasNext()){
+        printWriter.println(scanner.nextLine());
+    }
+}
+
+大数
+java.math.BigInteger，可以处理任意序列长度的整数
+java.math.BigDecimal，可以处理任意精度的浮点数
+java.math.BigInteger.valueOf(100)，不能使用算术运算符，需要调用相应的方法
+java仅重载的了字符串的+运算符，并且不允许重载运算符
+
+数组
+int[] lst=new int[5];
+int[] lst2={1,2,3,4};
+int[] lst2=new int[]{1,2,3,4};
+c#初始化数组语句：int[] lst3=new int[]{1,2,3,4};
+数组内容的字符串：var str=java.util.Arrays.toString(lst2)
+int[][] lst2={{1,2,3,4},{1,2,3,4}};
+var ars= java.util.Arrays.deepToString(lst2);
+sort 快排
+copyOf 拷贝
+binarySearch 二分查找算法查找指定值，返回索引
+fill 填充指定值
+equals 如果长度相同，并且相同索引的元素也相等，则两个数组相等
+java实际没有多维数组，只有一维数组，多维数组被解释"数组的数组"
+
+对象和类
+面向过程编程，先考虑算法，再考虑数据结构，算法+数据结构=程序
+面向对象编程，先考虑数据结构，再考虑算法，数据结构+算法=程序
+类：构造对象的模板
+对象：类的实例
+封装：数据和行为组合，编译后，数据和行为分离，访问器方法如果返回一个可变对象引用，意味着破坏封装性，可以返回改字段的clone对象，避免破坏封装
+继承：
+多态：
+对象的三个主要特征：行为，状态，标识
+类之间的关系：依赖，聚合，继承
+对象变量等价于c++的一级指针，和c++的引用不一样
+
+java的java.util.Date类实例表示一个特定的时间点，本质是距离UTC1970年1月1日00:00:00的毫秒数
+UTC 国际协调时间
+GMT 格林尼治时间
+java.time.LocalDate对应日历表示法表示的日期，1.8新增的
+java.time.LocalDate.now()
+java.time.LocalDate.of(2022,12,22)
+
+参数校验，对于null值得便捷处理
+Objects.requireNonNull(args,"必须指定args的值")
+Objects.requireNonNullElse(args,new String[]{"abc"})
+
+final修饰常量或者变量，等价于c#的readonly
+静态字段又称为类字段
+静态常量：public static final double PI=3.1415
+等价于c#:public static readonly double PI=3.1415
+或者：public const double PI=3.1415
+c#中const修改的变量等价于static+readonly，java中const是保留关键字，目前未使用
+
+调用静态方法的两种方式：
+类名称.静态方法()
+实例.静态方法()
+c#中调用静态方法的两种方式：
+类名称.静态方法()
+
+术语"静态"的历史，C引入static为了表示退出一个块后依然存在的局部变量。在这种情况下，术语"静态"是有意义的：变量一直保留，当再次进入这个块时仍然存在。
+随后，static在C中有了第二种含义，表示不能从其他文件访问的全局变量和函数，为了避免引入新的关键字，所以重用了关键字static
+最后，C++第三次重用了这个关键字，与前面赋予的含义完全无关，它指示属于类而不属于实例的变量和函数
+java的static与c++中等价
+
+方法参数
+参数传递给方法的方式：按值调用（传递变量的值，java中引用类型的变量本身就是一个一级指针，如果按引用传递，就变为二级指针），按引用调用（等价于传递变量的指针），按名调用
+java总是采用按值调用
+c#默认总是按值调用，如果参数使用ref或者out修饰，则变为按引用传递
+
+字段和构造函数
+方法中的变量必须明确赋值后才可以使用，否则编译报错
+实例字段可以不明确复制，因为如果构造函数没用显式地为字段赋值，编译器会自动地赋上默认值，值类型为0，布尔类型为false，对象引用为null
+上述规则，java和c#是一致的
+
+包
+java允许使用包将类组织在一个集合中，借助包可以方便的组织自己的代码，并将自己的代码和别人提供的代码库分开管理
+使用包的主要原因是确保类名的唯一性，假如两个程序员都建立了Empoloyee类，只要将这些放在不同的包中，就不会产生冲突
+为了保证包名的绝对唯一性，要用一个英特网域名（这显然是唯一的）以逆序的形式作为包名，然后对于不同的工程使用不同的子包
+包名+类名=类的完全限定名
+从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
+c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
+
+
+
+
+
+
+```
