@@ -196,13 +196,14 @@ xxx.java->xxx.class
 源码的文件名必须和文件内的公共类名称保持一致
 
 8中基本类型，primitive type
-byte   1字节   [-128,127]
-short  2字节   [-32786,32767]
-int    4字节   [-20亿,20亿]
-long   8字节   []
-float  4字节   有效位数6到7位，所以非常接近0的值（小数点后面大于7个0），float会直接保存为0
-double 8字节   有效位数15
-char   2字节   
+byte    1字节   [-128,127]
+short   2字节   [-32786,32767]
+int     4字节   [-20亿,20亿]
+long    8字节   []
+float   4字节   有效位数6到7位，所以非常接近0的值（小数点后面大于7个0），float会直接保存为0
+double  8字节   有效位数15
+char    2字节 
+boolean 1字节  
 
 三个特殊的浮点数，正无穷，负无穷，NaN
 算术二元运算，首先会把两个数据的数据类型转成一致，然后再进行计算
@@ -355,9 +356,145 @@ java允许使用包将类组织在一个集合中，借助包可以方便的组�
 从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
 c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
 
+想要把类放入包中，就必须将包的名字放在源文件的开头，将源文件放到与完整包名匹配的子目录中，编译器将编译后的类文件也放在相同的目录中
+如果没有在源文件中放置package语句，这个源文件中的类就属于无名包，无名包没有包名
+特别的：编译器在编译源文件的时候不检查目录结构，如果代码中声明的包名和实际的目录结构不一致，并且它也不依赖其他的包，就可以编译成功
+  但是，最终程序将无法运行，除非先将类文件移到代码声明的包名对应的路径中，否则，虚拟机就找不到类
+总结：类路径必须与包名匹配，这是jdk的约定，从1.2版开始，jdk的实现者修改了类加载器，明确禁止加载包名以java.开头的用户自定义的类
 
+类文件也可以存储在JAR文件中，java归档。
 
+继承
+超类<-子类
+基类<-派生类
+父类<-子类
+调用超类构造函数和超类的普通方法
+public class Student extends People{
+    string name;
+    public Student(){
+        super(101);
+        this.name=super.getTag()+"|Student";
+    }
+}
+c#调用父类构造函数
+public class Student:People{
+    string name;
+    public Student():base(101) {
+        this.name=base.getTag()+"|Student";
+    }
+}
+所有类默认可以被集成，使用final修饰符，则类不能被继承，并且他的所有方法都被final修饰
+c#中所有类默认可以被集成，使用seal修饰符，则类不能被继承
 
+强制类型转换
+只能在继承层次内进行强制类型转换
+判断变量是否指向某个类型或其子类型的实例：obj instanceof 类型
+c#的等价操作:obj is 类型
 
+方法访问控制修饰符
+仅本类可见           private
+仅对本包可见         默认，没有修饰符
+仅对本包和子类可见   protected
+所有可见            public
+
+C#方法的访问控制修饰符
+仅本类可见             private
+仅所在程序集可见       internal
+仅子类可见             protected
+仅子类和当前程序集可见  protected internal
+所有可见              public
+
+多态
+所有方法默认可以重写，使用final修饰符，则方法不允许被重写，final类的所有实例方法都被final修饰
+c#所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
+c++所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
+
+协变和逆变
+子类1[] a=value;
+超类[] b=a;         编译通过，运行通过
+潜在的问题：
+b[0]=子类2实例      编译通过，运行通过
+a[0].子类1的方法()  编译通过，运行报错或者结果非预期
+数组存在这个问题，普通变量也可能存在这个问题，因为赋值操作：
+子类1 a=子类2的实例               编译不通过
+子类1 a=(子类1)((超类)子类2实例)  编译通过，运行报错  
+
+方法调用：静态绑定，final修饰的方法，编译器都可以实现静态绑定，
+动态绑定，非final方法需要虚拟机进行动态绑定，虚拟机在程序启动后会维护一份方法列表，可以根据方法签名快速匹配
+对于静态绑定，编译器可能对方法调用进行优化，内联，等价于把被调用方法的内容搬到调用的地方，避免一次方法调用
+对于动态绑定，虚拟机会进一步进行内联优化
+
+对象包装器和自动装箱
+所有基本类型都有与之对应的类，通常，这些类称为包装器，包装器类是不可变的，并且都是final类
+泛型的类型参数不能是基本类型，
+自动装箱规范要求boolean,byte,char<=127,short[-128,127],int[-128,127]被包装到固定的对象中
+Integer a=127;
+Integer b=127;
+则a==b总是成立的，因为包装到固定对象中，所以指向的地址是一样的
+范围之外的包装器值，使用equesl方法比较值是否相等
+拆箱和装箱在编译阶段完成，编译器在生成类的字节码时会插入必要的方法调用，虚拟机只是执行这些字节码
+
+可变长参数方法
+int max(String name,int... lst){
+}
+等价于
+int max(String name,int[] lst){
+}
+特别的：可变长参数最多只能有一个，而且是最后一个参数，可以直接把数组传给可变长参数
+max(1,2,3)编译器会转换为：max(new int[]{1,2,3})
+c#的可变长参数
+int Max(string name,params int[] lst){
+}
+
+枚举
+枚举的构造器总是私有的，可以省略private修饰符
+public enum Size{
+    大(1),中(2),小(3);
+    private Size(int value){
+      this.value=value
+    }
+    int value;
+}
+枚举的toString方法返回枚举常量名，和valueOf互为逆方法，
+
+反射
+Class类，获取Class类实例的3中方法：
+实例.getClass()
+类型.class
+Class.from('类的完全限定名')
+ 
+获取类、字段、方法的修饰符信息
+java.lang.reflect.Modifier.isFinal(T.class.getModifiers())
+java.lang.reflect.Modifier.isStatic(T.class.getDeclaredField("").getModifiers())
+java.lang.reflect.Modifier.isPublic(T.class.getDeclaredMethod("").getModifiers())
+
+T.class.getFields()
+  返回类支持的公共字段，包括超类的公共字段
+T.class.getDeclareFields()
+  返回类中的全部字段，包括私有、受保护的，不包括超类中的字段
+方法和构造器也都有对应的两套
+反射机制的默认行为受限于java的访问控制，对应于他的访问修饰符，可以调用Field,Method,Constructor对象的setAccessible方法覆盖java的访问控制
+setAccessible方法是AccessibleObject类中的一个方法，它是Field,Method,Constructor类的超类，这个特性是为调试，持久存储和类似机制提供的
+setAccessible方法可能会抛异常，原因是访问被模块系统或者安全管理器拒绝
+
+java.lang.reflect.Array
+java.lang.reflect.Array.newInstance(int.class,100)
+  利用反射，创建指定元素类型和长度的数组
+java.lang.reflect.Array.getLength(lst
+)
+  利用反射获取数组的长度
+int[].class.getComponentType()
+  获取数组元素的类型，专用方法
+特别的：int[]可以转为Object类型，但是不能转为Object[]类型
+       People[]可以转为Object类型，也能转为Object[]类型
+
+接口、lambda表达式和内部类
+接口中所有方法都自动是public方法，在接口中声明方法的时候，不必提供关键字public
+Comparable接口约定，int (T other)
+返回0，则this==other
+返回>0，则this>other
+返回<0，则this<other
+返回的时候避免int溢出，导致本来是>0的，最终却是<0，也可以使用Integer.compare()，避免算术减法操作的结果溢出
+浮点数进行比较的时候，可以使用Double.compare(v1,v2)这个静态方法，因为如果两个值非常接近，算术减法操作的结果可能是0，从而不符合预期
 
 ```
