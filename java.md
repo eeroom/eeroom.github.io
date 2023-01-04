@@ -204,7 +204,7 @@ javac 源码文件
 jshell，交互式的命令行工具，可以执行java代码，并且自动打印计算结果
   jdk包含一个jshell.exe的可执行文件，和java.exe可执行文件所在的目录相同，linux上jshell可执行文件没有exe后缀
 
-8中基本类型(primitive type)
+8种基本类型(primitive type)
 |-----------|---------|-------------------------------------------------------------------------|
 |    type   |  length |    remark                                                               |
 |-----------|---------|-------------------------------------------------------------------------|
@@ -257,45 +257,13 @@ UTF-16编码采用不同长度的编码表示所有的Unicode码点，在第一�
 UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于哪一类（8位表示的值，16位表示的值，24位表示的值）
 UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
 
-变量
-  变量必须被赋值后才可以被使用，否则编译报错
-常量
-  值不变的变量
-Character.isJavaIdentifierStart()
-  判断某个字符是否可以作为变量的开头
-Character.isJavaIdentifierPart()
-  判断某个字符是否可以作为变量的非开头的其他部分
-c#中区分值类型和引用类型，java没有这个划分
-
-字符串
+字符串类型
 StringBuilder
   和c#的StringBuilder是等价的，优先使用，java5引入
 StringBuffer
   StringBuilder的前身，和StringBuilder的区别，允许多线程进行添加和删除，两者的api是一致的
 
-输入和输出
-System.out.println()
-  格式化输出，System.out.println("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
-  %[索引值$][,(5.2f 转换浮点数][d 转换整数][s 转换字符串][c 转换日期时间]
-  特别的，索引值从1开始
-  String msg=String.format("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
-var scanner=new Scanner(System.in);
-var value=scanner.nextLine();
-  输入
-var console=System.console();
-var value= console.readLine("请输入用户名:");
-var pwd=console.readPassword("请输入密码:");
-  输入，和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
-  特别的：在IDEA直接运行console是null，由cmd启动则正常，readPassword可以隐藏输入的字符
-简单读取和写入文本文件
-var scanner=new Scanner(Path.of("D:\\vs2019启动没反应.txt"),"GBK");
-try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应UTF-8.txt"),"UTF-8")){
-    while (scanner.hasNext()){
-        printWriter.println(scanner.nextLine());
-    }
-}
-
-大数
+大数类型
 java.math.BigInteger
   可以处理任意序列长度的整数
 java.math.BigDecimal
@@ -303,7 +271,7 @@ java.math.BigDecimal
 java.math.BigInteger.valueOf(100)
   不能使用算术运算符，需要调用相应的方法，java仅重载的了字符串的+运算符，并且不允许重载运算符
 
-数组
+数组类型
 int[] lst=new int[5];
 int[] lst2={1,2,3,4};
 int[] lst2=new int[]{1,2,3,4};
@@ -326,118 +294,146 @@ java.util.Arrays.fill
 java.util.Arrays.equals
   根据数组内容判断数组是否相等，而非根据引用地址判断，具体逻辑：如果长度相同，并且相同索引的元素也相等，则两个数组相等
 ```
-
-## 笔记
+## 输入和输出
+```
+System.out.println()
+  格式化输出，System.out.println("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
+  %[索引值$][,(5.2f 转换浮点数][d 转换整数][s 转换字符串][c 转换日期时间]
+  特别的，索引值从1开始
+  String msg=String.format("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
+var scanner=new Scanner(System.in);
+var value=scanner.nextLine();
+  输入
+var console=System.console();
+var value= console.readLine("请输入用户名:");
+var pwd=console.readPassword("请输入密码:");
+  输入，和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
+  特别的：在IDEA直接运行console是null，由cmd启动则正常，readPassword可以隐藏输入的字符
+简单读取和写入文本文件
+var scanner=new Scanner(Path.of("D:\\vs2019启动没反应.txt"),"GBK");
+try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应UTF-8.txt"),"UTF-8")){
+    while (scanner.hasNext()){
+        printWriter.println(scanner.nextLine());
+    }
+}
 ```
 
-
-
-对象和类
+## 对象与类
+```
 面向过程编程，先考虑算法，再考虑数据结构，算法+数据结构=程序
-面向对象编程，先考虑数据结构，再考虑算法，数据结构+算法=程序
-类：构造对象的模板
-对象：类的实例
-封装：数据和行为组合，编译后，数据和行为分离，访问器方法如果返回一个可变对象引用，意味着破坏封装性，可以返回改字段的clone对象，避免破坏封装
-继承：
-多态：
-对象的三个主要特征：行为，状态，标识
-类之间的关系：依赖，聚合，继承
-对象变量等价于c++的一级指针，和c++的引用不一样
-
-java的java.util.Date类实例表示一个特定的时间点，本质是距离UTC1970年1月1日00:00:00的毫秒数
-UTC 国际协调时间
-GMT 格林尼治时间
-java.time.LocalDate对应日历表示法表示的日期，1.8新增的
-java.time.LocalDate.now()
-java.time.LocalDate.of(2022,12,22)
-
-参数校验，对于null值得便捷处理
-Objects.requireNonNull(args,"必须指定args的值")
-Objects.requireNonNullElse(args,new String[]{"abc"})
-
-final修饰常量或者变量，等价于c#的readonly
-静态字段又称为类字段
-静态常量：public static final double PI=3.1415
-等价于c#:public static readonly double PI=3.1415
-或者：public const double PI=3.1415
-c#中const修改的变量等价于static+readonly，java中const是保留关键字，目前未使用
-
-调用静态方法的两种方式：
-类名称.静态方法()
-实例.静态方法()
-c#中调用静态方法的两种方式：
-类名称.静态方法()
-
-术语"静态"的历史，C引入static为了表示退出一个块后依然存在的局部变量。在这种情况下，术语"静态"是有意义的：变量一直保留，当再次进入这个块时仍然存在。
-随后，static在C中有了第二种含义，表示不能从其他文件访问的全局变量和函数，为了避免引入新的关键字，所以重用了关键字static
-最后，C++第三次重用了这个关键字，与前面赋予的含义完全无关，它指示属于类而不属于实例的变量和函数
-java的static与c++中等价
-
-方法参数
-参数传递给方法的方式：按值调用（传递变量的值，java中引用类型的变量本身就是一个一级指针，如果按引用传递，就变为二级指针），按引用调用（等价于传递变量的指针），按名调用
-java总是采用按值调用
-c#默认总是按值调用，如果参数使用ref或者out修饰，则变为按引用传递
-
-字段和构造函数
-方法中的变量必须明确赋值后才可以使用，否则编译报错
-实例字段可以不明确复制，因为如果构造函数没用显式地为字段赋值，编译器会自动地赋上默认值，值类型为0，布尔类型为false，对象引用为null
-上述规则，java和c#是一致的
-
+面向对象编程，先考虑数据结构，再考虑算法，数据结构+算法=程序，特征：封装+继承+多态
+类
+  构造对象的模板，类之间的关系：依赖，聚合，继承
+  c#中区分值类型和引用类型，java没有这个划分
+对象
+  类的实例，对象的三个主要特征：行为，状态，标识
+  变量等价于c++的一级指针，指向一个对象；和c++的引用不一样
+  null值处理，Objects提供一些便捷方法，java9引入
+  Objects.requireNonNull(变量,"变量值不能为null")
+  Objects.requireNonNullElse(变量,变量默认值)等价于c#的??运算符
+实例字段
+  字段可以不明确复制，如果构造函数没用显式地为字段赋值，编译器会自动地赋上默认值，值类型为0，布尔类型为false，对象引用为null
+静态字段
+  又称为类字段
+静态常量
+  final修饰的静态字段
+  public static final double PI=3.1415
+  等价于c#:public static readonly double PI=3.1415
+  或者：public const double PI=3.1415
+  c#中const修饰的变量等价于static readonly，java中const是保留关键字，目前未使用
+final
+  修饰实例字段，等价于c#的readonly
+  修饰静态字段，等价于c#的readonly，并且该静态字段成为静态常量
+  修饰变量值，则变量不可以被重新赋值，类似于只读指针，c#没有等价的语法和机制
+  修饰类，等价于c#的seal，类不能被继承
+  修饰实例方法，则方法不能被重写，java默认所有public和protect方法都能重写，c#中必须使用virtual修饰的pubulic和protect方法才能被重写
+实例方法
+  关键字this指示隐式参数，实例.实例方法(参数值)等价于对应的静态方法:静态方法(实例,参数值),该对应的静态方法第一个参数名就是this
+  面向对象语言在工程层面和源代码层面把数据结构和算法耦合，这个做法一般很符合人们对实际事物的理解和抽象
+  源代码编译之后，数据结构和算法会分离，类的实例字段组合成数据结构，实例方法和静态方法成为算法，并且编译后没有实例方法，都是静态方法
+  c#通过创建实例方法对应的静态方法的委托，从而验证编译后没有实例方法，都是静态方法
+静态方法
+  类名称.静态方法()   
+  实例.静态方法()  符合语法，但是不建议这种调用方式
+  c#中调用静态方法的方式：类名称.静态方法()
+术语"静态"的历史
+  C语言引入static为了表示退出一个块后依然存在的局部变量
+  在这种情况下，术语"静态"是有意义的：变量一直保留，当再次进入这个块时变量仍然存在
+  随后，static在C语言中有了第二种含义，表示不能从其他文件访问的全局变量和函数，为了避免引入新的关键字，所以重用了关键字static
+  最后，C++第三次重用了这个关键字，与前面赋予的含义完全无关，它指示属于类而不属于实例的变量和函数
+  java的static与c++中的static等价
+变量
+  变量必须被赋值后才可以使用，否则编译报错，java和c#对变量的这个规则是一致的
+  var关键字声明局部变量，java10引入
+  和字段的区别：变量是方法中的声明的变量，实例字段是类中声明的变量；变量指向某个具体的数据，字段是数据结构的组成部分
+  Character.isJavaIdentifierStart()
+    判断某个字符是否可以作为变量名的开头
+  Character.isJavaIdentifierPart()
+    判断某个字符是否可以作为变量名非开头的其他部分
+  全局变量：C语言的概念，面向对象语言没有这个概念，但是类的公共静态字段和C语言的全局变量机制类似
+常量
+  值不变的变量
+方法参数值的三种传递方式
+  按值调用，方法参数得到的值是调用方法时变量值的副本，java中引用类型的变量本身就是一个一级指针，参数得到的是指针的副本，仍然指向同一个对象
+  按引用调用，方法参数得到的值是调用方法时变量的指针
+  按名调用，Algol语言使用这种机制
+  java总是采用按值调用，java的参数有2种类别，基本数据类型和对象引用，对象引用本质就是一级指针，参数得到的是指针的副本，仍然指向同一个对象
+  c#默认按值调用，如果参数使用ref或者out修饰，则变为按引用调用
 包
-java允许使用包将类组织在一个集合中，借助包可以方便的组织自己的代码，并将自己的代码和别人提供的代码库分开管理
-使用包的主要原因是确保类名的唯一性，假如两个程序员都建立了Empoloyee类，只要将这些放在不同的包中，就不会产生冲突
-为了保证包名的绝对唯一性，要用一个英特网域名（这显然是唯一的）以逆序的形式作为包名，然后对于不同的工程使用不同的子包
-包名+类名=类的完全限定名
-从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
-c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
-
-想要把类放入包中，就必须将包的名字放在源文件的开头，将源文件放到与完整包名匹配的子目录中，编译器将编译后的类文件也放在相同的目录中
-如果没有在源文件中放置package语句，这个源文件中的类就属于无名包，无名包没有包名
-特别的：编译器在编译源文件的时候不检查目录结构，如果代码中声明的包名和实际的目录结构不一致，并且它也不依赖其他的包，就可以编译成功
-  但是，最终程序将无法运行，除非先将类文件移到代码声明的包名对应的路径中，否则，虚拟机就找不到类
-总结：类路径必须与包名匹配，这是jdk的约定，从1.2版开始，jdk的实现者修改了类加载器，明确禁止加载包名以java.开头的用户自定义的类
-
-类文件也可以存储在JAR文件中，java归档。
-
+  java使用包将类组织在一个集合中，借助包可以方便的组织自己的代码，确保类名的唯一性，假如两个程序员都建立了Empoloyee类，只要将这些放在不同的包中，就不会产生冲突
+  为了保证包名的绝对唯一性，要用一个英特网域名（这显然是唯一的）以逆序的形式作为包名，然后对于不同的工程使用不同的子包
+  特别的：类的完全限定名=包名+类名，从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
+  c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
+自定义包
+  将包的名字放在源文件的开头
+  将源文件放到与完整包名匹配的子目录中
+  将编译后的类文件和源文件放在同一个目录中
+  如果没有在源文件中放置package语句，这个源文件中的类就属于无名包，无名包没有包名
+  特别的：编译器在编译源文件的时候不检查目录结构，如果代码中声明的包名和源代码文件实际的目录结构不一致，并且它也不依赖其他的包，能编译成功，但是运行时报错，虚拟机找不到类
+  解决办法：将类文件移到代码声明的包名对应的路径中，否则，虚拟机就找不到类
+  总结：类路径必须与包名匹配，这是jdk的约定，从1.2版开始，jdk的实现者修改了类加载器，明确禁止加载包名以java.开头的用户自定义的类
+jar文件
+  包含一个或多个类文件的java归档文件，本质就是zip格式的压缩文件
+  jar cvf jar文件名称 类文件1 类文件2
+    创建一个jar文件
+  清单文件，约定存放在特定目录：jar文件/META-INF/MANIFEST.MF
+封装
+  数据和行为组合，编译后，数据和行为分离，访问器方法如果返回一个可变对象引用，意味着破坏封装性，可以返回改字段的clone对象，避免破坏封装
 继承
-超类<-子类
-基类<-派生类
-父类<-子类
-调用超类构造函数和超类的普通方法
-public class Student extends People{
-    string name;
-    public Student(){
-        super(101);
-        this.name=super.getTag()+"|Student";
-    }
-}
-c#调用父类构造函数
-public class Student:People{
-    string name;
-    public Student():base(101) {
-        this.name=base.getTag()+"|Student";
-    }
-}
-所有类默认可以被集成，使用final修饰符，则类不能被继承，并且他的所有方法都被final修饰
-c#中所有类默认可以被集成，使用seal修饰符，则类不能被继承
+  所有类默认可以被集成，使用final修饰符，则类不能被继承，并且他的所有方法都被final修饰
+  c#中所有类默认可以被集成，使用seal修饰符，则类不能被继承
+  超类<-子类
+  基类<-派生类
+  父类<-子类
+  调用超类构造函数和超类的普通方法
+  public class Student extends People{
+      string name;
+      public Student(){
+          super(101);
+          this.name=super.getTag()+"|Student";
+      }
+  }
+  c#调用父类构造函数父类的普通方法
+  public class Student:People{
+      string name;
+      public Student():base(101) {
+          this.name=base.getTag()+"|Student";
+      }
+  }
+  强制类型转换，只能在继承层次内进行强制类型转换，特别的，可以把任何变量转成Object类型，再转成其它类型，这样可以编译通过，但是运行可能会报错
+  判断变量是否指向某个类型或其子类型的实例：obj instanceof 类型，c#的等价操作:obj is 类型
+  方法访问控制修饰符
+  仅本类可见           private
+  仅对本包可见         默认，没有修饰符
+  仅对本包和子类可见   protected
+  所有可见            public
 
-强制类型转换
-只能在继承层次内进行强制类型转换
-判断变量是否指向某个类型或其子类型的实例：obj instanceof 类型
-c#的等价操作:obj is 类型
-
-方法访问控制修饰符
-仅本类可见           private
-仅对本包可见         默认，没有修饰符
-仅对本包和子类可见   protected
-所有可见            public
-
-C#方法的访问控制修饰符
-仅本类可见             private
-仅所在程序集可见       internal
-仅子类可见             protected
-仅子类和当前程序集可见  protected internal
-所有可见              public
+  C#方法的访问控制修饰符
+  仅本类可见             private
+  仅所在程序集可见       internal
+  仅子类可见             protected
+  仅子类和当前程序集可见  protected internal
+  所有可见              public
 
 多态
 所有方法默认可以重写，使用final修饰符，则方法不允许被重写，final类的所有实例方法都被final修饰
@@ -686,4 +682,13 @@ Class proxyClass=Proxy.getProxyClass(null,接口)
 
 
 
+```
+## 日期和时间API
+```
+java的java.util.Date类实例表示一个特定的时间点，本质是距离UTC1970年1月1日00:00:00的毫秒数
+UTC 国际协调时间
+GMT 格林尼治时间
+java.time.LocalDate对应日历表示法表示的日期，1.8新增的
+java.time.LocalDate.now()
+java.time.LocalDate.of(2022,12,22)
 ```
