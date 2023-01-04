@@ -84,7 +84,8 @@ c#的byte也是1个字节，但是没有符号位，所以数值范围[0x00,0xFF
 所以最直接的字符编码方式就是直接存储字符对应的二进制值的序列，典型案例为GBK
 但是有的字符编码方式是首先对二进制序列做处理，然后存储处理过后的二进制序列，典型案例为unicode字符集的utf-8编码
 
-unicode字符集，代码值范围是[0x000000,0x10ffff]，使用3个字节，第1个字节代码平面标识，第2、3个字节是其真正的码值
+1991年发布Unicode1.0
+Unicode字符集，代码值范围是[0x000000,0x10ffff]，使用3个字节，第1个字节代码平面标识，第2、3个字节是其真正的码值
 分为17代码区（代码平面），每个区都可包含0xffff+1（65536）个字符,
 代码区00：[0x000000,0x00ffff]
 代码区01：[0x010000,0x01ffff]
@@ -173,101 +174,119 @@ var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
-## 笔记
+## java概述和发展简史
 ```
+|----------|------------------|-----------------------------------------------------------------|
+|   Year   |   Version        |                          Remark                                 |
+|----------|------------------|-----------------------------------------------------------------|
+|   1996   | java1.0          |   浏览器上java applet，类型于silverligth,flash，后期直接被禁用     |
+|   1997   | java1.1          |   内部类                                                         |
+|   1998   | java1.2          |   strictfp修饰符                                                 |
+|          | java1.3          |                                                                 |
+|          | java1.4(java sdk)|   断言，应用场景调整到服务端应用，生成html页面                      |
+|   2004   | java5.0          |   泛型，元数据，枚举，foreach循环，自动装箱，注解                   |
+|          | java6            |   增强类库                                                       |
+|   2009   |                  |   oracle收购sun                                                  |
+|   2011   | java7(jdk1.7)    |   简单改进                                                       |
+|   2014   | java8(jdk1.8)    |   lambda,流和日期时间库                                           |
+|   2017   | java9            |   模块化，版本号混乱终结了,java和jdk版本号一致，oracle jdk仅包含64位 |
+|   2018   |                  |   每6个月一个大版本                                               |
+|----------|------------------|-----------------------------------------------------------------|
+
 java虚拟机=java解释器+jit即时编译
-1996年  java1.0   应用场景:浏览器上java applet，类型于silverligth,flash，后期直接被禁用
-1997    java1.1     内部类
-1998     java1.2    strictfp修饰符
-            java1.3
-            java1.4(java sdk)    特性：断言，应用场景：服务端应用，生成html页面
-2004    java5.0         特性：泛型，元数据，枚举，foreach循环，自动装箱，注解
-            java6      增强类库
-2009    oracle收购sun
-2011     java7(jdk1.7)        简单改进
-2014     java8（jdk1.8）         特性：lambda，流和日期时间库 
-2017      java9       特性：模块化，版本号混乱终结了，java版本号和内部版本号维持一致，oracle jdk不再包含32和64位的jdk，仅包含64位jdk。openjdk的版本待研究
-2018           每6个月一个大版本
+java 字节码文件 [-jar jar文件]
+  %JAVA_HOME%\java.exe，启动java虚拟机，虚拟机执行目标文件中的字节码
+  如果目标文件是.class文件，入口点就是该class的main方法
+  如果目标文件是jar文件，则首先读取清单文件中Main-Class指定的class，入口点就是该class的main方法
+javac 源码文件
+  java编译器，把源码文件xxx.java文件编译成字节码文件xxx.class
+  特别的：源码文件的文件名必须和文件内的公共类名称保持一致
+jshell，交互式的命令行工具，可以执行java代码，并且自动打印计算结果
+  jdk包含一个jshell.exe的可执行文件，和java.exe可执行文件所在的目录相同，linux上jshell可执行文件没有exe后缀
 
-JShell，jdk包含一个jshell的可执行文件，和java可执行文件在相同目录
-
-xxx.java->xxx.class
-源代码->字节码
-源码的文件名必须和文件内的公共类名称保持一致
-
-8中基本类型，primitive type
-byte    1字节   [-128,127]
-short   2字节   [-32786,32767]
-int     4字节   [-20亿,20亿]
-long    8字节   []
-float   4字节   有效位数6到7位，所以非常接近0的值（小数点后面大于7个0），float会直接保存为0
-double  8字节   有效位数15
-char    2字节 
-boolean 1字节  
-
-三个特殊的浮点数，正无穷，负无穷，NaN
+8中基本类型(primitive type)
+|-----------|---------|-------------------------------------------------------------------------|
+|    type   |  length |    remark                                                               |
+|-----------|---------|-------------------------------------------------------------------------|
+|  byte     |  1字节  |  [-128,127]                                                             |
+|  short    |  2字节  |  [-32786,32767]                                                         |
+|  int      |  4字节  |  [-20亿,20亿]                                                            |
+|  long     |  8字节  |  []                                                                     |
+|  float    |  4字节  |  有效位数6到7位，对于一个非常接近0的值(小数点后面大于7个0)，float只能表示为0  |
+|  double   |  8字节  |  有效位数15                                                              |
+|  char     |  2字节  |                                                                         |
+|  boolean  |  1字节  |                                                                         |
+|-----------|---------|-------------------------------------------------------------------------|
+三个特殊的浮点数
+Float.NaN                NaN
+Float.POSITIVE_INFINITY  正无穷
+Float.NEGATIVE_INFINITY  负无穷
+Double.NaN                NaN
+Double.POSITIVE_INFINITY  正无穷
+Double.NEGATIVE_INFINITY  负无穷
 算术二元运算，首先会把两个数据的数据类型转成一致，然后再进行计算
-如果除数是0，则异常
-如果除数是0d或者0f，结果是NaN或者无穷
-0d/0d=NaN
-0f/0f=NaN
-NaN==NaN的结果是false，js的浮点数也类似
-判断一个值是否是NaN的正确做法：Double.isNaN(值)
-
-'A'的Unicode码点是65，等价写法'\u0041'
-常用的转义
-\b  退格  \u0008
-\t  制表  \u0009
-\r  回车  \u000d
-\n  换行  \u000a
-\"  "     \u0022
-\'  '     \u0027
-\\  \     \u005c
-\u  16进制表示字符
-    [     \u005B
-    ]     \u005D
-
-转义会在代码解析之前处理，类似于宏的预处理，"\u0022+\u0022" 编译前被转为""+""，运行时的结果为""
-public static void main(String\u005B\u005D args) 可以编译通过，ide会报红
-注释里面如果出现\u，就可能产生编译报错，ide不会报红，// \u000a is a new line ，\u000a是换行符，导致编译报错
-\u后边必须接4个16进制数，否则报错，在注释中也存在这个情况
-
-1991年       Unicode1.0
-Unicode字符超过35536个，16位char类型以及不能满足描述所有Unicode字符
-Unicode码点分为17个代码平面
-
-java采用16位Unicode字符集
+  如果除数是0，则异常
+  如果除数是0d或者0f，结果是NaN或者无穷
+  0d/0d=NaN
+  0f/0f=NaN
+  NaN==NaN的结果是false，js的浮点数也类似，判断一个值是否是NaN的正确做法：Double.isNaN(值)
+char类型和Unicode
+ 'A'的Unicode码点是65，等价写法'\u0041'
+  常用的转义
+  |------|--------------|----------|
+  | 转义 |     字符      |  Unicode |
+  |------|--------------|----------|
+  |  \b  |   退格       |  \u0008  |
+  |  \t  |   制表       |  \u0009  |
+  |  \r  |   回车       |  \u000d  |
+  |  \n  |   换行       |  \u000a  |
+  |  \"  |   "          |  \u0022  |
+  |  \'  |   '          |  \u0027  |
+  |  \\  |   \          |  \u005c  |
+  |  \u  | 16进制表示字符|          |
+  |      |    [         |  \u005B  |
+  |      |    ]         |  \u005D  |
+  |------|--------------|----------|
+  转义会在代码解析之前处理，类似于宏的预处理，"\u0022+\u0022" 编译前被转为""+""，运行时的结果为""
+  public static void main(String\u005B\u005D args) 可以编译通过，但IDEA会报红
+  \u后边必须接4个16进制数，否则报错
+  代码注释中如果有\u要特别注意，比如：// \u000a is a new line
+  IDEA不会报红，但编译报错，原因：\u000a是换行符，导致is a new line实际在下一行，没有以//开头
+java采用16位Unicode字符集，char类型已经不能描述所有Unicode字符
 UTF-16编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，每个字符用16位表示，通常称为代码单元，char类型描述了UTF-16编码中的一个代码单元
-UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于那一类（8位表示的值，16位表示的值，24位表示的值）,UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
+UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于哪一类（8位表示的值，16位表示的值，24位表示的值）
+UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
 
-变量，常量就是值不变的变量
+变量
+  变量必须被赋值后才可以被使用，否则编译报错
+常量
+  值不变的变量
 Character.isJavaIdentifierStart()
+  判断某个字符是否可以作为变量的开头
 Character.isJavaIdentifierPart()
-可以判断某个字符是否可以作为变量的开头或者其他部分
-变量必须被赋值后才可以被使用，否则编译报错，
+  判断某个字符是否可以作为变量的非开头的其他部分
 c#中区分值类型和引用类型，java没有这个划分
 
-StringBuilder 和c#的StringBuilder是等价的，优先使用，java5引入
-StringBuffer，是StringBuilder的前身，和 StringBuilder 的区别，允许多线程进行添加和删除，两者的api是一致的
+字符串
+StringBuilder
+  和c#的StringBuilder是等价的，优先使用，java5引入
+StringBuffer
+  StringBuilder的前身，和StringBuilder的区别，允许多线程进行添加和删除，两者的api是一致的
 
 输入和输出
 System.out.println()
-var scanner=new Scanner(System.in)
-var value=scanner.nextLine()
-和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
+  格式化输出，System.out.println("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
+  %[索引值$][,(5.2f 转换浮点数][d 转换整数][s 转换字符串][c 转换日期时间]
+  特别的，索引值从1开始
+  String msg=String.format("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
+var scanner=new Scanner(System.in);
+var value=scanner.nextLine();
+  输入
 var console=System.console();
 var value= console.readLine("请输入用户名:");
 var pwd=console.readPassword("请输入密码:");
-console.printf(new String(pwd));
-和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
-特别的，在idea直接运行console是null，由cmd启动则正常，readPassword可以隐藏输入的字符
-
-格式化输出
-String msg=String.format("姓名：%2$s，年龄：%1$d，%1$d",121,"张三");
-System.out.println("姓名：%2$s，年龄：%1$d，%1$d",121,"张三")
-%[索引值$][,(5.2f 转换浮点数][d 转换整数][s 转换字符串][c 转换日期时间]
-特别的，索引值从1开始
-
+  输入，和c#的System.Console.WriteLine()和System.Console.ReadLine()类似
+  特别的：在IDEA直接运行console是null，由cmd启动则正常，readPassword可以隐藏输入的字符
 简单读取和写入文本文件
 var scanner=new Scanner(Path.of("D:\\vs2019启动没反应.txt"),"GBK");
 try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应UTF-8.txt"),"UTF-8")){
@@ -277,25 +296,41 @@ try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应
 }
 
 大数
-java.math.BigInteger，可以处理任意序列长度的整数
-java.math.BigDecimal，可以处理任意精度的浮点数
-java.math.BigInteger.valueOf(100)，不能使用算术运算符，需要调用相应的方法
-java仅重载的了字符串的+运算符，并且不允许重载运算符
+java.math.BigInteger
+  可以处理任意序列长度的整数
+java.math.BigDecimal
+  可以处理任意精度的浮点数
+java.math.BigInteger.valueOf(100)
+  不能使用算术运算符，需要调用相应的方法，java仅重载的了字符串的+运算符，并且不允许重载运算符
 
 数组
 int[] lst=new int[5];
 int[] lst2={1,2,3,4};
 int[] lst2=new int[]{1,2,3,4};
-c#初始化数组语句：int[] lst3=new int[]{1,2,3,4};
-数组内容的字符串：var str=java.util.Arrays.toString(lst2)
+  初始化数组变量
+  c#初始化数组语句：int[] lst3=new int[]{1,2,3,4};
+var str=java.util.Arrays.toString(lst2);
+  获取数组内容对应的字符串
 int[][] lst2={数组1,数组2};
-var ars= java.util.Arrays.deepToString(lst2);
-sort 快排
-copyOf 拷贝
-binarySearch 二分查找算法查找指定值，返回索引
-fill 填充指定值
-equals 如果长度相同，并且相同索引的元素也相等，则两个数组相等
-java实际没有多维数组，只有一维数组，多维数组被解释"数组的数组"
+  多维数组，java实际没有多维数组，只有一维数组，多维数组被解释"数组的数组"
+var str= java.util.Arrays.deepToString(lst2);
+  获取多维数组内容对应的字符串
+java.util.Arrays.sort
+  快排
+java.util.Arrays.copyOf
+  拷贝
+java.util.Arrays.binarySearch
+  二分查找算法查找指定值，返回索引
+java.util.Arrays.fill
+  填充指定值
+java.util.Arrays.equals
+  根据数组内容判断数组是否相等，而非根据引用地址判断，具体逻辑：如果长度相同，并且相同索引的元素也相等，则两个数组相等
+```
+
+## 笔记
+```
+
+
 
 对象和类
 面向过程编程，先考虑算法，再考虑数据结构，算法+数据结构=程序
