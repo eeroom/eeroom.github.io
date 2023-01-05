@@ -174,7 +174,7 @@ var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
-## java概述和发展简史
+## java发展简史和基本概念
 ```
 |----------|------------------|-----------------------------------------------------------------|
 |   Year   |   Version        |                          Remark                                 |
@@ -203,96 +203,24 @@ javac 源码文件
   特别的：源码文件的文件名必须和文件内的公共类名称保持一致
 jshell，交互式的命令行工具，可以执行java代码，并且自动打印计算结果
   jdk包含一个jshell.exe的可执行文件，和java.exe可执行文件所在的目录相同，linux上jshell可执行文件没有exe后缀
-
-8种基本类型(primitive type)
-|-----------|---------|-------------------------------------------------------------------------|
-|    type   |  length |    remark                                                               |
-|-----------|---------|-------------------------------------------------------------------------|
-|  byte     |  1字节  |  [-128,127]                                                             |
-|  short    |  2字节  |  [-32786,32767]                                                         |
-|  int      |  4字节  |  [-20亿,20亿]                                                            |
-|  long     |  8字节  |  []                                                                     |
-|  float    |  4字节  |  有效位数6到7位，对于一个非常接近0的值(小数点后面大于7个0)，float只能表示为0  |
-|  double   |  8字节  |  有效位数15                                                              |
-|  char     |  2字节  |                                                                         |
-|  boolean  |  1字节  |                                                                         |
-|-----------|---------|-------------------------------------------------------------------------|
-三个特殊的浮点数
-Float.NaN                NaN
-Float.POSITIVE_INFINITY  正无穷
-Float.NEGATIVE_INFINITY  负无穷
-Double.NaN                NaN
-Double.POSITIVE_INFINITY  正无穷
-Double.NEGATIVE_INFINITY  负无穷
-算术二元运算，首先会把两个数据的数据类型转成一致，然后再进行计算
-  如果除数是0，则异常
-  如果除数是0d或者0f，结果是NaN或者无穷
-  0d/0d=NaN
-  0f/0f=NaN
-  NaN==NaN的结果是false，js的浮点数也类似，判断一个值是否是NaN的正确做法：Double.isNaN(值)
-char类型和Unicode
- 'A'的Unicode码点是65，等价写法'\u0041'
-  常用的转义
-  |------|--------------|----------|
-  | 转义 |     字符      |  Unicode |
-  |------|--------------|----------|
-  |  \b  |   退格       |  \u0008  |
-  |  \t  |   制表       |  \u0009  |
-  |  \r  |   回车       |  \u000d  |
-  |  \n  |   换行       |  \u000a  |
-  |  \"  |   "          |  \u0022  |
-  |  \'  |   '          |  \u0027  |
-  |  \\  |   \          |  \u005c  |
-  |  \u  | 16进制表示字符|          |
-  |      |    [         |  \u005B  |
-  |      |    ]         |  \u005D  |
-  |------|--------------|----------|
-  转义会在代码解析之前处理，类似于宏的预处理，"\u0022+\u0022" 编译前被转为""+""，运行时的结果为""
-  public static void main(String\u005B\u005D args) 可以编译通过，但IDEA会报红
-  \u后边必须接4个16进制数，否则报错
-  代码注释中如果有\u要特别注意，比如：// \u000a is a new line
-  IDEA不会报红，但编译报错，原因：\u000a是换行符，导致is a new line实际在下一行，没有以//开头
-java采用16位Unicode字符集，char类型已经不能描述所有Unicode字符
-UTF-16编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，每个字符用16位表示，通常称为代码单元，char类型描述了UTF-16编码中的一个代码单元
-UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于哪一类（8位表示的值，16位表示的值，24位表示的值）
-UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
-
-字符串类型
-StringBuilder
-  和c#的StringBuilder是等价的，优先使用，java5引入
-StringBuffer
-  StringBuilder的前身，和StringBuilder的区别，允许多线程进行添加和删除，两者的api是一致的
-
-大数类型
-java.math.BigInteger
-  可以处理任意序列长度的整数
-java.math.BigDecimal
-  可以处理任意精度的浮点数
-java.math.BigInteger.valueOf(100)
-  不能使用算术运算符，需要调用相应的方法，java仅重载的了字符串的+运算符，并且不允许重载运算符
-
-数组类型
-int[] lst=new int[5];
-int[] lst2={1,2,3,4};
-int[] lst2=new int[]{1,2,3,4};
-  初始化数组变量
-  c#初始化数组语句：int[] lst3=new int[]{1,2,3,4};
-var str=java.util.Arrays.toString(lst2);
-  获取数组内容对应的字符串
-int[][] lst2={数组1,数组2};
-  多维数组，java实际没有多维数组，只有一维数组，多维数组被解释"数组的数组"
-var str= java.util.Arrays.deepToString(lst2);
-  获取多维数组内容对应的字符串
-java.util.Arrays.sort
-  快排
-java.util.Arrays.copyOf
-  拷贝
-java.util.Arrays.binarySearch
-  二分查找算法查找指定值，返回索引
-java.util.Arrays.fill
-  填充指定值
-java.util.Arrays.equals
-  根据数组内容判断数组是否相等，而非根据引用地址判断，具体逻辑：如果长度相同，并且相同索引的元素也相等，则两个数组相等
+包
+  java使用包将类组织在一个集合中，借助包可以方便的组织自己的代码，确保类名的唯一性，假如两个程序员都建立了Empoloyee类，只要将这些放在不同的包中，就不会产生冲突
+  为了保证包名的绝对唯一性，要用一个英特网域名（这显然是唯一的）以逆序的形式作为包名，然后对于不同的工程使用不同的子包
+  特别的：类的完全限定名=包名+类名，从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
+  c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
+自定义包
+  将包的名字放在源文件的开头
+  将源文件放到与完整包名匹配的子目录中
+  将编译后的类文件和源文件放在同一个目录中
+  如果没有在源文件中放置package语句，这个源文件中的类就属于无名包，无名包没有包名
+  特别的：编译器在编译源文件的时候不检查目录结构，如果代码中声明的包名和源代码文件实际的目录结构不一致，并且它也不依赖其他的包，能编译成功，但是运行时报错，虚拟机找不到类
+  解决办法：将类文件移到代码声明的包名对应的路径中，否则，虚拟机就找不到类
+  总结：类路径必须与包名匹配，这是jdk的约定，从1.2版开始，jdk的实现者修改了类加载器，明确禁止加载包名以java.开头的用户自定义的类
+jar文件
+  包含一个或多个类文件的java归档文件，本质就是zip格式的压缩文件
+  jar cvf jar文件名称 类文件1 类文件2
+    创建一个jar文件
+  清单文件，约定存放在特定目录：jar文件/META-INF/MANIFEST.MF
 ```
 ## 输入和输出
 ```
@@ -317,7 +245,6 @@ try (var printWriter=new java.io.PrintWriter(new File("D:\\vs2019启动没反应
     }
 }
 ```
-
 ## 对象与类
 ```
 面向过程编程，先考虑算法，再考虑数据结构，算法+数据结构=程序
@@ -379,147 +306,227 @@ final
   按名调用，Algol语言使用这种机制
   java总是采用按值调用，java的参数有2种类别，基本数据类型和对象引用，对象引用本质就是一级指针，参数得到的是指针的副本，仍然指向同一个对象
   c#默认按值调用，如果参数使用ref或者out修饰，则变为按引用调用
-包
-  java使用包将类组织在一个集合中，借助包可以方便的组织自己的代码，确保类名的唯一性，假如两个程序员都建立了Empoloyee类，只要将这些放在不同的包中，就不会产生冲突
-  为了保证包名的绝对唯一性，要用一个英特网域名（这显然是唯一的）以逆序的形式作为包名，然后对于不同的工程使用不同的子包
-  特别的：类的完全限定名=包名+类名，从编译器的角度看，嵌套的包名之间没有任何关系，例如java.util包和java.util.jar包毫无关系，每个包都是独立的类集合
-  c#中的等价概念是命名空间，如果命名空间仍然冲突，可以为不同程序集指定别名，然后利用别名来体现类的完全限定名
-自定义包
-  将包的名字放在源文件的开头
-  将源文件放到与完整包名匹配的子目录中
-  将编译后的类文件和源文件放在同一个目录中
-  如果没有在源文件中放置package语句，这个源文件中的类就属于无名包，无名包没有包名
-  特别的：编译器在编译源文件的时候不检查目录结构，如果代码中声明的包名和源代码文件实际的目录结构不一致，并且它也不依赖其他的包，能编译成功，但是运行时报错，虚拟机找不到类
-  解决办法：将类文件移到代码声明的包名对应的路径中，否则，虚拟机就找不到类
-  总结：类路径必须与包名匹配，这是jdk的约定，从1.2版开始，jdk的实现者修改了类加载器，明确禁止加载包名以java.开头的用户自定义的类
-jar文件
-  包含一个或多个类文件的java归档文件，本质就是zip格式的压缩文件
-  jar cvf jar文件名称 类文件1 类文件2
-    创建一个jar文件
-  清单文件，约定存放在特定目录：jar文件/META-INF/MANIFEST.MF
-封装
-  数据和行为组合，编译后，数据和行为分离，访问器方法如果返回一个可变对象引用，意味着破坏封装性，可以返回改字段的clone对象，避免破坏封装
-继承
-  所有类默认可以被集成，使用final修饰符，则类不能被继承，并且他的所有方法都被final修饰
-  c#中所有类默认可以被集成，使用seal修饰符，则类不能被继承
-  超类<-子类
-  基类<-派生类
-  父类<-子类
-  调用超类构造函数和超类的普通方法
-  public class Student extends People{
-      string name;
-      public Student(){
-          super(101);
-          this.name=super.getTag()+"|Student";
-      }
-  }
-  c#调用父类构造函数父类的普通方法
-  public class Student:People{
-      string name;
-      public Student():base(101) {
-          this.name=base.getTag()+"|Student";
-      }
-  }
-  强制类型转换，只能在继承层次内进行强制类型转换，特别的，可以把任何变量转成Object类型，再转成其它类型，这样可以编译通过，但是运行可能会报错
-  判断变量是否指向某个类型或其子类型的实例：obj instanceof 类型，c#的等价操作:obj is 类型
-  方法访问控制修饰符
-  仅本类可见           private
-  仅对本包可见         默认，没有修饰符
-  仅对本包和子类可见   protected
-  所有可见            public
 
-  C#方法的访问控制修饰符
-  仅本类可见             private
-  仅所在程序集可见       internal
-  仅子类可见             protected
-  仅子类和当前程序集可见  protected internal
-  所有可见              public
-
-多态
-所有方法默认可以重写，使用final修饰符，则方法不允许被重写，final类的所有实例方法都被final修饰
-c#所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
-c++所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
-
-协变和逆变
-子类1[] a=value;
-超类[] b=a;         编译通过，运行通过
-潜在的问题：
-b[0]=子类2实例      编译通过，运行通过
-a[0].子类1的方法()  编译通过，运行报错或者结果非预期
-数组存在这个问题，普通变量也可能存在这个问题，因为赋值操作：
-子类1 a=子类2的实例               编译不通过
-子类1 a=(子类1)((超类)子类2实例)  编译通过，运行报错  
-
-方法调用：静态绑定，final修饰的方法，编译器都可以实现静态绑定，
-动态绑定，非final方法需要虚拟机进行动态绑定，虚拟机在程序启动后会维护一份方法列表，可以根据方法签名快速匹配
-对于静态绑定，编译器可能对方法调用进行优化，内联，等价于把被调用方法的内容搬到调用的地方，避免一次方法调用
-对于动态绑定，虚拟机会进一步进行内联优化
-
-对象包装器和自动装箱
-所有基本类型都有与之对应的类，通常，这些类称为包装器，包装器类是不可变的，并且都是final类
-泛型的类型参数不能是基本类型，
-自动装箱规范要求boolean,byte,char<=127,short[-128,127],int[-128,127]被包装到固定的对象中
-Integer a=127;
-Integer b=127;
-则a==b总是成立的，因为包装到固定对象中，所以指向的地址是一样的
-范围之外的包装器值，使用equesl方法比较值是否相等
-拆箱和装箱在编译阶段完成，编译器在生成类的字节码时会插入必要的方法调用，虚拟机只是执行这些字节码
-
-可变长参数方法
-int max(String name,int... lst){
-}
-等价于
-int max(String name,int[] lst){
-}
-特别的：可变长参数最多只能有一个，而且是最后一个参数，可以直接把数组传给可变长参数
-max(1,2,3)编译器会转换为：max(new int[]{1,2,3})
-c#的可变长参数
-int Max(string name,params int[] lst){
-}
-
-枚举
-枚举的构造器总是私有的，可以省略private修饰符
-public enum Size{
+8种基本类型(primitive type)
+  |-----------|---------|-------------------------------------------------------------------------|
+  |    type   |  length |    remark                                                               |
+  |-----------|---------|-------------------------------------------------------------------------|
+  |  byte     |  1字节  |  [-128,127]                                                             |
+  |  short    |  2字节  |  [-32786,32767]                                                         |
+  |  int      |  4字节  |  [-20亿,20亿]                                                            |
+  |  long     |  8字节  |  []                                                                     |
+  |  float    |  4字节  |  有效位数6到7位，对于一个非常接近0的值(小数点后面大于7个0)，float只能表示为0  |
+  |  double   |  8字节  |  有效位数15                                                              |
+  |  char     |  2字节  |                                                                         |
+  |  boolean  |  1字节  |                                                                         |
+  |-----------|---------|-------------------------------------------------------------------------|
+三个特殊的浮点数
+  Float.NaN                NaN
+  Float.POSITIVE_INFINITY  正无穷
+  Float.NEGATIVE_INFINITY  负无穷
+  Double.NaN                NaN
+  Double.POSITIVE_INFINITY  正无穷
+  Double.NEGATIVE_INFINITY  负无穷
+算术二元运算
+  首先会把两个数据的数据类型转成一致，然后再进行计算
+  如果除数是0，则异常
+  如果除数是0d或者0f，结果是NaN或者无穷
+  0d/0d=NaN
+  0f/0f=NaN
+  NaN==NaN的结果是false，js的浮点数也类似，判断一个值是否是NaN的正确做法：Double.isNaN(值)
+char类型和Unicode
+ 'A'的Unicode码点是65，等价写法'\u0041'
+  常用的转义
+  |------|--------------|----------|
+  | 转义 |     字符      |  Unicode |
+  |------|--------------|----------|
+  |  \b  |   退格       |  \u0008  |
+  |  \t  |   制表       |  \u0009  |
+  |  \r  |   回车       |  \u000d  |
+  |  \n  |   换行       |  \u000a  |
+  |  \"  |   "          |  \u0022  |
+  |  \'  |   '          |  \u0027  |
+  |  \\  |   \          |  \u005c  |
+  |  \u  | 16进制表示字符|          |
+  |      |    [         |  \u005B  |
+  |      |    ]         |  \u005D  |
+  |------|--------------|----------|
+  转义会在代码解析之前处理，类似于宏的预处理，"\u0022+\u0022" 编译前被转为""+""，运行时的结果为""
+  public static void main(String\u005B\u005D args) 可以编译通过，但IDEA会报红
+  \u后边必须接4个16进制数，否则报错
+  代码注释中如果有\u要特别注意，比如：// \u000a is a new line
+  IDEA不会报红，但编译报错，原因：\u000a是换行符，导致is a new line实际在下一行，没有以//开头
+  java采用16位Unicode字符集，char类型已经不能描述所有Unicode字符
+  UTF-16编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，每个字符用16位表示，通常称为代码单元，char类型描述了UTF-16编码中的一个代码单元
+  UTF-8编码采用不同长度的编码表示所有的Unicode码点，在第一个基本多语言平面，0-127用8位表示，整体的思路和UTF-16类似，就是字节本身的大小决定了其是属于哪一类（8位表示的值，16位表示的值，24位表示的值）
+  UTF-8非常适合网页，html中的标签,以及js代码都是在[0-127]范围内，如果用UTF-16，体积翻倍
+字符串类型
+  StringBuilder
+    和c#的StringBuilder是等价的，优先使用，java5引入
+  StringBuffer
+    StringBuilder的前身，和StringBuilder的区别，允许多线程进行添加和删除，两者的api是一致的
+大数类型
+  java.math.BigInteger
+    可以处理任意序列长度的整数
+  java.math.BigDecimal
+    可以处理任意精度的浮点数
+  java.math.BigInteger.valueOf(100)
+    不能使用算术运算符，需要调用相应的方法，java仅重载的了字符串的+运算符，并且不允许重载运算符
+数组类型
+  int[] lst=new int[5];
+  int[] lst2={1,2,3,4};
+  int[] lst2=new int[]{1,2,3,4};
+    初始化数组变量
+    c#初始化数组语句：int[] lst3=new int[]{1,2,3,4};
+  var str=java.util.Arrays.toString(lst2);
+    获取数组内容对应的字符串
+  int[][] lst2={数组1,数组2};
+    多维数组，java实际没有多维数组，只有一维数组，多维数组被解释"数组的数组"
+  var str= java.util.Arrays.deepToString(lst2);
+    获取多维数组内容对应的字符串
+  java.util.Arrays.sort
+    快排
+  java.util.Arrays.copyOf
+    拷贝
+  java.util.Arrays.binarySearch
+    二分查找算法查找指定值，返回索引
+  java.util.Arrays.fill
+    填充指定值
+  java.util.Arrays.equals
+    根据数组内容判断数组是否相等，而非根据引用地址判断，具体逻辑：如果长度相同，并且相同索引的元素也相等，则两个数组相等
+枚举类
+  枚举的构造器总是私有的，可以省略private修饰符
+  枚举的toString方法返回枚举常量名，和valueOf互为逆方法
+  public enum Size{
     大(1),中(2),小(3);
     private Size(int value){
       this.value=value
     }
     int value;
+  }
+```
+## 封装
+```
+封装
+  数据和行为组合
+  编译后，数据和行为分离
+  访问器方法如果返回一个可变对象引用，意味着破坏封装性，可以返回改字段的clone对象，避免破坏封装
+|--------------------|-----------------------------------|
+|  方法访问控制修饰符  |           说明                    |
+|--------------------|-----------------------------------|
+|   private          |   仅本类可见                       |
+|   默认，没有修饰符  |    仅对本包可见                     |
+|   protected        |   仅对本包和子类可见                |
+|   public           |   所有可见                         |
+|--------------------|-----------------------------------|
+
+|--------------------|-----------------------------------|
+|方法访问控制修饰符(c#)|           说明                    |
+|--------------------|-----------------------------------|
+|   private          |   仅本类可见                       |
+|   internal         |    仅所在程序集可见                 |
+|   protected        |   仅子类可见                       |
+|  protected internal|   仅子类和当前程序集可见            |
+|   public           |   仅子类可见                       |
+|--------------------|-----------------------------------|
+```
+## 继承
+```
+默认所有类可以被继承
+使用final修饰类，则类不能被继承，并且他的所有方法都被final修饰
+c#默认所有类可以被继承，使用seal修饰符，则类不能被继承
+子类->父类
+子类->超类
+派生类->基类
+
+调用超类构造函数和超类的普通方法
+public class Student extends People{
+    string name;
+    public Student(){
+        super(101);
+        this.name=super.getTag()+"|Student";
+    }
 }
-枚举的toString方法返回枚举常量名，和valueOf互为逆方法，
-
-反射
-Class类，获取Class类实例的3中方法：
+c#调用父类构造函数父类的普通方法
+public class Student:People{
+    string name;
+    public Student():base(101) {
+        this.name=base.getTag()+"|Student";
+    }
+}
+类型转换
+  只能在继承层次内进行强制类型转换
+  特别的，可以把任何变量转成Object类型，再转成其它类型，这样可以编译通过，但是运行可能会报错
+obj instanceof 类型
+  判断变量是否是指定类型的实例或指定类型的子类型的实例
+  c#的等价操作:obj is 类型
+数组的类型转换
+  子类[] a=value;
+  父类[] b=a;         编译通过，运行通过
+  潜在的问题：
+  b[0]=子类2实例      编译通过，运行通过
+  a[0].子类1的方法()  编译通过，运行报错或者结果非预期
+  特别的：
+  int[]可以转为Object类型，但不能转为Object[]类型
+  People[]可以转为Object类型，也能转为Object[]类型
+可变长参数方法，本质是编译器把参数改为数组
+  int max(String name,int... lst){
+  }
+  等价于
+  int max(String name,int[] lst){
+  }
+  特别的：可变长参数最多只能有一个，而且是最后一个参数，可以直接把数组传给可变长参数
+  max(1,2,3)编译器会转换为：max(new int[]{1,2,3})
+  c#的可变长参数
+  int Max(string name,params int[] lst){
+  }
+```
+## 多态
+```
+所有方法默认可以重写，使用final修饰符，则方法不允许被重写，final类的所有实例方法都被final修饰
+c#所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
+c++所有方法默认不可以重写，使用virtual修饰符，则方法允许被重写
+方法调用
+  静态绑定，final修饰的方法，编译器都可以实现静态绑定，编译时可能对方法调用进行优化，内联，等价于把被调用方法的内容搬到调用的地方，减少一次方法调用
+  动态绑定，非final方法需要虚拟机进行动态绑定，虚拟机在程序启动后会维护一份方法列表，可以根据方法签名快速匹配，虚拟机在运行时会进一步进行内联优化
+```
+## 反射
+```
 实例.getClass()
-类型.class
-Class.from('类的完全限定名')
- 
-获取类、字段、方法的修饰符信息
+  获取实例的类型的元数据
+T.class
+  获取类型的元数据
+java.lang.Class.from('类的完全限定名')
+  获取指定类型的元数据
 java.lang.reflect.Modifier.isFinal(T.class.getModifiers())
+  获取类的修饰符信息
 java.lang.reflect.Modifier.isStatic(T.class.getDeclaredField("").getModifiers())
+  获取字段的修饰符信息
 java.lang.reflect.Modifier.isPublic(T.class.getDeclaredMethod("").getModifiers())
-
+  获取方法的修饰符信息
 T.class.getFields()
   返回类支持的公共字段，包括超类的公共字段
 T.class.getDeclareFields()
   返回类中的全部字段，包括私有、受保护的，不包括超类中的字段
-方法和构造器也都有对应的两套
-反射机制的默认行为受限于java的访问控制，对应于他的访问修饰符，可以调用Field,Method,Constructor对象的setAccessible方法覆盖java的访问控制
-setAccessible方法是AccessibleObject类中的一个方法，它是Field,Method,Constructor类的超类，这个特性是为调试，持久存储和类似机制提供的
-setAccessible方法可能会抛异常，原因是访问被模块系统或者安全管理器拒绝
-
-java.lang.reflect.Array
-java.lang.reflect.Array.newInstance(int.class,100)
+T.class.getMethods()
+  返回类支持的公共方法，包括超类的公共方法
+T.class.getDeclaredMethods()
+  返回类中的全部方法，包括私有、受保护的，不包括超类中的方法
+T.class.getDeclareField("私有字段名称").setAccessible(true)
+  覆盖指定字段的private访问控制，设置为public，这个特性是为调试，持久存储和类似机制提供的
+  setAccessible方法可能会抛异常，原因是访问被模块系统或者安全管理器拒绝
+  反射机制的默认行为受限于java的访问控制，对应于他的访问修饰符
+T.class.getDeclaredMethod("私有方法名称").setAccessible(true)
+  覆盖指定方法的private访问控制，设置为public
+java.lang.reflect.Array.newInstance(T.class,100)
   利用反射，创建指定元素类型和长度的数组
-java.lang.reflect.Array.getLength(lst
-)
+java.lang.reflect.Array.getLength(lst)
   利用反射获取数组的长度
-int[].class.getComponentType()
+实例.class.getComponentType()
   获取数组元素的类型，专用方法
-特别的：int[]可以转为Object类型，但是不能转为Object[]类型
-       People[]可以转为Object类型，也能转为Object[]类型
-
-接口、lambda表达式和内部类
+```
+## 接口、lambda表达式和内部类
+```
 一般情况下，接口的方法都是public的抽象方法，在接口中声明方法的时候，不必提供关键字public和abstract
 Comparable接口约定，int (T other);
 返回0，则this==other
@@ -644,44 +651,6 @@ jdk提供的一个加载服务的简单机制
 代理类实在程序运行时动态创建的，一旦被创建，就变成了常规类，
 Class proxyClass=Proxy.getProxyClass(null,接口)
   获取动态创建的代理类
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ```
 ## 日期和时间API
 ```
