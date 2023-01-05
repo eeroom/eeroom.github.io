@@ -45,7 +45,7 @@ xxx.jar
   包含一个或多个类文件的java归档文件，本质就是zip格式的压缩文件
 jar cvf jar文件名称 类文件1 类文件2
   创建一个jar文件
-清单文件，约定存放在特定目录：jar文件/META-INF/MANIFEST.MF
+  清单文件，约定存放在特定目录：jar文件/META-INF/MANIFEST.MF
 ```
 ## 输入和输出
 ```
