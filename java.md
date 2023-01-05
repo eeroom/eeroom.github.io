@@ -527,6 +527,25 @@ jdk提供的一个加载服务的简单机制
 Class proxyClass=Proxy.getProxyClass(null,接口)
   获取动态创建的代理类
 ```
+
+## 集合和算法
+```
+```
+## 多线程
+```
+```
+## java8的流库
+```
+```
+## xml
+```
+```
+## 网络
+```
+```
+## JDBC
+```
+```
 ## 日期和时间API
 ```
 java的java.util.Date类实例表示一个特定的时间点，本质是距离UTC1970年1月1日00:00:00的毫秒数
@@ -536,9 +555,17 @@ java.time.LocalDate对应日历表示法表示的日期，1.8新增的
 java.time.LocalDate.now()
 java.time.LocalDate.of(2022,12,22)
 ```
-## hello world
+## 国际化
 ```
-
+```
+## java模块系统
+```
+```
+## 安全
+```
+```
+## 本地方法
+```
 ```
 ##  进制和整数
 ```
