@@ -325,41 +325,6 @@ c++所有方法默认不可以重写，使用virtual修饰符，则方法允许�
   静态绑定，final修饰的方法，编译器都可以实现静态绑定，编译时可能对方法调用进行优化，内联，等价于把被调用方法的内容搬到调用的地方，减少一次方法调用
   动态绑定，非final方法需要虚拟机进行动态绑定，虚拟机在程序启动后会维护一份方法列表，可以根据方法签名快速匹配，虚拟机在运行时会进一步进行内联优化
 ```
-## 反射
-```
-实例.getClass()
-  获取实例的类型的元数据
-T.class
-  获取类型的元数据
-java.lang.Class.from('类的完全限定名')
-  获取指定类型的元数据
-java.lang.reflect.Modifier.isFinal(T.class.getModifiers())
-  获取类的修饰符信息
-java.lang.reflect.Modifier.isStatic(T.class.getDeclaredField("").getModifiers())
-  获取字段的修饰符信息
-java.lang.reflect.Modifier.isPublic(T.class.getDeclaredMethod("").getModifiers())
-  获取方法的修饰符信息
-T.class.getFields()
-  返回类支持的公共字段，包括超类的公共字段
-T.class.getDeclareFields()
-  返回类中的全部字段，包括私有、受保护的，不包括超类中的字段
-T.class.getMethods()
-  返回类支持的公共方法，包括超类的公共方法
-T.class.getDeclaredMethods()
-  返回类中的全部方法，包括私有、受保护的，不包括超类中的方法
-T.class.getDeclareField("私有字段名称").setAccessible(true)
-  覆盖指定字段的private访问控制，设置为public，这个特性是为调试，持久存储和类似机制提供的
-  setAccessible方法可能会抛异常，原因是访问被模块系统或者安全管理器拒绝
-  反射机制的默认行为受限于java的访问控制，对应于他的访问修饰符
-T.class.getDeclaredMethod("私有方法名称").setAccessible(true)
-  覆盖指定方法的private访问控制，设置为public
-java.lang.reflect.Array.newInstance(T.class,100)
-  利用反射，创建指定元素类型和长度的数组
-java.lang.reflect.Array.getLength(lst)
-  利用反射获取数组的长度
-实例.class.getComponentType()
-  获取数组元素的类型，专用方法
-```
 ## 接口、lambda表达式和内部类
 ```
 接口
@@ -511,6 +476,41 @@ public interface java.lang.Cloneable {
 }
 javax.swing.Timer
 ```
+## 泛型和反射
+```
+实例.getClass()
+  获取实例的类型的元数据
+T.class
+  获取类型的元数据
+java.lang.Class.from('类的完全限定名')
+  获取指定类型的元数据
+java.lang.reflect.Modifier.isFinal(T.class.getModifiers())
+  获取类的修饰符信息
+java.lang.reflect.Modifier.isStatic(T.class.getDeclaredField("").getModifiers())
+  获取字段的修饰符信息
+java.lang.reflect.Modifier.isPublic(T.class.getDeclaredMethod("").getModifiers())
+  获取方法的修饰符信息
+T.class.getFields()
+  返回类支持的公共字段，包括超类的公共字段
+T.class.getDeclareFields()
+  返回类中的全部字段，包括私有、受保护的，不包括超类中的字段
+T.class.getMethods()
+  返回类支持的公共方法，包括超类的公共方法
+T.class.getDeclaredMethods()
+  返回类中的全部方法，包括私有、受保护的，不包括超类中的方法
+T.class.getDeclareField("私有字段名称").setAccessible(true)
+  覆盖指定字段的private访问控制，设置为public，这个特性是为调试，持久存储和类似机制提供的
+  setAccessible方法可能会抛异常，原因是访问被模块系统或者安全管理器拒绝
+  反射机制的默认行为受限于java的访问控制，对应于他的访问修饰符
+T.class.getDeclaredMethod("私有方法名称").setAccessible(true)
+  覆盖指定方法的private访问控制，设置为public
+java.lang.reflect.Array.newInstance(T.class,100)
+  利用反射，创建指定元素类型和长度的数组
+java.lang.reflect.Array.getLength(lst)
+  利用反射获取数组的长度
+实例.class.getComponentType()
+  获取数组元素的类型，专用方法
+```
 ## SPI，服务加载器
 ```
 jdk提供的一个加载服务的简单机制
@@ -527,9 +527,25 @@ jdk提供的一个加载服务的简单机制
 Class proxyClass=Proxy.getProxyClass(null,接口)
   获取动态创建的代理类
 ```
-
-## 集合和算法
+## 集合体系
 ```
+长度可变，不能存储基本数据类型值
+ |—--Collection（不同步,单列）
+ |          |---List（有序，可以重复添加，迭代器遍历得到的数据顺序和数据的写入顺序一致或一一对应）
+ |          |    |---ArrayList 基于数组结构实现，按下标查询效率高，增删非尾部的数据需要移动数组内的数据，效率不高
+ |          |    |---LinkedList 基于链表结构，每个节点都包含本身的数据应用和前后两个节点的引用，按下标查询需要遍历节点，效率不高，增删数据效率高
+ |          |---Set（无序，不能重复添加，迭代器遍历得到的数据顺序和数据的写入顺序一致）
+ |               |---HashSet 基于HashMap实现，数据本身决定了其位置，把哈希值映射到数组索引值
+ |               |---TreeSet 基于二叉树结构，数据按照比较接口的接口有序的分布在二叉树节点，这个有序是指数据排序，不是集合数据的添加顺序
+ |               |---LinkedHashSet 基于hashmap?，并且数据包一层链表结构?
+ |---Map（不同步，双列，key不能重复，但是value可以重复）
+ |     |---HashMap ，基于哈希算法
+ |     |---TreeMap
+ |
+ |---Vector(jdk1.0,同步，功能类似于ArrayList，已过时，兼容老代码，所以保留)
+ |---Hashtable(jdk1.0,同步，功能类似于HashSet,已过时，兼容老代码，所以保留)
+ |---Enumeration（枚举器，jdk1.0，已过时，新的jdk增加功能可直接转为迭代器）
+ |---Iterator<E>（迭代器，取代枚举器）
 ```
 ## 多线程
 ```
