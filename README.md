@@ -1,3 +1,17 @@
+## linux发行版
+```
+DVD版
+  常用的普通安装版，包含大量常用软件
+Everything版
+  包含所有软件组建，体积最大
+LiveCD版
+  光盘系统，可通过光盘启动系统，也可以安装系统，有图像界面，也有终端，有些内容需要联网下载
+Minimal版
+  精简版本，包含核心组建，体积小
+  虚拟机安装Minimal版本，然后安装dotnet,docker等程序的时候，如果缺少依赖，就去对应的Everything版中找依赖包，避免套娃式更新依赖组件
+NetInstall版
+  网络安装版本，联网安装系统
+```
 ## 网络
 ```
 ip [-s 更详细] [-h 美化] [link 网卡设备的名称，mac等] [addr ip地址的网关，掩码等] [route 路由] [rule ]
@@ -495,6 +509,12 @@ centos6安装桌面
 ```
 ## docker
 ```
+rpm包方式安装docker1.12
+  centos7.2和docker1.12版本的发布时间接近，Everything版中的组件满足docker直接和间接依赖的所有组件
+  凑齐所有依赖组件，执行：yum localinstall * --nogpgcheck
+  服务端主程序：/usr/bin/dockerd
+  客户端程序：/usr/bin/docker
+  docker安装程序会在systemd下注册服务：/usr/lib/systemd/system/docker.service 对应windows的服务
 2013年：docker公司发布docker
 2016年：docker开源并将containerd捐赠给了CNCF
 核心组件：
@@ -1090,6 +1110,50 @@ setx JAVA_HOME "C:\dw\jdk-11.0.2" /m
 setx PATH "^%JAVA_HOME^%\bin;%PATH%" /m
   设置环境变量
   特别的：如果直接使用%JAVA_HOME%，cmd会读取该变量值替换进去然后更新PATH变量，使用^%JAVA_HOME^%可以避免变量值替换
+linux安装jdk
+二进制压缩包方式
+  openjdk网站或者镜像站(华为云镜像等)下载
+tar zxf openjdk-11.0.2_linux-x64_bin.tar.gz -C ./openjdk
+  解压到指定目录
+/etc/profile
+    修改全局环境变量(可选)，末尾增加如下两行:
+      export JAVA_HOME=解压后的存放路径，例如/root/openjdk/jdk-11.0.2
+      export PATH=${JAVA_HOME}/bin:$PATH
+      刷新profile文件或者重启系统：source /etc/profile
+二进制压缩包已经包含jdk的所有依赖，和windows上的安装方式完全一致
+rpm包方式
+  rpm官网下载rpm包
+yum localinstall xxx.rpm --nogpgcheck
+  解析依赖，先不安装，只是查看yum分析出来的依赖组件
+  从Everything版中的组件包凑齐jdk的所有组件
+  把jdk的rpm包和依赖包放在相同的目录
+yum localinstall * --nogpgcheck
+  会自动创建java执行程序到默认PATH路径下的链接，不需要再设置环境变量
+  特别的：centos7.2安装jdk11仅需要更新一个组件
+```
+## dotnet
+```
+二进制压缩包方式
+  微软官网下载tar.gz的文件
+tar zxf dotnet-sdk-2.1.202-linux-x64.tar.gz -C ./dotnet2.0.9
+  解压到指定目录
+/etc/profile
+    修改全局环境变量(可选)，末尾增加如下两行:
+      export DOTNET_HOME=解压后的存放路径，例如/root/dotnet2.0.9
+      export PATH=${DOTNET_HOME}:$PATH
+      刷新profile文件或者重启系统：source /etc/profile
+libicu和libunwind
+  依赖组件，从Everything版的组件包中获取后安装
+dotnet --version
+  查看版本：
+dotnet xxxx.dll
+  执行程序
+  aspnetcore程序默认监听localhost:5000，只能本机访问
+  修改地址和端口，允许其他主机访问，方法如下：
+    办法1：代码指定
+    办法2：代码不指定，修改环境变量：export ASPNETCORE_URLS="http://192.168.56.102:5001"
+脚本或rpm包方式
+    待研究，依赖网络，并且不好选择合适的旧版本，新版本又容易导致依赖组件套娃更新
 ```
 ## tomcat
 ```
