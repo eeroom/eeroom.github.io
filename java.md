@@ -396,7 +396,7 @@ lambda表达式
   lambda表达式可以捕获外围作用域中变量的值
     但是外围变量的值需要确保不能改变，这是java的限制，编译器创建包含lambda代码段的类型，对于引用的外围变量会创建对应的字段并赋值过去
     原因：如果lambda表达式中更改变量，并发执行多个动作时就会不安全
-    绕过限制:定义一个包含字段的匿名对象，例如：var lp=new {Integer age=10;};lambda表达式可以随意修改lp.age的值
+    绕过限制:定义一个包含字段的匿名对象，例如：var lp=new Object(){Integer age=10;};lambda表达式可以随意修改lp.age的值
     c#没有这种限制
   lambda在运行时，方法中的this变量指向定义lambada表达式的方法的this隐式参数，如果定义lambda方法的方法是静态方法，则lambda方法里面不能使用this
 内部类
