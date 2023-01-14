@@ -1,0 +1,84 @@
+<script>
+  init({
+    title: 'Sticky Header',
+    desc: 'User Plugin: bootstrap-table-sticky-header. An extension which provides a sticky header for the table when scrolling.',
+    links: [
+      'bootstrap-table.min.css',
+      'extensions/sticky-header/bootstrap-table-sticky-header.css'
+    ],
+    scripts: [
+      'bootstrap-table.min.js',
+      'extensions/sticky-header/bootstrap-table-sticky-header.min.js'
+    ]
+  })
+</script>
+
+<div class="toolbar">
+  <div class="radio">
+    <label>
+      <input type="radio" checked name="theadClasses">
+      <code>undefined</code>
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="theadClasses">
+      <code>thead-light</code>
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" name="theadClasses">
+      <code>thead-dark</code>
+    </label>
+  </div>
+</div>
+
+<table id="table" data-show-columns="true"></table>
+
+<script>
+  var $table = $('#table')
+
+  function buildTable($el, cells, rows) {
+    var i
+    var j
+    var row
+    var columns = []
+    var data = []
+
+    for (i = 0; i < cells; i++) {
+      columns.push({
+        field: 'field' + i,
+        title: 'Cell' + i,
+        sortable: true
+      })
+    }
+    for (i = 0; i < rows; i++) {
+      row = {}
+      for (j = 0; j < cells; j++) {
+        row['field' + j] = 'Row-' + i + '-' + j
+      }
+      data.push(row)
+    }
+
+    var classes = $('.toolbar input:checked').next().text()
+
+    $el.bootstrapTable('destroy').bootstrapTable({
+      columns: columns,
+      data: data,
+      showFullscreen: true,
+      search: true,
+      stickyHeader: true,
+      stickyHeaderOffsetLeft: '3em',
+      stickyHeaderOffsetRight: '3em',
+      theadClasses: classes
+    })
+  }
+
+  function mounted() {
+    $('.toolbar input').change(function () {
+      buildTable($table, 20, 50)
+    })
+    buildTable($table, 20, 50)
+  }
+</script>

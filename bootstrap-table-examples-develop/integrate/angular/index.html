@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="app">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular Demo</title>
+  <script src="app.js"></script>
+</head>
+<body class="container-fluid" ng-controller="MainController">
+  <br />
+  <!-- Workspaces nav -->
+  <ul class="nav nav-tabs">
+    <li role="presentation" ng-repeat="wk in workspaces" ng-class="{active: currentWorkspace==wk}" ng-click="changeCurrentWorkspace(wk)"><a href="#">{{wk.name}}</a></li>
+  </ul>
+
+  <!-- Workspaces containers -->
+  <div class="workspaceContainer" ng-repeat="wk in workspaces" ng-show="currentWorkspace==wk">
+    <table bs-table-control="wk.bsTableControl"></table>
+  </div>
+</body>
+</html>
