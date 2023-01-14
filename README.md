@@ -993,6 +993,10 @@ start /w ocsetup NetFx2-ServerCore
   启用.NET2.0
 start /w ocsetup NetFx2-ServerCore-WOW64
   启用.NET2.0的WoW64支持
+Start /w ocsetup NetFx3-ServerCore
+  启用.NET3.5
+Start /w ocsetup NetFx3-ServerCore-WOW64
+  启用.NET3.5的WoW64支持
 dism /online /enable-feature /featurename:IIS-WebServerRole
 dism /online /enable-feature /featurename:IIS-ISAPIFilter
 dism /online /enable-feature /featurename:IIS-ISAPIExtensions
