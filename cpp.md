@@ -208,3 +208,30 @@ pacman -Scc
 GTK
 gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
 ```
+## C语法
+```
+数据类型
+三大分支
+结构体
+函数
+递归
+
+数据结构
+链表
+队列
+栈
+树和二叉树
+
+系统编程
+基本操作和shell
+进程间通信IPC机制
+数据编程
+
+数据统访问
+socket库
+linux/windows下的IPC库
+配置文件读写库
+日志库
+
+
+```
