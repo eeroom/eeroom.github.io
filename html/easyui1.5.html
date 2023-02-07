@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>bootstrap-datepicker</title>
+    <title>bootstrap-layout</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../Bootstrap3.3.7/css/bootstrap.css" rel="stylesheet" />
@@ -19,8 +19,6 @@
     <!-- Custom styles for this template -->
     <link href="../css/layout-fluid.css" rel="stylesheet" />
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    @*
-    <script src="../js/ie-emulation-modes-warning.js"></script>*@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
         <script src="/js/ie8-responsive-file-warning.js"></script>
@@ -36,55 +34,70 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/ie10-viewport-bug-workaround.js"></script>
-    <link href="../bootstrap-datepicker-1.9.0-dist/css/bootstrap-datepicker.css" rel="stylesheet" />
-    <script src="../bootstrap-datepicker-1.9.0-dist/js/bootstrap-datepicker.js"></script>
-    <script src="../bootstrap-datepicker-1.9.0-dist/locales/bootstrap-datepicker.zh-CN.min.js"></script>
     <script src="../js/menu.js"></script>
+    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/icon.css">
+    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/color.css">
+    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/default/tree.css">
+    <script src="../jquery-easyui-1.5.2/plugins/jquery.parser.js"></script>
+    <script src="../jquery-easyui-1.5.2/plugins/jquery.draggable.js"></script>
+    <script src="../jquery-easyui-1.5.2/plugins/jquery.droppable.js"></script>
+    <script src="../jquery-easyui-1.5.2/plugins/jquery.tree.js"></script>
     <style type="text/css">
-        .chouti .modal-dialog {
-            right: 0;
-            top: 0;
-            bottom: 0;
+        #tt {
             position: absolute;
-            margin: 0 auto;
-            width: 400px;
+            right: 5px;
+            width: 180px;
+            top: 20px;
+            height: 800px;
+            overflow-y: auto;
+            border: 1px grey solid;
         }
-
-        .chouti .modal-content {
-            border-radius: 0;
-
+    
+        #easyuibrowser {
+            width: 760px;
+            height: 800px;
+            border: 1px grey solid;
+            margin-left: -30px;
+            padding-left: 0;
+        }
+    
+        #easyuibrowserCode {
+            height: 800px;
+            border: 1px grey solid;
+            margin-right: 160px;
+            position: relative;
+            margin-left: 731px;
+        }
+    
+        #easyuibrowserCode>textarea {
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            border: none;
         }
     </style>
     <script type="text/javascript">
-        $(function () {
-            var opt = $.fn.datepicker.defaults;
-            $('#datetimepicker').datepicker({
-                format: 'yyyy-mm-dd'
-                , language: "zh-CN"
-                , autoclose: true
-                //,clearBtn: true
-                //,todayBtn: true
-                , todayHighlight: true
-                , orientation: "bottom right"
-                , minViewMode: 0//天选择
-                , maxViewMode: 2//年,这个往下一级是10年，世纪等
-            });
-        });
-
+       var refreshdoc=function  (node){
+           if (node.children)
+               return
+           var url = "../jquery-easyui-1.5.2/demo/" + node.id;
+           $("#easyuibrowser").attr("src", url)
+           $.get(url, function (html) {
+               $("#easyuibrowserCode>textarea").text(html)
+           })
+       }
         $(function () {
 
-            $("#monthpicker").datepicker({
-                format: 'yyyy-mm'
-                , language: "zh-CN"
-                , autoclose: true
-                //,clearBtn: true
-                //,todayBtn: true
-                , todayHighlight: true
-                , orientation: "bottom right"
-                , minViewMode: 1//天选择
-                , maxViewMode: 2//年,这个往下一级是10年，世纪等
+            $('#tt').tree({
+                method: "get",
+                url: 'tree_data1.json',
+                onClick: refreshdoc,
+                onDblClick: function (node) {
+                    node.children && $("#tt").tree("toggle", node.target)
+                }
             });
-        });
+            refreshdoc({id:"tree/basic.html"})
+        })
     </script>
 
 </head>
@@ -93,22 +106,32 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="navbar-brand" href="#">千针石林</a>
             </div>
-            <ul class="nav navbar-nav navbar-left">
-                <li class="active"><a href="./bootstrap-table.html">html</a></li>
-                <li id="README"><a href="../index.html?tp=README.md">devops</a></li>
-                <li id='net'><a href="../index.html?tp=net.md">.net</a></li>
-                <li id="java"><a href="../index.html?tp=java.md">java</a></li>
-                <li id="cpp"><a href="../index.html?tp=cpp.md">c/c++</a></li>
-                <li id="nodejs"><a href="../index.html?tp=nodejs.md">nodejs</a></li>
-                <li id="Algorithm"><a href="../index.html?tp=Algorithm.md">Algorithm</a></li>
-                <li><a href="../hzfoundation/index.html" target="_blank">hz</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">帮助</a></li>
-                <li><a href="#">eeroom</a></li>
-            </ul>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="./bootstrap-table.html">html</a></li>
+                    <li id="README"><a href="../index.html?tp=README.md">devops</a></li>
+                    <li id='net'><a href="../index.html?tp=net.md">.net</a></li>
+                    <li id="java"><a href="../index.html?tp=java.md">java</a></li>
+                    <li id="cpp"><a href="../index.html?tp=cpp.md">c/c++</a></li>
+                    <li id="nodejs"><a href="../index.html?tp=nodejs.md">nodejs</a></li>
+                    <li id="Algorithm"><a href="../index.html?tp=Algorithm.md">Algorithm</a></li>
+                    <li><a href="../hzfoundation/index.html" target="_blank">hz</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">帮助</a></li>
+                    <li><a href="#">eeroom</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -132,9 +155,9 @@
                             <li><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
                             <li><a href="./bootstrap-table.html"><span>table</span></a></li>
                             <li><a href="./bootstrap-drawer.html"><span>drawer</span></a></li>
-                            <li class="active"><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
+                            <li><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
                             <li><a href="./bootstrap-select.html"><span>select</span></a></li>
-                            <li><a href="./easyui1.5.html"><span>easyui1.5</span></a></li>
+                            <li class="active"><a href="./easyui1.5.html"><span>easyui1.5</span></a></li>
                         </ul>
                     </li>
                 </ul>
@@ -150,19 +173,17 @@
                 </ul>
             </div>
             <div class="col-md-21 col-md-offset-3 main">
-
-                日期选择
-                <input type="text" id="datetimepicker" class="form-control" style="width:205px">
-
-                月份选择
-                <input type="text" id="monthpicker" class="form-control" style="width:205px">
-
-
+                <iframe id="easyuibrowser" class="pull-left" src=""  frameborder="0"></iframe>
+                <div id="easyuibrowserCode">
+                        <textarea readonly ></textarea>
+                </div>
+                
+                <ul id="tt"></ul>
             </div>
         </div>
     </div>
 
-    <div class="col-md-offset-3">
+    <div class="col-md-offset-3 ">
         <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
     </div>
 </body>
