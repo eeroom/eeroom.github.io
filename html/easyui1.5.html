@@ -52,7 +52,7 @@
             overflow-y: auto;
             border: 1px grey solid;
         }
-    
+
         #easyuibrowser {
             width: 760px;
             height: 800px;
@@ -60,7 +60,7 @@
             margin-left: -30px;
             padding-left: 0;
         }
-    
+
         #easyuibrowserCode {
             height: 800px;
             border: 1px grey solid;
@@ -68,24 +68,29 @@
             position: relative;
             margin-left: 731px;
         }
-    
+
         #easyuibrowserCode>textarea {
             height: 100%;
             position: absolute;
             width: 100%;
             border: none;
         }
+
+        .main>p {
+            margin-left: -30px;
+            color: red;
+        }
     </style>
     <script type="text/javascript">
-       var refreshdoc=function  (node){
-           if (node.children)
-               return
-           var url = "../jquery-easyui-1.5.2/demo/" + node.id;
-           $("#easyuibrowser").attr("src", url)
-           $.get(url, function (html) {
-               $("#easyuibrowserCode>textarea").text(html)
-           })
-       }
+        var refreshdoc = function (node) {
+            if (node.children)
+                return
+            var url = "../jquery-easyui-1.5.2/demo/" + node.id;
+            $("#easyuibrowser").attr("src", url)
+            $.get(url, function (html) {
+                $("#easyuibrowserCode>textarea").text(html)
+            })
+        }
         $(function () {
 
             $('#tt').tree({
@@ -96,7 +101,7 @@
                     node.children && $("#tt").tree("toggle", node.target)
                 }
             });
-            refreshdoc({id:"tree/basic.html"})
+            refreshdoc({ id: "tree/basic.html" })
         })
     </script>
 
@@ -173,12 +178,15 @@
                 </ul>
             </div>
             <div class="col-md-21 col-md-offset-3 main">
-                <iframe id="easyuibrowser" class="pull-left" src=""  frameborder="0"></iframe>
+
+                <iframe id="easyuibrowser" class="pull-left" src="" frameborder="0"></iframe>
                 <div id="easyuibrowserCode">
-                        <textarea readonly ></textarea>
+                    <textarea readonly></textarea>
                 </div>
-                
+
                 <ul id="tt"></ul>
+                <p>可以独立引入各个组件，避免整体引入导致的冲突，独立引入的关键点：先引入该组件的依赖组件。具体参照本页右侧的独立引入的树组件</p>
+
             </div>
         </div>
     </div>
