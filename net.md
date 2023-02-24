@@ -55,7 +55,7 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 把数据库部署多台,就成了数据库集群
 所以集群一定是分布式部署，是一种特点情况下的分布式
 ```
-## T-SQL(tsql)
+## sqlserver
 ```
 声明变量：declare @名称 类型
 声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
@@ -146,119 +146,7 @@ CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY �
 drop SEQUENCE 序列名称   
      删除序列
 ```
-## Entity Framework(ef)
-1. 数据迁移基本操作
-```
-启用迁移：Enable-Migrations
-增加一个版本：Add-Migration 版本名称
-     只需要指定版本名称,工具会自动加上日期前缀
-更新到最新版本：Update-Database -Verbose
-更新到指定版本(支持回退版本):Update-Database –TargetMigration:版本名称
-获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
-宏变量，0版本名称：$InitialDatabase
-```
-1. 手工操作初始化数据库结构
-```
-前提：关闭ef的数据库初始化策略：System.Data.Entity.Database.SetInitializer<HFDbContext>(null);
-使用工具或者代码创建数据sdf数据文件：compactview
-把项目设定为启动项目,vs的原因,ef迁移工具会从启动项目中读取数据库连接串!
-在包管理控制台中把项目选为默认项目，
-更新数据机构到最新版本：Update-Database -Verbose
-适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
-     Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
-```
-1. ef策略初始化数据库
-```
-CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
-     Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
-     这样等价上面的手工操作
-DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发和测试场景
-DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
-自定义策略,自己实现约定接口即可
-上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
-MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
-修改数据库初始化策略为：
-     Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
-修改迁移配置类，
-     在构造函数设置启用自动迁移：this.AutomaticMigrationsEnabled = true;
-     启用允许修改表结构：this.AutomaticMigrationDataLossAllowed = true;
-非常适合用于开发阶段场景：
-     表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
-```
-1. tips
-```
-compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
-```
 
-## sqlservercompact
-```
-程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
-连接字符串：Data Source=|DataDirectory|httpfile.sdf;Password=123456;Persist Security Info=True
-建表：
-create table Abc(
-id int primary key identity(1,1),
-Name nvarchar(100),
-CardId uniqueidentifier not null
-)
-
-使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
-```
-
-## oracle
-```
-表名和列名称区分大小写,sql语句中的表名和列表都会被默认转为大写
-场景:表名是小写,执行sql报错:表不存在或列不存在
-原因:sql语句中的小写表名被转成大写,然后的表名称又是小写,导致找不到表
-解决办法:sql中的表名加上双引号,oracle就不会自动把sql中表名转大写
-
-oracle安装教程：
-先只装数据库程序文件
-然后使用net configer 工具设置监听
-然后使用database configer工具安装数据库实例,调整字符集
-完成安装
-
-使用1：INSERT INTO TEST(ID,Name) VALUES(NEXT VALUE FOR 序列名称, 'allen')
-使用2：SELECT NEXT VALUE FOR 序列名称
-
-数据库客户端navicat lite依赖oci,所以需要安装oracle client或者odp.net,然后设置oci路径
-
-TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle client或者odp.net的根目录}/NetWork/ADMIN/tsname.ora
-{oracle client或者odp.net的根目录}/NetWork/ADMIN/Simpale/下有示例ora文件,照着改即可
-
-.net程序引用odp.net程序集,然后正常走ado.net即可
-
-待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
-```
-## lambda表达式树，动态创建表达式树
-```
-var sortName = context.Request["sortName"];
-var parameterExp = System.Linq.Expressions.Expression.Parameter(typeof(Model.FileEntity), "mq");
-var getpropValueExp = System.Linq.Expressions.Expression.PropertyOrField(parameterExp, sortName);
-var getpropObjectValueExp = System.Linq.Expressions.Expression.Convert(getpropValueExp, typeof(object));
-var lex = System.Linq.Expressions.Expression.Lambda<Func<Model.FileEntity, object>>(getpropObjectValueExp, parameterExp);
-lstQuery = lstQuery.OrderBy(lex);
-```
-## lambda表达式树，动态查询
-```
-等价的sql逻辑为：字段a like "%value1" || 字段a like "%value2"|| 字段a like "%value3" || ... 
-var dbcontext = new Model.DbContext();
-System.Linq.Expressions.Expression<Func<Model.Log, string>> exp = x => x.Name;
-var lst = new List<string>() { "zhaozehui", "aaa", "bbb" };
-var lstexp = lst.Select(value =>
-{
-     var likevalue = System.Linq.Expressions.Expression.Constant(value);
-     var likeexp = System.Linq.Expressions.Expression.Call(exp.Body, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), likevalue);
-     return System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(likeexp, exp.Parameters);
-
-}).ToList();
-var tmpbody = lstexp[0].Body;
-for (int i = 1; i < lstexp.Count; i++)
-{
-     tmpbody = System.Linq.Expressions.Expression.Or(tmpbody, lstexp[i].Body);
-}
-var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
-var lstlog= dbcontext.Log.Where(whereexp).ToList();
-```
 ## mysql
 ```
 begin
@@ -305,6 +193,119 @@ else
 end if
      分支语句
 ```
+
+## oracle
+```
+表名和列名称区分大小写,sql语句中的表名和列表都会被默认转为大写
+场景:表名是小写,执行sql报错:表不存在或列不存在
+原因:sql语句中的小写表名被转成大写,然后的表名称又是小写,导致找不到表
+解决办法:sql中的表名加上双引号,oracle就不会自动把sql中表名转大写
+
+oracle安装教程：
+先只装数据库程序文件
+然后使用net configer 工具设置监听
+然后使用database configer工具安装数据库实例,调整字符集
+完成安装
+
+使用1：INSERT INTO TEST(ID,Name) VALUES(NEXT VALUE FOR 序列名称, 'allen')
+使用2：SELECT NEXT VALUE FOR 序列名称
+
+数据库客户端navicat lite依赖oci,所以需要安装oracle client或者odp.net,然后设置oci路径
+
+TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle client或者odp.net的根目录}/NetWork/ADMIN/tsname.ora
+{oracle client或者odp.net的根目录}/NetWork/ADMIN/Simpale/下有示例ora文件,照着改即可
+
+.net程序引用odp.net程序集,然后正常走ado.net即可
+
+待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
+```
+
+## Entity Framework(ef)
+```
+数据迁移基本操作
+启用迁移：Enable-Migrations
+增加一个版本：Add-Migration 版本名称
+     只需要指定版本名称,工具会自动加上日期前缀
+更新到最新版本：Update-Database -Verbose
+更新到指定版本(支持回退版本):Update-Database –TargetMigration:版本名称
+获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
+宏变量，0版本名称：$InitialDatabase
+
+手工操作初始化数据库结构
+前提：关闭ef的数据库初始化策略：System.Data.Entity.Database.SetInitializer<HFDbContext>(null);
+使用工具或者代码创建数据sdf数据文件：compactview
+把项目设定为启动项目,vs的原因,ef迁移工具会从启动项目中读取数据库连接串!
+在包管理控制台中把项目选为默认项目，
+更新数据机构到最新版本：Update-Database -Verbose
+适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
+     Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
+
+ef策略初始化数据库
+CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
+     Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
+     这样等价上面的手工操作
+DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发和测试场景
+DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
+自定义策略,自己实现约定接口即可
+上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
+MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
+修改数据库初始化策略为：
+     Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
+修改迁移配置类，
+     在构造函数设置启用自动迁移：this.AutomaticMigrationsEnabled = true;
+     启用允许修改表结构：this.AutomaticMigrationDataLossAllowed = true;
+非常适合用于开发阶段场景：
+     表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
+
+tips
+compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
+```
+
+## sqlservercompact
+```
+程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
+连接字符串：Data Source=|DataDirectory|httpfile.sdf;Password=123456;Persist Security Info=True
+建表：
+create table Abc(
+id int primary key identity(1,1),
+Name nvarchar(100),
+CardId uniqueidentifier not null
+)
+
+使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
+```
+
+## lambda表达式树，动态创建表达式树
+```
+var sortName = context.Request["sortName"];
+var parameterExp = System.Linq.Expressions.Expression.Parameter(typeof(Model.FileEntity), "mq");
+var getpropValueExp = System.Linq.Expressions.Expression.PropertyOrField(parameterExp, sortName);
+var getpropObjectValueExp = System.Linq.Expressions.Expression.Convert(getpropValueExp, typeof(object));
+var lex = System.Linq.Expressions.Expression.Lambda<Func<Model.FileEntity, object>>(getpropObjectValueExp, parameterExp);
+lstQuery = lstQuery.OrderBy(lex);
+```
+## lambda表达式树，动态查询
+```
+等价的sql逻辑为：字段a like "%value1" || 字段a like "%value2"|| 字段a like "%value3" || ... 
+var dbcontext = new Model.DbContext();
+System.Linq.Expressions.Expression<Func<Model.Log, string>> exp = x => x.Name;
+var lst = new List<string>() { "zhaozehui", "aaa", "bbb" };
+var lstexp = lst.Select(value =>
+{
+     var likevalue = System.Linq.Expressions.Expression.Constant(value);
+     var likeexp = System.Linq.Expressions.Expression.Call(exp.Body, typeof(string).GetMethod("StartsWith", new Type[] { typeof(string) }), likevalue);
+     return System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(likeexp, exp.Parameters);
+
+}).ToList();
+var tmpbody = lstexp[0].Body;
+for (int i = 1; i < lstexp.Count; i++)
+{
+     tmpbody = System.Linq.Expressions.Expression.Or(tmpbody, lstexp[i].Body);
+}
+var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
+var lstlog= dbcontext.Log.Where(whereexp).ToList();
+```
+
 ## log4net
 ```
 配置：
