@@ -255,24 +255,44 @@ for (int i = 1; i < lstexp.Count; i++)
 var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
 var lstlog= dbcontext.Log.Where(whereexp).ToList();
 ```
-## mysql存储过程,批量插入，事务，异常回滚
+## mysql
 ```
-delimiter **
-drop procedure if exists addHandler
-create procedure addHandler()
-begin
-     declare errorFlag int default 0;
+创建存储过程
+     --mysql默认的分隔符是;号,解释器遇到;号就会认为这是一行可以执行的语句然后执行
+     --存储过程内部有一行或者多行普通的sql语句并且以;结束，所以需要使用delimiter把分隔符改成其它符号，避免误导解释器
+     delimiter $$
+     drop procedure if exists addHandler
+     create procedure addHandler()
+     begin
+          declare errorFlag int default 0;
+          declare continue handler for sqlexception set errorFlag=1;
+          start transaction;
+          insert into student (name,age) values('张三',10);
+          insert into student (name,age) values('李四',12);
+          if errorFlag=1 then
+               rollback;
+          else
+               commit;
+          end if;
+     end  $$
+执行存储过程
+     call addHandler
+异常处理
      declare continue handler for sqlexception set errorFlag=1;
-     start transaction;
-     insert into student (name,age) values('张三',10);
-     insert into student (name,age) values('李四',12);
-     if errorFlag=1 then
-          rollback;
+     declare continue handler for sqlexception rollback;
+声明变量
+     declare 变量名称 类型;
+变量赋值
+     set 变量名=变量值;
+     select nextval('序列名称') into 变量名 form dual;
+     select count(1) into 变量名 from 表
+分支语句
+     if 变量=1 then
+          --处理逻辑
      else
-          commit;
-     end if;
-end **
-call addHandler
+          --处理逻辑
+     end if
+
 ```
 ## log4net
 ```
