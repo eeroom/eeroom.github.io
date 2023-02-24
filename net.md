@@ -132,6 +132,19 @@ begin
 	form ...
 	where ....
 end
+
+declare @变量名称 类型
+     声明变量
+set @变量名=变量值
+     变量赋值
+select @变量名=count(1) from 表
+     变量赋值
+select @变量名=列名称 from 表
+     变量赋值，如果有多行，则变量的值是最后一行对应的值
+CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
+     传教序列，sqlserver2014及以后的版本
+drop SEQUENCE 序列名称   
+     删除序列
 ```
 ## Entity Framework(ef)
 1. 数据迁移基本操作
@@ -189,15 +202,6 @@ CardId uniqueidentifier not null
 )
 
 使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
-```
-## sqlserver
-1. 序列(版本>=sqlserver2014)
-```
-创建序列：CREATE SEQUENCE 序列名称 AS 类型
-    START WITH 初始值
-    INCREMENT BY 步长
-    [CYCLE]
-删除序列：drop SEQUENCE 序列名称
 ```
 
 ## oracle
@@ -257,42 +261,49 @@ var lstlog= dbcontext.Log.Where(whereexp).ToList();
 ```
 ## mysql
 ```
-创建存储过程
-     --mysql默认的分隔符是;号,解释器遇到;号就会认为这是一行可以执行的语句然后执行
-     --存储过程内部有一行或者多行普通的sql语句并且以;结束，所以需要使用delimiter把分隔符改成其它符号，避免误导解释器
-     delimiter $$
-     drop procedure if exists addHandler
-     create procedure addHandler()
-     begin
-          declare errorFlag int default 0;
-          declare continue handler for sqlexception set errorFlag=1;
-          start transaction;
-          insert into student (name,age) values('张三',10);
-          insert into student (name,age) values('李四',12);
-          if errorFlag=1 then
-               rollback;
-          else
-               commit;
-          end if;
-     end  $$
-执行存储过程
-     call addHandler
-异常处理
-     declare continue handler for sqlexception set errorFlag=1;
-     declare continue handler for sqlexception rollback;
-声明变量
-     declare 变量名称 类型;
-变量赋值
-     set 变量名=变量值;
-     select nextval('序列名称') into 变量名 form dual;
-     select count(1) into 变量名 from 表
-分支语句
-     if 变量=1 then
-          --处理逻辑
-     else
-          --处理逻辑
-     end if
+begin
+     --do something
+end
+     复合语句，使用场景：创建存储过程，触发器等
 
+--mysql默认的分隔符是;号,解释器遇到;号就会认为这是一行可以执行的语句然后执行
+--存储过程内部有一行或者多行普通的sql语句并且以;结束，所以需要使用delimiter把分隔符改成其它符号，避免误导解释器
+delimiter $$
+drop procedure if exists addHandler;
+create procedure addHandler()
+begin
+     declare errorFlag int default 0;
+     declare continue handler for sqlexception set errorFlag=1;
+     start transaction;
+     insert into student (name,age) values('张三',10);
+     insert into student (name,age) values('李四',12);
+     if errorFlag=1 then
+          rollback;
+     else
+          commit;
+     end if;
+end  $$
+     创建存储过程
+     
+call addHandler;
+     执行存储过程
+declare continue handler for sqlexception set errorFlag=1;
+     异常处理
+declare continue handler for sqlexception rollback;
+     异常处理
+declare 变量名称 类型; 
+     声明变量
+set 变量名=变量值;
+select nextval('序列名称') into 变量名 form dual;
+select count(1) into 变量名 from 表;
+     变量赋值
+
+if 变量=1 then
+     --处理逻辑
+else
+     --处理逻辑
+end if
+     分支语句
 ```
 ## log4net
 ```
