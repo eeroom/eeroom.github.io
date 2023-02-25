@@ -145,6 +145,31 @@ CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY �
      传教序列，sqlserver2014及以后的版本
 drop SEQUENCE 序列名称   
      删除序列
+
+--切割字符串的函数，等价于split函数
+CREATE FUNCTION splitToString
+(
+	@str nvarchar(1000),
+	@splitstr nvarchar(10)
+)
+RETURNS @returntable TABLE
+(
+	v1 nvarchar(100)
+)
+AS
+BEGIN
+	DECLARE @xmlstr XML;
+    SET @xmlstr = CONVERT(XML, '<root><a>' + REPLACE(@str, @splitstr, '</a><a>') + '</a></root>');
+    INSERT INTO @returntable
+    SELECT F1 = N.a.value('.', 'varchar(100)') 
+	FROM @xmlstr.nodes('/root/a') N(a);
+	RETURN;
+END
+
+--使用示例
+select *
+from INFORMATION_SCHEMA.COLUMNS cc
+join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
 ```
 
 ## mysql
