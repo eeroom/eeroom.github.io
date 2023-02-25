@@ -55,7 +55,7 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 把数据库部署多台,就成了数据库集群
 所以集群一定是分布式部署，是一种特点情况下的分布式
 ```
-## T-SQL(tsql)
+## sqlserver
 ```
 声明变量：declare @名称 类型
 声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
@@ -132,72 +132,66 @@ begin
 	form ...
 	where ....
 end
-```
-## Entity Framework(ef)
-1. 数据迁移基本操作
-```
-启用迁移：Enable-Migrations
-增加一个版本：Add-Migration 版本名称
-     只需要指定版本名称,工具会自动加上日期前缀
-更新到最新版本：Update-Database -Verbose
-更新到指定版本(支持回退版本):Update-Database –TargetMigration:版本名称
-获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
-宏变量，0版本名称：$InitialDatabase
-```
-1. 手工操作初始化数据库结构
-```
-前提：关闭ef的数据库初始化策略：System.Data.Entity.Database.SetInitializer<HFDbContext>(null);
-使用工具或者代码创建数据sdf数据文件：compactview
-把项目设定为启动项目,vs的原因,ef迁移工具会从启动项目中读取数据库连接串!
-在包管理控制台中把项目选为默认项目，
-更新数据机构到最新版本：Update-Database -Verbose
-适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
-     Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
-```
-1. ef策略初始化数据库
-```
-CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
-     Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
-     这样等价上面的手工操作
-DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发和测试场景
-DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
-自定义策略,自己实现约定接口即可
-上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
-MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
-修改数据库初始化策略为：
-     Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
-修改迁移配置类，
-     在构造函数设置启用自动迁移：this.AutomaticMigrationsEnabled = true;
-     启用允许修改表结构：this.AutomaticMigrationDataLossAllowed = true;
-非常适合用于开发阶段场景：
-     表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
-```
-1. tips
-```
-compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
+
+declare @变量名称 类型
+     声明变量
+set @变量名=变量值
+     变量赋值
+select @变量名=count(1) from 表
+     变量赋值
+select @变量名=列名称 from 表
+     变量赋值，如果有多行，则变量的值是最后一行对应的值
+CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
+     传教序列，sqlserver2014及以后的版本
+drop SEQUENCE 序列名称   
+     删除序列
 ```
 
-## sqlservercompact
+## mysql
 ```
-程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
-连接字符串：Data Source=|DataDirectory|httpfile.sdf;Password=123456;Persist Security Info=True
-建表：
-create table Abc(
-id int primary key identity(1,1),
-Name nvarchar(100),
-CardId uniqueidentifier not null
-)
+begin
+     --do something
+end
+     复合语句，使用场景：创建存储过程，触发器等
 
-使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
-```
-## sqlserver
-1. 序列(版本>=sqlserver2014)
-```
-创建序列：CREATE SEQUENCE 序列名称 AS 类型
-    START WITH 初始值
-    INCREMENT BY 步长
-    [CYCLE]
-删除序列：drop SEQUENCE 序列名称
+--mysql默认的分隔符是;号,解释器遇到;号就会认为这是一行可以执行的语句然后执行
+--存储过程内部有一行或者多行普通的sql语句并且以;结束，所以需要使用delimiter把分隔符改成其它符号，避免误导解释器
+delimiter $$
+drop procedure if exists addHandler;
+create procedure addHandler()
+begin
+     declare errorFlag int default 0;
+     declare continue handler for sqlexception set errorFlag=1;
+     start transaction;
+     insert into student (name,age) values('张三',10);
+     insert into student (name,age) values('李四',12);
+     if errorFlag=1 then
+          rollback;
+     else
+          commit;
+     end if;
+end  $$
+     创建存储过程
+     
+call addHandler;
+     执行存储过程
+declare continue handler for sqlexception set errorFlag=1;
+     异常处理
+declare continue handler for sqlexception rollback;
+     异常处理
+declare 变量名称 类型; 
+     声明变量
+set 变量名=变量值;
+select nextval('序列名称') into 变量名 form dual;
+select count(1) into 变量名 from 表;
+     变量赋值
+
+if 变量=1 then
+     --处理逻辑
+else
+     --处理逻辑
+end if
+     分支语句
 ```
 
 ## oracle
@@ -225,6 +219,62 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 
 待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
 ```
+
+## Entity Framework(ef)
+```
+数据迁移基本操作
+启用迁移：Enable-Migrations
+增加一个版本：Add-Migration 版本名称
+     只需要指定版本名称,工具会自动加上日期前缀
+更新到最新版本：Update-Database -Verbose
+更新到指定版本(支持回退版本):Update-Database –TargetMigration:版本名称
+获取从A版本更新到B版本对应的sql脚本：Update-Database -Script -SourceMigration:版本A -TargetMigration:版本B
+宏变量，0版本名称：$InitialDatabase
+
+手工操作初始化数据库结构
+前提：关闭ef的数据库初始化策略：System.Data.Entity.Database.SetInitializer<HFDbContext>(null);
+使用工具或者代码创建数据sdf数据文件：compactview
+把项目设定为启动项目,vs的原因,ef迁移工具会从启动项目中读取数据库连接串!
+在包管理控制台中把项目选为默认项目，
+更新数据机构到最新版本：Update-Database -Verbose
+适合线上变更场景,生成变更用的幂等sql脚步,可以将当前任何版本的数据库升级到最新版本：
+     Update-Database -Script -SourceMigration:$InitialDatabase -TargetMigration:AddPostAbstract
+
+ef策略初始化数据库
+CreateDatabaseIfNotExists:默认策略，数据库不存在，生成数据库；一旦model发生变化，抛异常，提示走数据迁移。
+     Database.SetInitializer<HFDbContext>(new System.Data.Entity.CreateDatabaseIfNotExists<HFDbContext>());
+     这样等价上面的手工操作
+DropCreateDatabaseAlways：数据库每次都重新生成，仅适用于开发和测试场景
+DropCreateDatabaseIfModelChanges：一旦mode发送变化，删除数据库重新生成
+自定义策略,自己实现约定接口即可
+上述方式会删掉原有的旧数据，仅适合新部署或搭建新的本地环境，不适用线上环境变变更等场景，
+MigrateDatabaseToLatestVersion：自动数据迁移,程序起来后，会自动更新数据库结构到最新的版本
+修改数据库初始化策略为：
+     Database.SetInitializer<HFDbContext>(new MigrateDatabaseToLatestVersion<HFDbContext,Migrations.Configuration>());
+修改迁移配置类，
+     在构造函数设置启用自动迁移：this.AutomaticMigrationsEnabled = true;
+     启用允许修改表结构：this.AutomaticMigrationDataLossAllowed = true;
+非常适合用于开发阶段场景：
+     表结构和表数量经常变动，但是不丢失已有的一些假数据，我们只需要在修改表结构后，增加一个版本，重新启动程序即可
+
+tips
+compactview工具打开sdf文件后会，如果使用MigrateDatabaseToLatestVersion策略更新表结构会失败,但是查询数据是可以的
+```
+
+## sqlservercompact
+```
+程序集：Install-Package Microsoft.SqlServer.Compact -Version 4.0.8876.1
+连接字符串：Data Source=|DataDirectory|httpfile.sdf;Password=123456;Persist Security Info=True
+建表：
+create table Abc(
+id int primary key identity(1,1),
+Name nvarchar(100),
+CardId uniqueidentifier not null
+)
+
+使用ef：Install-Package EntityFramework.SqlServerCompact -Version 6.4.4
+```
+
 ## lambda表达式树，动态创建表达式树
 ```
 var sortName = context.Request["sortName"];
@@ -255,25 +305,7 @@ for (int i = 1; i < lstexp.Count; i++)
 var whereexp = System.Linq.Expressions.Expression.Lambda<Func<Model.Log, bool>>(tmpbody, exp.Parameters);
 var lstlog= dbcontext.Log.Where(whereexp).ToList();
 ```
-## mysql存储过程,批量插入，事务，异常回滚
-```
-delimiter **
-drop procedure if exists addHandler
-create procedure addHandler()
-begin
-     declare errorFlag int default 0;
-     declare continue handler for sqlexception set errorFlag=1;
-     start transaction;
-     insert into student (name,age) values('张三',10);
-     insert into student (name,age) values('李四',12);
-     if errorFlag=1 then
-          rollback;
-     else
-          commit;
-     end if;
-end **
-call addHandler
-```
+
 ## log4net
 ```
 配置：
