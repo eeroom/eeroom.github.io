@@ -915,8 +915,8 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
     </property>
   </configuration>
 下发配置文件
-scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode1:/usr/hadoop-2.7.4/etc
-scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode2:/usr/hadoop-2.7.4/etc
+scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode1:/usr/hadoop-2.7.4/
+scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode2:/usr/hadoop-2.7.4/
 
 搭建部署伪分布模式步骤(windows版)
 解压hadoop-2.7.1.tar.gz，就是普通的java程序，和linux版相同，执行：tar zxvf hadoop-2.7.1.tar.gz
