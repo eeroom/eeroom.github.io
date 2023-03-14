@@ -1485,3 +1485,34 @@ SET IMPLICIT_TRANSACTIONS ON
   把app.asar改成别的文件名做为备份，原理：postman既会自动加载app.asar，也会自动加载app文件夹，优先级未研究
   本质上：postman是基于chrome的定制版程序，定制的功能就是app.asar文件中的js文件，chrome会加载和执行这些js
 ```
+## VBA
+```
+依赖Microsoft Scriptlet Library
+Function GUID()
+    Dim Lib As Scriptlet.IGenScriptletTLib
+    Set Lib = CreateObject("Scriptlet.Typelib")
+    GUID = Lib.GUID
+End Function
+
+生成随机长度随机内容的汉字字符串，长度[1,length]
+Function NR(length As Integer) As String
+    Dim min As Long
+    Dim max As Long
+    Dim len2 As Integer
+    Dim rt As String
+    rt = ""
+    min = 19968
+    max = 19968 + 2000
+    len2 = length * Rnd() + 1
+    For i = 1 To len2
+      rt = rt + ChrW(((max - min) * Rnd() + min))
+    Next
+    NR = rt
+End Function
+
+从输入的数据列表中随机返回一种，可变长参数
+Function XL(ParamArray intScores() As Variant) As String
+    XL = intScores((UBound(intScores())) * Rnd())
+End Function
+
+```
