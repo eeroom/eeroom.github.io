@@ -1470,10 +1470,12 @@ SET IMPLICIT_TRANSACTIONS ON
   变量标识符
 自定义js处理脚本，场景：首先调用登陆接口，认证成功后更新token值，后续的接口使用更新后的token值
   执行时机：发送请求之前（Pre-request Script）、获取响应之后（Tests）
-  响应内容：pm.response，pm.response.text(),pm.response.json()
+  响应内容：pm.response,pm.response.text(),pm.response.json()
   更新变量值：pm.environment.set(变量名,值)
   打印变量的值：console.log(变量名,变量值)
   特别的：右侧提供了一些常用代码段，点击即可获得代码段，然后做一些修改即可满足实际需求
+  获取响应头:postman.getResponseHeader('set-cookie')
+  获取cookie:postman.getResponseCookie('cookieName')
 关闭自动弹出更新提示框，步骤如下：
   创建空的node项目，执行：npm init
   复制C:/Users/用户/AppData/Local/Postman/app-5.5.0/resources/app.asar到项目根目录
