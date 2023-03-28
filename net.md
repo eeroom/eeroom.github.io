@@ -170,6 +170,13 @@ END
 select *
 from INFORMATION_SCHEMA.COLUMNS cc
 join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
+
+--获取指定表已执行过的历史语句
+select ST.text
+from sys.dm_exec_query_stats  QS
+CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
+WHERE ST.text LIKE '%Student%'
+order by QS.creation_time DESC
 ```
 
 ## mysql
