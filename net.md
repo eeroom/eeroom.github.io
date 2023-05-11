@@ -57,36 +57,60 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 ```
 ## sqlserver
 ```
-声明变量：declare @名称 类型
-声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
+--声明变量
+declare @变量名称 类型
+--变量赋值
+set @变量名=变量值
+--变量赋值     
+select @变量名=count(1) from 表
+--变量赋值，如果有多行，则变量的值是最后一行对应的值     
+select @变量名=列名称 from 表
+--声明临时表
+declare @表名称 table(列名称 类型，列名称 类型，...)
 
-insert 语句，表必须存在
-insert into 表 values()
-insert into 表 select语句
+--插入语句，表必须存在
 insert into 表(列名称，...) values()
+insert into 表 values()
 insert into 表(列名称，...) select语句
-
-insert 语句，表必须不存在(#表名称 为临时表，会话结束自动删除，否则为非临时表)
+insert into 表 select语句
+--插入语句，表必须不存在，#表名称 为临时表，会话结束自动删除，否则为非临时表
 select 列
 into 表
 from ....
-
-update 语句，批量更新
+--更新语句，批量更新
 update 表 别名1
 join 表2 别名2 on 连接条件
 set 别名1.列=别名2.列
 where ....
+--删除语句，批量删除
+--output语句
+insert into 表(列) output inserted.列名 values()
+update 表 set 列1=值 output inserted.列名 where ...
 
-delete 语句，批量删除
+--分支语句
+if (@变量=3)
+     begin
+     ...
+     end
+else
+     begin
+     ...
+     end
+--循环语句
+while @变量=3
+     begin
+     ...
+     end
+
+--创建序列，sqlserver2014及以后的版本 
+CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
+--删除序列   
+drop SEQUENCE 序列名称
 
 集合操作
 取差集：except 
 取并集：union
 取交集：intersect
-
-output 语句
-insert into 表(列) output inserted.列名 values()
-update 表 set 列1=值 output inserted.列名 where ...
 
 表分区
 第一步：添加文件组和文件
@@ -119,11 +143,12 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 优点：文件可以落在不同的磁盘，按照分区条件查数据的时候性能大大提高
 		极大的方便不停机归档数据，如果不分区进行归档数据，有两个土办法(往归档表写，往原表删；或者：原本重命名，新建原表，往原表回写)
 
-利用临时表记录数据的变化情况(有时候权限所限，不能触发器，没有建表权限，只能临时表。触发器和非临时表更科学)
-思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
-创建临时表：
+--利用循环语句和临时表监测数据变化
+--场景：有时候分析生产环境问题，权限所限，不能创建触发器，也没有建表权限，只能临时表，触发器和非临时表更科学
+--思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
+--创建临时表
 create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
-循环查某个数据写入临时表,每5秒查一次:
+--循环查询数据再插入临时表,每N秒查一次:
 while 1=1
 begin
 	WAITFOR DELAY '00:00:5'
@@ -132,19 +157,6 @@ begin
 	form ...
 	where ....
 end
-
-declare @变量名称 类型
-     声明变量
-set @变量名=变量值
-     变量赋值
-select @变量名=count(1) from 表
-     变量赋值
-select @变量名=列名称 from 表
-     变量赋值，如果有多行，则变量的值是最后一行对应的值
-CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
-     传教序列，sqlserver2014及以后的版本
-drop SEQUENCE 序列名称   
-     删除序列
 
 --切割字符串的函数，等价于split函数
 CREATE FUNCTION splitToString
@@ -165,7 +177,6 @@ BEGIN
 	FROM @xmlstr.nodes('/root/a') N(a);
 	RETURN;
 END
-
 --使用示例
 select *
 from INFORMATION_SCHEMA.COLUMNS cc
