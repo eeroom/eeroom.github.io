@@ -158,7 +158,8 @@ create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时�
 --循环查询数据再插入临时表,每N秒查一次:
 while 1=1
 begin
-	WAITFOR DELAY '00:00:5'
+     --等待500毫秒，小时:分钟:秒:毫秒
+	WAITFOR DELAY '00:00:00:500'
 	insert into #表名称(列1,列2,...,写入时间)
 	select 列a,列b,...,getdate()
 	form ...
