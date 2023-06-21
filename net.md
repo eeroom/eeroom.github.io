@@ -57,36 +57,66 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 ```
 ## sqlserver
 ```
-声明变量：declare @名称 类型
-声明临时表：declare @表名称 table(列名称 类型，列名称 类型，...)
+--声明变量
+declare @变量名称 类型
+--变量赋值
+set @变量名=变量值
+--变量赋值     
+select @变量名=count(1) from 表
+--变量赋值，如果有多行，则变量的值是最后一行对应的值     
+select @变量名=列名称 from 表
+--声明临时表
+declare @表名称 table(列名称 类型，列名称 类型，...)
 
-insert 语句，表必须存在
-insert into 表 values()
-insert into 表 select语句
+--插入语句，表必须存在
 insert into 表(列名称，...) values()
+insert into 表 values()
 insert into 表(列名称，...) select语句
-
-insert 语句，表必须不存在(#表名称 为临时表，会话结束自动删除，否则为非临时表)
+insert into 表 select语句
+--插入语句，表必须不存在，#表名称 为临时表，会话结束自动删除，否则为非临时表
 select 列
 into 表
 from ....
-
-update 语句，批量更新
+--更新语句，批量更新
 update 表 别名1
 join 表2 别名2 on 连接条件
 set 别名1.列=别名2.列
 where ....
+--删除语句，批量删除
+--output语句
+insert into 表(列) output inserted.列名 values()
+update 表 set 列1=值 output inserted.列名 where ...
 
-delete 语句，批量删除
+--分支语句
+if (@变量=3)
+     begin
+     ...
+     end
+else
+     begin
+     ...
+     end
+--循环语句
+while @变量=3
+     begin
+     ...
+     end
+
+--创建序列，sqlserver2014及以后的版本 
+CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
+--删除序列   
+drop SEQUENCE 序列名称
 
 集合操作
 取差集：except 
 取并集：union
 取交集：intersect
 
-output 语句
-insert into 表(列) output inserted.列名 values()
-update 表 set 列1=值 output inserted.列名 where ...
+调试
+存储过程和触发器可以在ssms中直接进行调试
+打开存储过程和触发器的代码，对应的修改或者创建语句都可以，打上断点
+新建一个查询窗口，编写调用存储过程的语句或者编写增删改的语句，打上断点，从菜单栏中的调试菜单启动调试，F11即可进入逐行调试
+特别的：触发器的代码执行的时候，总是发生在增删改完成以后，所以代码中查询触发器所在表的时候一定要考虑到这个情况
 
 表分区
 第一步：添加文件组和文件
@@ -119,41 +149,76 @@ tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段�
 优点：文件可以落在不同的磁盘，按照分区条件查数据的时候性能大大提高
 		极大的方便不停机归档数据，如果不分区进行归档数据，有两个土办法(往归档表写，往原表删；或者：原本重命名，新建原表，往原表回写)
 
-利用临时表记录数据的变化情况(有时候权限所限，不能触发器，没有建表权限，只能临时表。触发器和非临时表更科学)
-思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
-创建临时表：
+--利用循环语句和临时表监测数据变化
+--场景：有时候分析生产环境bug，权限所限，不能创建触发器，也没有建表权限，只能临时表，触发器和非临时表更科学
+--bug原因：分布式系统中，程序员认为总是按照T1,T2,T3步骤的顺序修改某个字段，代码的逻辑判断中又依赖该字段值，实际情况可能会出现T1,T3,T2的更新顺序，导致bug
+--思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
+--创建临时表
 create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
-循环查某个数据写入临时表,每5秒查一次:
+--循环查询数据再插入临时表,每N秒查一次:
 while 1=1
 begin
-	WAITFOR DELAY '00:00:5'
+     --等待500毫秒，小时:分钟:秒:毫秒
+	WAITFOR DELAY '00:00:00:500'
 	insert into #表名称(列1,列2,...,写入时间)
 	select 列a,列b,...,getdate()
 	form ...
 	where ....
 end
 
-declare @变量名称 类型
-     声明变量
-set @变量名=变量值
-     变量赋值
-select @变量名=count(1) from 表
-     变量赋值
-select @变量名=列名称 from 表
-     变量赋值，如果有多行，则变量的值是最后一行对应的值
-CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
-     传教序列，sqlserver2014及以后的版本
-drop SEQUENCE 序列名称   
-     删除序列
+--切割字符串的函数，等价于split函数
+CREATE FUNCTION splitToString
+(
+	@str nvarchar(1000),
+	@splitstr nvarchar(10)
+)
+RETURNS @returntable TABLE
+(
+	v1 nvarchar(100)
+)
+AS
+BEGIN
+	DECLARE @xmlstr XML;
+    SET @xmlstr = CONVERT(XML, '<root><a>' + REPLACE(@str, @splitstr, '</a><a>') + '</a></root>');
+    INSERT INTO @returntable
+    SELECT F1 = N.a.value('.', 'varchar(100)') 
+	FROM @xmlstr.nodes('/root/a') N(a);
+	RETURN;
+END
+--使用示例
+select *
+from INFORMATION_SCHEMA.COLUMNS cc
+join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
+
+--获取指定表已执行过的历史语句
+select ST.text
+from sys.dm_exec_query_stats  QS
+CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
+WHERE ST.text LIKE '%Student%'
+order by QS.creation_time DESC
 ```
 
 ## mysql
 ```
-begin
-     --do something
-end
-     复合语句，使用场景：创建存储过程，触发器等
+--声明变量
+declare 变量名称 类型;
+--变量赋值
+set 变量名=变量值;
+select nextval('序列名称') into 变量名 form dual;
+select count(1) into 变量名 from 表;
 
+--分支语句
+if 变量=1 then
+     begin
+     ...
+     end
+else
+     begin
+     ...
+     end
+end if
+
+--创建存储过程
 --mysql默认的分隔符是;号,解释器遇到;号就会认为这是一行可以执行的语句然后执行
 --存储过程内部有一行或者多行普通的sql语句并且以;结束，所以需要使用delimiter把分隔符改成其它符号，避免误导解释器
 delimiter $$
@@ -171,27 +236,12 @@ begin
           commit;
      end if;
 end  $$
-     创建存储过程
-     
+--执行存储过程
 call addHandler;
-     执行存储过程
+--异常处理
 declare continue handler for sqlexception set errorFlag=1;
-     异常处理
-declare continue handler for sqlexception rollback;
-     异常处理
-declare 变量名称 类型; 
-     声明变量
-set 变量名=变量值;
-select nextval('序列名称') into 变量名 form dual;
-select count(1) into 变量名 from 表;
-     变量赋值
-
-if 变量=1 then
-     --处理逻辑
-else
-     --处理逻辑
-end if
-     分支语句
+--异常处理
+declare continue handler for sqlexception rollback;  
 ```
 
 ## oracle

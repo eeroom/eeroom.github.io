@@ -213,6 +213,10 @@ dir /s /b
 ```
 ## 系统及配置
 ```
+/etc/shadow
+  保存了所有的用户账号
+chage -l 账号名
+  查看账号的信息，过期时间，密码过期时间等
 su 用户名
   直接切换用户，不用logout
 logout
@@ -831,33 +835,49 @@ docker-machine rm
   单机模式：独立模式，默认情况下即为该模式，用于开发和调试，不对配置文件进行修改，使用本地的文件系统，而不是分布式的文件系统
   伪分布模式：在1个机器上运行HDFS的NameNode和DataNode、YARN的ResourceManager和NodeManager，但分别启动单独的java进程，主要用于调试
   集群模式：使用N台主机组成一个Hadoop集群，主节点和从节点会分开部署在不同的机器上，主要用于生产环境部署
-搭建集群模式，不含3个角色，角色和步骤如下：
-  |----------------|-----------------------------------------|
-  |      node      |         role                            |
-  |----------------|-----------------------------------------|
-  |      node-01   |   NameNode DateNode  ResourceManager    |
-  |      node-02   | DateNode NodeManager  SecondaryNameNode |
-  |      node-03   |   NameNode NodeManager                  |
-  |----------------|-----------------------------------------|
-vbox创建三台虚拟机，分别命名为：hadoopNameNode,hadoopDataNode1,hadoopDataNode2
-修改名称，路径：/etc/hostname
-修改hosts文件，把各台的名称和ip对应上，路径：/etc/hosts
-配置互相之间的免密登陆
-复制jdk1.8到/usr/java/jdk1.8.0_231-amd64，配置环境变量，如下
-export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
-export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
-export PATH=$PATH:$JAVA_HOME/bin
-上传hadoop程序到hadoopNameNode，位置：/export/server/，解压到当前目录，执行：tar zxvf hadoop-2.7.4.tar.gz
-配置文件说明
+搭建集群模式，基于三台vbox虚拟机，包含以下3个角色，详细操作如下：
+  |-----------------------------------------|-----------------|-----------------|
+  |         role                            |     ip地址      |      hostname   |
+  |-----------------------------------------|-----------------|-----------------|
+  |   NameNode DateNode  ResourceManager    |  192.168.56.20  | hadoopNameNode  |
+  | DateNode NodeManager  SecondaryNameNode |  192.168.56.21  | hadoopDataNode1 |
+  |   NameNode NodeManager                  |  192.168.56.22  | hadoopDataNode2 |
+  |-----------------------------------------|-----------------|-----------------|
+修改hostname，设定固定ip地址,
+  特别的：这两个操作会导致远程登陆卡顿，参照ssh教程解决卡顿问题
+        虚拟机内存<=1024MB的情况下，hadoop可以正常启动起来，但是执行demo程序，ResourceManager会报错终止运行
+配置互相的免密登陆，，参照ssh教程
+scp -r /etc/ssh/sshd_config root@hadoopDataNode1:/etc/ssh/sshd_config
+scp -r /etc/ssh/sshd_config root@hadoopDataNode2:/etc/ssh/sshd_config
+
+配置hosts映射，三台的映射关系一样，内容如下
+  192.168.56.20     hadoopNameNode
+  192.168.56.21     hadoopDataNode1
+  192.168.56.22     hadoopDataNode2
+scp -r /etc/hosts root@hadoopDataNode1:/etc/hosts
+scp -r /etc/hosts root@hadoopDataNode2:/etc/hosts
+
+配置jdk1.8，jdk-8u181-linux-x64.tar.gz，程序主目录：/usr/hadoop-2.7.4
+配置hadoop主程序，hadoop-2.7.4.tar.gz，程序目录：/usr/jdk1.8.0_181
+
+hadoop的环境变量
+export HADOOP_HOME=/usr/hadoop-2.7.4
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+下发环境变量
+scp -r /etc/profile root@hadoopDataNode1:/etc/profile
+scp -r /etc/profile root@hadoopDataNode2:/etc/profile
+刷新各台机器的环境变量
+source /etc/profile
+
+hadoop的配置文件
 xxx-default.xml，hadoop默认的配置选项,如果用户没有修改，那么这里面的选项将会生效
 xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中配置的值优先级大于default中的配置项的值
-修改配置文件
-路径：/export/server/hadoop2.7.4/etc/hadoop/hadoop-env.sh，如下配置
-  export JAVA_HOME=/usr/java/jdk1.8.0_231-amd64
-路径：/export/server/hadoop2.7.4/etc/hadoop/slaves，增加2行
+路径：/usr/hadoop-2.7.4/etc/hadoop/hadoop-env.sh，如下配置
+  export JAVA_HOME=${JAVA_HOME}
+路径：/usr/hadoop-2.7.4/etc/hadoop/slaves，增加2行
   hadoopDataNode1
   hadoopDataNode2
-路径：/export/server/hadoop2.7.4/etc/hadoop/core-site.xml，如下配置
+路径：/usr/hadoop-2.7.4/etc/hadoop/core-site.xml，如下配置
   <configuration>
     <property>
       <name>fs.defaultFS</name>
@@ -868,7 +888,7 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
       <value>/home/hadoop2.7.4_data</value>
     </property>
   </configuration>
-路径：/export/server/hadoop2.7.4/etc/hadoop/hdfs-site.xml，如下配置
+路径：/usr/hadoop-2.7.4/etc/hadoop/hdfs-site.xml，如下配置
   <configuration>
     <property>
       <name>dfs.replication</name>
@@ -879,7 +899,7 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
       <value>hadoopDataNode1:50090</value>
     </property>
   </configuration>
-路径：/export/server/hadoop2.7.4/etc/hadoop/mapred-site.xml.template
+路径：/usr/hadoop-2.7.4/etc/hadoop/mapred-site.xml.template
   重命名：mv mapred-site.xml.template mapred-site.xml，如下配置
   <configuration>
     <property>
@@ -887,7 +907,7 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
       <value>yarn</value>
     </property>
   </configuration>
-路径：/export/server/hadoop2.7.4/etc/hadoop/yarn-site.xml，如下配置
+路径：/usr/hadoop-2.7.4/etc/hadoop/yarn-site.xml，如下配置
   <configuration>
     <property>
       <name>yarn.resourcemanager.hostname</name>
@@ -898,18 +918,9 @@ xxx-site.xml，这里面配置了用户需要自定义的配置选项，site中�
       <value>mapreduce_shuffle</value>
     </property>
   </configuration>
-配置hadoop相关的环境变量
-export HADOOP_HOME=/export/server/hadoop2.7.4
-export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
-特别的：虚拟机内存<=1024MB的情况下，hadoop可以正常启动起来，但是执行demo程序，resourcemanager会报错终止运行
 下发配置文件
-scp -r /export/server/hadoop2.7.4 root@hadoopDataNode1:/export/server/hadoop2.7.4/
-scp -r /export/server/hadoop2.7.4 root@hadoopDataNode2:/export/server/hadoop2.7.4/
-下发环境变量
-scp -r /etc/profile root@hadoopDataNode1:/etc/
-scp -r /etc/profile root@hadoopDataNode2:/etc/
-刷新各台机器的环境变量
-source /etc/profile
+scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode1:/usr/hadoop-2.7.4/
+scp -r /usr/hadoop-2.7.4/etc root@hadoopDataNode2:/usr/hadoop-2.7.4/
 
 搭建部署伪分布模式步骤(windows版)
 解压hadoop-2.7.1.tar.gz，就是普通的java程序，和linux版相同，执行：tar zxvf hadoop-2.7.1.tar.gz
@@ -1107,6 +1118,7 @@ msbuild xxx.csproj /p:VisualStudioVersion=14.0 /p:DeployOnBuild=true /p:PublishP
 ```
 ## jdk
 ```
+特别的:jdk1.8及以前的版本需要配置CLASSPATH变量：CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 windows安装jdk
 解压到目录：C:\dw\jdk-11.0.2
 setx JAVA_HOME "C:\dw\jdk-11.0.2" /m
@@ -1462,10 +1474,12 @@ SET IMPLICIT_TRANSACTIONS ON
   变量标识符
 自定义js处理脚本，场景：首先调用登陆接口，认证成功后更新token值，后续的接口使用更新后的token值
   执行时机：发送请求之前（Pre-request Script）、获取响应之后（Tests）
-  响应内容：pm.response，pm.response.text(),pm.response.json()
+  响应内容：pm.response,pm.response.text(),pm.response.json()
   更新变量值：pm.environment.set(变量名,值)
   打印变量的值：console.log(变量名,变量值)
   特别的：右侧提供了一些常用代码段，点击即可获得代码段，然后做一些修改即可满足实际需求
+  获取响应头:postman.getResponseHeader('set-cookie')
+  获取cookie:postman.getResponseCookie('cookieName')
 关闭自动弹出更新提示框，步骤如下：
   创建空的node项目，执行：npm init
   复制C:/Users/用户/AppData/Local/Postman/app-5.5.0/resources/app.asar到项目根目录
@@ -1476,4 +1490,35 @@ SET IMPLICIT_TRANSACTIONS ON
   把app这个文件夹复制到postman的安装目录的resources目录下
   把app.asar改成别的文件名做为备份，原理：postman既会自动加载app.asar，也会自动加载app文件夹，优先级未研究
   本质上：postman是基于chrome的定制版程序，定制的功能就是app.asar文件中的js文件，chrome会加载和执行这些js
+```
+## VBA
+```
+依赖Microsoft Scriptlet Library
+Function GUID()
+    Dim Lib As Scriptlet.IGenScriptletTLib
+    Set Lib = CreateObject("Scriptlet.Typelib")
+    GUID = Lib.GUID
+End Function
+
+生成随机长度随机内容的汉字字符串，长度[1,length]
+Function NR(length As Integer) As String
+    Dim min As Long
+    Dim max As Long
+    Dim len2 As Integer
+    Dim rt As String
+    rt = ""
+    min = 19968
+    max = 19968 + 2000
+    len2 = length * Rnd() + 1
+    For i = 1 To len2
+      rt = rt + ChrW(((max - min) * Rnd() + min))
+    Next
+    NR = rt
+End Function
+
+从输入的数据列表中随机返回一种，可变长参数
+Function XL(ParamArray intScores() As Variant) As String
+    XL = intScores((UBound(intScores())) * Rnd())
+End Function
+
 ```
