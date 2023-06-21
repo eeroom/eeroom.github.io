@@ -232,6 +232,11 @@ tasks.json 完整路径：项目根目录/.vscode/tasks.json
 	"label": "被launch.json中的preLaunchTask使用"
 	"command": "编译器路径，make程序路径，各种自定义操作需要执行的程序"
 	"args": [参数数组]
+设置mingw-w64的终端
+	配置项：
+	"terminal.integrated.shell.windows": "msys2_shell.cmd的全路径，或者把msys2的根目录添加到PATH变量",
+    "terminal.integrated.shellArgs.windows": ["-mingw64", "-no-start", "-defterm", "-here"] 
+	可以配置各个子环境的终端，通过msys2_shell.cmd -help查看子环境对应的参数值
 ```
 ## C语法
 ```
