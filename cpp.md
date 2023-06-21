@@ -191,7 +191,7 @@ CLANG32环境
 
 pacman -Ss
   搜索包 
-pacman -S 包名 [--downloadonly 仅从远程依赖仓下载到本地目录，不执行安装]
+pacman -S 包名 [--downloadonly 仅从远程仓库下载到本地目录，不执行安装]
   安装软件，可以同时安装多个包，只需以空格分隔包名即可。
   默认的保存目录：/var/cache/pacman/pkg
   保存到本地的文件都是*.pkg.tar.zst和一个对应的*.pkg.tar.zst.sig，方便打包留着以后进行离线安装
@@ -208,31 +208,30 @@ pacman -Sl
   显示软件仓库所有软件的列表
 pacman -Qs 关键字
   搜索已安装的软件包
-pacman -Qi 软件包
-  查看某个软件包详细信息
-pacman -Ql 软件名
-  列出软件包所有文件安装路径
-pacman -R[v 详情] 软件名
-  卸载软件，不卸载依赖
-pacman -Rs 软件名
-  卸载软件，同时卸载依赖
-pacman -Rsc 软件名
-  卸载软件，并卸载依赖该软件的其它程序
-pacman -Sg
-  列出软件仓库上所有软件包组
-pacman -Qg
-  列出本地已经安装的软件包组和子软件包
-pacman -Sg 软件包组
-  查看软件包组所包含的软件包
-pacman -Qg 软件包组
-  查看软件包组所包含的软件包
-pacman -Sc
-  清理未安装的软件包文件
-pacman -Scc
-  清理所有的缓存文件
 
 GTK
 gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
+```
+## VsCode配置gcc环境
+```
+C/C++插件，微软提供，支持跳转到定义，智能提示等功能，默认使用vc编译器和msvc的体系进行智能提示
+c_cpp_properties.json C/C++插件的配置文件，完整路径：项目根目录/.vscode/c_cpp_properties.json
+	默认情况下没有该文件，可以直接创建 或者 打开命令面板，搜索c++，选择编辑配置(UI/JSON)间接创建
+	关键配置项：
+	"compilerPath": "编译器完整路径"
+	"intelliSenseMode": "智能提示的体系"
+	"includePath": ["${workspaceFolder}/**","E:/gtk30/include/**","E:/gtk30/lib/glib-2.0/include",需要include文件的所在目录]
+launch.json vscode的调试功能读取此配置文件，完整路径：项目根目录/.vscode/launch.json
+	关键配置项：
+	"name": "展示在调试的下拉列表"
+	"program": "被调试的程序"
+	"miDebuggerPath": "调试器完整路径"
+	"preLaunchTask": "调试之前的要执行操作，比如编译，对应task.json中的lable，非必需"
+tasks.json 完整路径：项目根目录/.vscode/tasks.json
+	关键配置项：
+	"label": "被launch.json中的preLaunchTask使用"
+	"command": "编译器路径，make程序路径，各种自定义操作需要执行的程序"
+	"args": [参数数组]
 ```
 ## C语法
 ```
