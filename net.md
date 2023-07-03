@@ -396,3 +396,47 @@ docker run -d -it --rm -p 5000:80 --name wch123 wch
 docker images|grep none|awk '{print $3 }'|xargs docker rmi
 ```
 微软文档[dotnet publish的FAQ:](https://docs.microsoft.com/zh-cn/dotnet/core/tools/dotnet-publish)
+
+## HTTP上传文件
+```
+分片上传
+浏览器支持，前提，文件API，File类
+发起多次请求，浪费时间
+请求特征和普通请求一致，常见的web服务器都支持
+
+流式上传
+浏览器不支持
+需要服务端支持，IIS支持，遇到中间有代理的情况，可能就失效
+只发起一次请求
+关键请求头：Transfer-Encoding: chunked
+和流式下载是对应的
+
+curl的例子：
+curl -X POST -v -T D:/Downloads/2003-MSDN.iso -H "Content-Type: application/octet-stream" --header "Transfer-Encoding: chunked"   "http://localhost:8083/HandlerBigFile.ashx"
+
+c#的例子
+var request= (HttpWebRequest)System.Net.HttpWebRequest.Create("http://localhost:8083/HandlerBigFile.ashx");
+request.Method = System.Net.WebRequestMethods.Http.Post;
+request.KeepAlive = true;
+request.SendChunked = true;
+//只设置request.SendChunked，效果就是请求头走Transfer-Encoding，不走Content-Length
+//request.TransferEncoding = "chunked";
+request.MediaType = "application/octet-stream";
+request.Pipelined = true;
+//上传大文件必须设置为false,否则导致客户端占用大量内存
+request.AllowWriteStreamBuffering = false;
+//默认是100s，大文件场景时间很长，-1为一直等待，不做超时检测
+request.Timeout = -1;
+using (var fs=new System.IO.FileStream("E:\\W7Dell5490MSDN.GHO", System.IO.FileMode.Open)) {
+     //这一步就会发送请求到服务端
+     var stream = request.GetRequestStream();
+     var bufferSize =5*81920;
+     var buffer = new byte[bufferSize];
+     var length = 0;
+     var timer = 0;
+     while ((length=fs.Read(buffer,0,bufferSize))>0) {
+          stream.Write(buffer, 0, length);
+          stream.Flush();
+     }
+}
+```
