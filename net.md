@@ -406,7 +406,7 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 
 流式上传
 浏览器不支持
-需要服务端支持，IIS支持，遇到中间有代理的情况，可能就失效
+需要服务端支持，IIS支持，aspnetcore的Kestrel服务器支持，遇到中间有代理的情况，可能就失效
 只发起一次请求
 关键请求头：Transfer-Encoding: chunked
 和流式下载是对应的
