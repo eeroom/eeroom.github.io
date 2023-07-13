@@ -57,152 +57,150 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 ```
 ## sqlserver
 ```
---声明变量
-declare @变量名称 类型
---变量赋值
-set @变量名=变量值
---变量赋值     
-select @变量名=count(1) from 表
---变量赋值，如果有多行，则变量的值是最后一行对应的值     
-select @变量名=列名称 from 表
---声明临时表
-declare @表名称 table(列名称 类型，列名称 类型，...)
-
---插入语句，表必须存在
-insert into 表(列名称，...) values()
-insert into 表 values()
-insert into 表(列名称，...) select语句
-insert into 表 select语句
---插入语句，表必须不存在，#表名称 为临时表，会话结束自动删除，否则为非临时表
-select 列
-into 表
-from ....
-
---更新语句，批量更新
-update 表 别名1
-join 表2 别名2 on 连接条件
-set 别名1.列=别名2.列
-where ....
-
---删除语句，批量删除
-delete 别名1 
-from 表1 别名1
-join 表2 别名2 on 连接条件
-where 筛选条件
-
---output语句
-insert into 表(列) output inserted.列名 values()
-update 表 set 列1=值 output inserted.列名 where ...
-
---分支语句
-if (@变量=3)
-     begin
-     ...
-     end
-else
-     begin
-     ...
-     end
---循环语句
-while @变量=3
-     begin
-     ...
-     end
-
---创建序列，sqlserver2014及以后的版本 
-CREATE SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
---删除序列   
-drop SEQUENCE 序列名称
-
+声明变量
+     declare @变量名称 类型
+变量赋值
+     set @变量名=变量值
+     select @变量名=count(1) from 表
+     select @变量名=列名称 from 表
+       特别的：如果有多行，则变量的值是最后一行对应的值
+声明临时表
+     declare @表名称 table(列名称 类型，列名称 类型，...)
+插入语句（表必须存在）
+     insert into 表(列名称，...) values()
+     insert into 表 values()
+     insert into 表(列名称，...) select语句
+     insert into 表 select语句
+插入语句（表必须不存在）
+     select 列
+     into 表名
+     from ....
+       特别的：表名以#开头， 为临时表，会话结束后自动删除，否则为非临时表
+更新语句（联表）
+     update 表 别名1
+     join 表2 别名2 on 连接条件
+     set 别名1.列=别名2.列
+     where ....
+删除语句（联表）
+     delete 别名1 
+     from 表1 别名1
+     join 表2 别名2 on 连接条件
+     where 筛选条件
+output语句
+     insert into 表(列) output inserted.列名 values()
+     update 表 set 列1=值 output inserted.列名 where ...
+分支语句
+     if (@变量=3)
+          begin
+          ...
+          end
+     else
+          begin
+          ...
+          end
+循环语句
+     while @变量=3
+          begin
+          ...
+          end
+序列
+     create SEQUENCE 序列名称 AS 类型    START WITH 初始值    INCREMENT BY 步长    [CYCLE]
+     drop SEQUENCE 序列名称
+       特别的：需sqlserver2014及以后的版本才支持
 集合操作
-取差集：except 
-取并集：union
-取交集：intersect
-
+     取差集：except 
+     取并集：union
+     取交集：intersect
 调试
-存储过程和触发器可以在ssms中直接进行调试
-打开存储过程和触发器的代码，对应的修改或者创建语句都可以，打上断点
-新建一个查询窗口，编写调用存储过程的语句或者编写增删改的语句，打上断点，从菜单栏中的调试菜单启动调试，F11即可进入逐行调试
-特别的：触发器的代码执行的时候，总是发生在增删改完成以后，所以代码中查询触发器所在表的时候一定要考虑到这个情况
+     存储过程和触发器可以在ssms中直接进行调试
+     打开存储过程和触发器的代码，对应的修改或者创建语句都可以，打上断点
+     新建一个查询窗口，编写调用存储过程的语句或者编写增删改的语句，打上断点，从菜单栏中的调试菜单启动调试，F11即可进入逐行调试
+触发器
+     触发器的代码执行的时候，总是发生在增删改完成以后
+     触发器或者存储过程代码中查询触发器所在表的时候一定要考虑到上述情况
 
-表分区
-第一步：添加文件组和文件
-创建分区函数：create partition function 名称(分区字段类型) as range right for values(区间值1,区间值2,,,)
-创建分区scheme:create partition scheme 名称 as partition 分区函数名称 to(文件组1,文件组2,,,)
-tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段，需要对应6个文件组，,不同的分区可以使用相同的文件组
-创建分区表：create table 表名称(列1名称 类型，列2名称 类型,...)on 分区scheme(分区字段)
-创建聚集索引[且唯一索引]：create [unique] clustered index 索引名称 on 表名称(列名称 ASC或DESC [,列名称2 ASC或DESC]) ON 分区scheme(分区字段)
-创建非聚集索引[且唯一索引]：create [unique] nonclustered index 索引名称 on 表名称(列名称 ASC或DESC [,列名称2 ASC或DESC]) ON 分区scheme(分区字段)
-特别地：如果是唯一索引，则索引列中一定要包含分区列！
-设定主键本质就是创建唯一聚集索引，所以分区表如果创建主键，则一定要包含分区列
-
-查询具体的数据会落在哪个分区：select $partition.分区函数名 ('具体数据对应分区列的值，比如："2020-06-04"')
-返回值是分区序号，从1开始
-查询指定分区序号下的所有记录：select * from 表名 where $partition.分区函数(分区列)=分区序号
-
-删除1年以前的定分区数据
-创建临时表，结构和源表一样，使用相同的 on 分区scheme(分区字段)
-确定要删除的分区的序号，分区序号从1开始，计算序号的逻辑，借助临时表，键值结构(月份，序号)
-切换别删除分区的数据到临时表：alter table 源表 switch partition 分区序号 to 临时表 partition 分区序号
-删除临时表：drop table 临时表
-
-删除分区所在的数据文件场景：某个数据文件可能有一个或多个分区的数据落在这个文件上，但是这些分区的数据业务上已经没有意义,需要清理，并且释放磁盘空间
-     删除这些分区数据，并且drop掉临时表后，磁盘文件并不会释放
-     删除办法：确保这个数据文件已经被清理，确保这个文件分组至少有一个文件，如果这个数据文件是这个文件组下仅有的一个文件，就添加一个新文件到文件组
-               执行收缩：DBCC SHRINKFILE([文件名称],EMPTYFILE)，即使文件很大，T级别，收缩也很快，收缩成功后，文件大小并不会改变，也就是不会释放磁盘空间
-               执行删除数据文件：ALTER DATABASE [数据库] REMOVE FILE [文件名称]
-
-水平分区，表结构不变，数据落在不同的文件
-优点：文件可以落在不同的磁盘，按照分区条件查数据的时候性能大大提高
-		极大的方便不停机归档数据，如果不分区进行归档数据，有两个土办法(往归档表写，往原表删；或者：原本重命名，新建原表，往原表回写)
-
---利用循环语句和临时表监测数据变化
---场景：有时候分析生产环境bug，权限所限，不能创建触发器，也没有建表权限，只能临时表，触发器和非临时表更科学
---bug原因：分布式系统中，程序员认为总是按照T1,T2,T3步骤的顺序修改某个字段，代码的逻辑判断中又依赖该字段值，实际情况可能会出现T1,T3,T2的更新顺序，导致bug
---思路：利用循环语句,定时查询某个需要监视的数据行，然后把当前值写入记录表中，额外包含写入时的时间，后续按照写入时间排序，就能看出数据是如何变化的！
---创建临时表
-create table #表明称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
---循环查询数据再插入临时表,每N秒查一次:
-while 1=1
-begin
+表分区的操作步骤：
+  添加文件组和文件
+  创建分区函数：create partition function 名称(分区字段类型) as range right for values(区间值1,区间值2,,,)
+  创建分区scheme:create partition scheme 名称 as partition 分区函数名称 to(文件组1,文件组2,,,)
+  tips:文件组个数=区间值个数+1，因为5个区间值对应6个区间段，需要对应6个文件组，,不同的分区可以使用相同的文件组
+  创建分区表：create table 表名称(列1名称 类型，列2名称 类型,...)on 分区scheme(分区字段)
+  创建聚集索引[且唯一索引]：create [unique] clustered index 索引名称 on 表名称(列名称 ASC或DESC [,列名称2 ASC或DESC]) ON 分区scheme(分区字段)
+  创建非聚集索引[且唯一索引]：create [unique] nonclustered index 索引名称 on 表名称(列名称 ASC或DESC [,列名称2 ASC或DESC]) ON 分区scheme(分区字段)
+  特别地：如果是唯一索引，则索引列中一定要包含分区列！
+  设定主键本质就是创建唯一聚集索引，所以分区表如果创建主键，则一定要包含分区列
+分区表查询
+  查询具体的数据会落在哪个分区：select $partition.分区函数名 ('具体数据对应分区列的值，比如："2020-06-04"')
+  返回值是分区序号，从1开始
+  查询指定分区序号下的所有记录：select * from 表名 where $partition.分区函数(分区列)=分区序号
+分区表清理的操作步骤
+  创建临时表，结构和源表一样，使用相同的 on 分区scheme(分区字段)
+  确定要删除的分区的序号，分区序号从1开始，计算序号的逻辑，借助临时表，键值结构(月份，序号)
+  切换别删除分区的数据到临时表：alter table 源表 switch partition 分区序号 to 临时表 partition 分区序号
+  删除临时表：drop table 临时表
+  释放磁盘空间
+分区表清理的场景
+  某个数据文件可能有一个或多个分区的数据落在这个文件上，但是这些分区的数据业务上已经没有意义
+  需要清理分区数据，加快查询速度
+  需要释放磁盘空间，降低磁盘占用
+  清理分区数据后，分区对应的数据文件仍然存在，文件大小不会改变
+  删除分区表对应的临时表后，临时表的数据文件仍然存在，文件大小不会改变
+释放磁盘空间的操作步骤：
+  确保数据文件对应的分区已经被清理
+  确保数据文件所在的分组在释放后还至少有一个文件，如果该数据文件是所在文件组中的唯一文件，需要提前添加一个新文件到所在文件组
+  执行收缩：DBCC SHRINKFILE([文件名称],EMPTYFILE)，
+    即使文件很大，T级别，收缩也很快，收缩成功后，文件大小并不会改变，也就是不会释放磁盘空间
+  执行删除数据文件：ALTER DATABASE [数据库] REMOVE FILE [文件名称]
+    文件删除后，才真正的释放了磁盘空间
+水平分区
+  表结构不变，数据落在不同的文件
+  优点：
+  文件可以落在不同的磁盘，按照分区条件查数据的时候性能大大提高
+  极大的方便不停机归档数据，如果不分区进行归档数据，有两个土办法(往归档表写，往原表删；或者：原本重命名，新建原表，往原表回写)
+数据监测（循环语句和临时表实现）
+  场景：分析生产环境bug，只有查询权限，不能创建触发器，不能创建建表。
+  bug：分布式系统中，程序员预期按照步骤T1,T2,T3的顺序修改某个字段，代码的逻辑判断依赖该字段值，实际情况出现了步骤T1,T3,T2的更新顺序，导致bug
+  目的：得到某个字段值的变化情况
+  实现方法：创建临时表,循环语句,定时查询需要监视的数据字段，把查询结果和当前时间（作为写入时间）添加到临时表中，按照写入时间排序就是字段的变化过程
+  create table #表名称(列1 列1的类型,列2 列2的类型,......,写入时间 datetime)
+  while 1=1
+  begin
      --等待500毫秒，小时:分钟:秒:毫秒
-	WAITFOR DELAY '00:00:00:500'
-	insert into #表名称(列1,列2,...,写入时间)
-	select 列a,列b,...,getdate()
-	form ...
-	where ....
-end
-
---切割字符串的函数，等价于split函数
-CREATE FUNCTION splitToString
-(
-	@str nvarchar(1000),
-	@splitstr nvarchar(10)
-)
-RETURNS @returntable TABLE
-(
-	v1 nvarchar(100)
-)
-AS
-BEGIN
-	DECLARE @xmlstr XML;
-    SET @xmlstr = CONVERT(XML, '<root><a>' + REPLACE(@str, @splitstr, '</a><a>') + '</a></root>');
-    INSERT INTO @returntable
-    SELECT F1 = N.a.value('.', 'varchar(100)') 
-	FROM @xmlstr.nodes('/root/a') N(a);
-	RETURN;
-END
---使用示例
-select *
-from INFORMATION_SCHEMA.COLUMNS cc
-join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
-
---获取指定表已执行过的历史语句
-select ST.text
-from sys.dm_exec_query_stats  QS
-CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
-WHERE ST.text LIKE '%Student%'
-order by QS.creation_time DESC
+  	WAITFOR DELAY '00:00:00:500'
+  	insert into #表名称(列1,列2,...,写入时间)
+  	select 列a,列b,...,getdate()
+  	form ...
+  	where ....
+  end
+切割字符串（split函数）
+  CREATE FUNCTION splitToString
+  (
+  	@str nvarchar(1000),
+  	@splitstr nvarchar(10)
+  )
+  RETURNS @returntable TABLE
+  (
+  	v1 nvarchar(100)
+  )
+  AS
+  BEGIN
+  	DECLARE @xmlstr XML;
+      SET @xmlstr = CONVERT(XML, '<root><a>' + REPLACE(@str, @splitstr, '</a><a>') + '</a></root>');
+      INSERT INTO @returntable
+      SELECT F1 = N.a.value('.', 'varchar(100)') 
+  	FROM @xmlstr.nodes('/root/a') N(a);
+  	RETURN;
+  END
+切割字符串（使用示例）
+     select *
+     from INFORMATION_SCHEMA.COLUMNS cc
+     join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
+数据库已执行的sql语句的历史纪录（查询系统表）
+  select ST.text
+  from sys.dm_exec_query_stats  QS
+  CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
+  WHERE ST.text LIKE '%Student%'
+  order by QS.creation_time DESC
 ```
 
 ## mysql
