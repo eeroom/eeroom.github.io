@@ -77,12 +77,19 @@ insert into 表 select语句
 select 列
 into 表
 from ....
+
 --更新语句，批量更新
 update 表 别名1
 join 表2 别名2 on 连接条件
 set 别名1.列=别名2.列
 where ....
+
 --删除语句，批量删除
+delete 别名1 
+from 表1 别名1
+join 表2 别名2 on 连接条件
+where 筛选条件
+
 --output语句
 insert into 表(列) output inserted.列名 values()
 update 表 set 列1=值 output inserted.列名 where ...
