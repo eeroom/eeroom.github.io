@@ -196,11 +196,10 @@ output语句
      from INFORMATION_SCHEMA.COLUMNS cc
      join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
 数据库已执行的sql语句的历史纪录（查询系统表）
-  select ST.text
-  from sys.dm_exec_query_stats  QS
-  CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
-  WHERE ST.text LIKE '%Student%'
-  order by QS.creation_time DESC
+  select eqs.creation_time as 首次次执行时间,eqs.last_execution_time 末次执行时间,eqs.execution_count 总次数,eqt.text sql语句,eqt.*,eqs.*
+  FROM  sys.dm_exec_query_stats eqs CROSS APPLY sys.dm_exec_sql_text(eqs.sql_handle) eqt
+  order by eqs.last_execution_time desc
+  特别的：只能知道首次和末次执行时间，如果每次执行的语句相同，则总次数会增加，但是不知道中间每次执行的具体时间
 ```
 
 ## mysql
