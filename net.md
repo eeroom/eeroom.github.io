@@ -57,6 +57,7 @@ java的Calendar.getInstance().getTime()等价于c#中的(DateTime.Now.ToUniversa
 ```
 ## sqlserver
 ```
+https://juejin.cn/post/7231070518223962172
 声明变量
      declare @变量名称 类型
 变量赋值
