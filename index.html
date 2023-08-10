@@ -52,7 +52,7 @@
     <script type="text/javascript">
         function setNavRight(){
             var lstPageId= $("#doc>h2").toArray().map(el=>$(el).prop("id"));
-            var lstPageLi=lstPageLi.map(id=>`<a id="btn${id}" href="#${id}" class="list-group-item">${id}</a>`)
+            var lstPageLi=lstPageId.map(id=>`<a id="btn${id}" href="#${id}" class="list-group-item">${id}</a>`)
             $(".list-group-nav-right").append(lstPageLi.join(''))
             $(".list-group-nav-right a").click(function (params) {
                 $(".list-group-nav-right a").removeClass("active")
