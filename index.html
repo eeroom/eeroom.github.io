@@ -40,9 +40,42 @@
             height: auto;
             display: block;
         }
+        .list-group-nav-right{
+            position: fixed;
+            right: 10px;
+            top:80px
+        }
+        .list-group-item{
+            padding: 3px 15px
+        }
     </style>
     <script type="text/javascript">
-      
+        function setNavRight(){
+            var lstPageId= $("#doc>h2").toArray().map(el=>$(el).prop("id"));
+            var lstPageLi=lstPageLi.map(id=>`<a id="btn${id}" href="#${id}" class="list-group-item">${id}</a>`)
+            $(".list-group-nav-right").append(lstPageLi.join(''))
+            $(".list-group-nav-right a").click(function (params) {
+                $(".list-group-nav-right a").removeClass("active")
+                $(this).addClass("active")
+                window.setTimeout(function (params) {
+                    document.documentElement.scrollTop=document.documentElement.scrollTop-60
+                },10)
+            })
+            $("#btn"+lstPageId[0]).trigger("click")
+            var lstPageTop=lstPageId.map(id=>({id,top:$("#"+id).offset().top})).reverse()
+            window.onscroll=function (params) {
+                var top=document.documentElement.scrollTop
+                for (let index = 0; index < lstPageTop.length; index++) {
+                    const element = lstPageTop[index];
+                    if(top+80>element.top){
+                        $(".list-group-nav-right a").removeClass("active")
+                        $("#btn"+element.id).addClass("active")
+                        break;
+                    }
+                    
+                }
+            }    
+        }
     </script>
 
 </head>
@@ -77,7 +110,9 @@
             </div>
         </div>
     </nav>
-
+    <div class="list-group list-group-nav-right">
+        
+      </div>
     <div class="container">
         <div class="row">
             <div class="col-xs-24" id='doc'>
