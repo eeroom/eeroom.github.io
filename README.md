@@ -1549,15 +1549,14 @@ frpc 客户端
   "AppParameters"="-c frpc.ini"
 frpc.ini
   [common]
-server_addr = 服务端地址
-server_port = 服务端监听的端口
-token = 服务端的token值
-
-[RDP]
-type = tcp
-local_ip = 127.0.0.1
-local_port = 3389
-remote_port = 客户端被代理的监听端口
+  server_addr = 服务端地址
+  server_port = 服务端监听的端口
+  token = 服务端的token值
+  [RDP]
+  type = tcp
+  local_ip = 127.0.0.1
+  local_port = 3389
+  remote_port = 客户端被代理的监听端口
 
 mstsc的使用方法：
   目标地址：frps服务的地址
