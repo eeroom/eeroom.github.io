@@ -77,12 +77,12 @@ https://juejin.cn/post/7231070518223962172
      into 表名
      from ....
        特别的：表名以#开头， 为临时表，会话结束后自动删除，否则为非临时表
-更新语句（联表）
+更新语句（连表）
      update 表 别名1
      join 表2 别名2 on 连接条件
      set 别名1.列=别名2.列
      where ....
-删除语句（联表）
+删除语句（连表）
      delete 别名1 
      from 表1 别名1
      join 表2 别名2 on 连接条件
@@ -119,7 +119,8 @@ output语句
 触发器
      触发器的代码执行的时候，总是发生在增删改完成以后
      触发器或者存储过程代码中查询触发器所在表的时候一定要考虑到上述情况
-
+文件组
+     ALTER DATABASE 数据库 ADD FILEGROUP 文件组名称
 表分区的操作步骤：
   添加文件组和文件
   创建分区函数：create partition function 名称(分区字段类型) as range right for values(区间值1,区间值2,,,)
@@ -197,11 +198,10 @@ output语句
      from INFORMATION_SCHEMA.COLUMNS cc
      join splitToString('1,3,4,5,6,aa',',') t2 on t2.v1=cc.COLLATION_NAME
 数据库已执行的sql语句的历史纪录（查询系统表）
-  select ST.text
-  from sys.dm_exec_query_stats  QS
-  CROSS APPLY sys.dm_exec_sql_text(QS.sql_handle) ST
-  WHERE ST.text LIKE '%Student%'
-  order by QS.creation_time DESC
+  select eqs.creation_time as 首次次执行时间,eqs.last_execution_time 末次执行时间,eqs.execution_count 总次数,eqt.text sql语句,eqt.*,eqs.*
+  FROM  sys.dm_exec_query_stats eqs CROSS APPLY sys.dm_exec_sql_text(eqs.sql_handle) eqt
+  order by eqs.last_execution_time desc
+  特别的：只能知道首次和末次执行时间，如果每次执行的语句相同，则总次数会增加，但是不知道中间每次执行的具体时间
 ```
 
 ## mysql
@@ -248,6 +248,11 @@ call addHandler;
 declare continue handler for sqlexception set errorFlag=1;
 --异常处理
 declare continue handler for sqlexception rollback;  
+--更新语句（连表）
+update 表1 别名1
+join 表2 别名2 on 连接条件
+set 别名1.列名1=别名2.列名2
+where 筛选条件
 ```
 
 ## oracle
