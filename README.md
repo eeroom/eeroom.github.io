@@ -1522,3 +1522,46 @@ Function XL(ParamArray intScores() As Variant) As String
 End Function
 
 ```
+## 代理
+```
+frps 服务端
+注册为windows服务
+  instsrv.exe 服务名 D:\01Tools\frp_0.43.0_windows_amd64\srvany.exe
+注册表内容
+  Windows Registry Editor Version 5.00
+  [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\服务名\Parameters]
+  "Application"="D:\\01Tools\\frp_0.43.0_windows_amd64\\frps.exe"
+  "AppDirectory"="D:\\01Tools\\frp_0.43.0_windows_amd64\\"
+  "AppParameters"="-c frps.ini"
+frps.ini
+  [common]
+  bind_port = 服务端监听的端口
+  token = 自定义的一段token值，客户端使用相同token值连上这个服务端
+
+frpc 客户端
+注册为windows服务
+  instsrv.exe 服务名 D:\01Tools\frp_0.43.0_windows_amd64\srvany.exe
+注册表内容
+  Windows Registry Editor Version 5.00
+  [HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\服务名\Parameters]
+  "Application"="D:\\01Tools\\frp_0.43.0_windows_amd64\\frpc.exe"
+  "AppDirectory"="D:\\01Tools\\frp_0.43.0_windows_amd64\\"
+  "AppParameters"="-c frpc.ini"
+frpc.ini
+  [common]
+server_addr = 服务端地址
+server_port = 服务端监听的端口
+token = 服务端的token值
+
+[RDP]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 3389
+remote_port = 客户端被代理的监听端口
+
+mstsc的使用方法：
+  目标地址：frps服务的地址
+  目标端口：客户端被代理的监听端口
+  目标用户名：frpc主机的用户名
+  目标密码：frpc主机的用户密码
+```
