@@ -484,6 +484,7 @@ asp.net springmvc等框架会读取请求流的内容并进行解析，普通文
 iis和servelet中，请求流都只能被读取一次
 
 响应头Transfer-Encoding=chunked配合Rang响应头实现断点续传和多线程下载
+浏览器下载功能都支持解析这两个响应头进行断点续传
 
 
 
