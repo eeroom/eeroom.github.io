@@ -483,6 +483,8 @@ Transfer-Encoding=chunked可以绕过iis和asp.net对请求内容长度的前置
 asp.net springmvc等框架会读取请求流的内容并进行解析，普通文本就转化为键值对，文件内容就创建一个新的内存流来存储请求流中对应的数据，上传大文件的场景就非常浪费
 iis和servelet中，请求流都只能被读取一次
 
+响应头Transfer-Encoding=chunked配合Rang响应头实现断点续传和多线程下载
+
 
 
 
