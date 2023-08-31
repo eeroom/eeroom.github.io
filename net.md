@@ -416,10 +416,13 @@ docker images|grep none|awk '{print $3 }'|xargs docker rmi
 请求特征和普通请求一致，常见的web服务器都支持
 
 流式上传
-浏览器不支持
-需要服务端支持，IIS支持，aspnetcore的Kestrel服务器支持，遇到中间有代理的情况，可能就失效
+浏览器支持，通过xhr可以获取上传进度，fetch不方便获取进度
+需要服务端支持，IIS，tomcat都支持，aspnetcore的Kestrel服务器支持，遇到中间有代理的情况，可能就失效
 只发起一次请求
-关键请求头：Transfer-Encoding: chunked
+关键请求头：content-type: application/octet-stream
+如果不能提前确定上传内容的长度，例如：一边打包一边上传的场景
+     Transfer-Encoding: chunked
+     
 和流式下载是对应的
 
 curl的例子：
@@ -432,22 +435,21 @@ request.KeepAlive = true;
 request.SendChunked = true;
 //只设置request.SendChunked，效果就是请求头走Transfer-Encoding，不走Content-Length
 //request.TransferEncoding = "chunked";
-request.MediaType = "application/octet-stream";
+request.ContentType = "application/octet-stream";
 request.Pipelined = true;
 //上传大文件必须设置为false,否则导致客户端占用大量内存
 request.AllowWriteStreamBuffering = false;
 //默认是100s，大文件场景时间很长，-1为一直等待，不做超时检测
 request.Timeout = -1;
 using (var fs=new System.IO.FileStream("E:\\W7Dell5490MSDN.GHO", System.IO.FileMode.Open)) {
-     //这一步就会发送请求到服务端
+     //这一步就会发送请求到服务端，到达我们的逻辑代码，
+     //如果是表单提交，则不行，服务端的框架代码会先读取整个请求体，然后解析出表单提交的内容
      var stream = request.GetRequestStream();
-     var bufferSize =5*81920;
+     var bufferSize =8192;
      var buffer = new byte[bufferSize];
      var length = 0;
-     var timer = 0;
      while ((length=fs.Read(buffer,0,bufferSize))>0) {
           stream.Write(buffer, 0, length);
-          stream.Flush();
      }
 }
 ```
