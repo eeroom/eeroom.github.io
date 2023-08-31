@@ -462,5 +462,28 @@ soket协议约定：
 如果接收缓冲区满了，就会通知对端停止发送，等到业务代码把接收缓冲区中的数据被取走了，才通知对端继续发送
 如果接受缓冲区没有数据，则读取接收缓冲区数据的业务代码阻塞，直到接收缓冲区中有数据
 
+http请求中常见的content-type值，iis和tomcat的默认处理策略
+content-type=表单   不能立即到达业务代码，服务端会读取请求流的内容，并且解析为字典形式表单数据及文件流，对请求体长度有限制
+content-type=application/json 不能立即到达业务，asp.net mvc、spring mvc等框架会有参数绑定、参数解析器等前置处理，读取请求体内容然后反序列化
+content-type=application/octet-stream  可以立即到达业务，asp.net mvc、spring mvc等框架目前都不会额外这类请求，iis会校验请求体长度，最大2GB，tomcat不会校验长度
+
+Transfer-Encoding和Content-Length请求如果同时出现，则忽略Content-Length
+对于发送请求之前，或者发送响应之前不能确定内容长度，就使用Transfer-Encoding=chunked ，比如变打包边上传，或者边打包边下载
+Transfer-Encoding=chunked可以绕过iis和asp.net对请求内容长度的前置校验，但是业务代码读取请求流内容的时候仍然受到长度限制，
+     asp.net 4.5版本提供新的api, HttpRequest.GetBufferlessInputStream()可以忽略长度限制
+     aspnetcore的kerstral服务器在这种场景下没有长度限制
+
+总结：上传大文件>10G，浏览器侧把文件分成多个块上传，比如（200MB一块），块的体积太小（使用表单提交）会导致大量的请求，严重降低整体效率
+使用content-type=application/octet-stream进行提交，其他的参数值放在请求头，这样请求可以立即到达业务代码，避免被服务端读取进行缓存，然后我们再读取
+浏览器的xhr和fetech目前不支持设置请求头Transfer-Encoding=chunked
+
+总结：http请求本身很简单，默认情况下，请求可以立即到达业务代码，但是服务端和各种框架会对某些类型的请求做一些前置处理，
+比如：content-type=multipart/form-data;boundary=xxxx 类型的请求
+服务端可能会校验请求提长度
+asp.net springmvc等框架会读取请求流的内容并进行解析，普通文本就转化为键值对，文件内容就创建一个新的内存流来存储请求流中对应的数据，上传大文件的场景就非常浪费
+iis和servelet中，请求流都只能被读取一次
+
+
+
 
 ```
