@@ -65,3 +65,12 @@ Function类型
                     .__proto__  [Object.prototype]
                     .__proto__  [null]
 ```
+## 复制和粘贴
+```
+input元素.select()
+document.exeCommand("Copy")
+    复制的关键，必需借助input元素，执行select()，然后执行浏览器的复制api，等价于手动选中内容然后执行
+    对于复制input的type为password时的内容，需要借助障眼法，先把type改为text，复制api执行后，再把type改为password
+    
+    
+```
