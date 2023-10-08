@@ -736,3 +736,15 @@ var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
 mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
+## 命令行参数
+```
+-D 添加的参数程序jvm的属性，-D属性名=属性值
+  例如：java -Dserver.port=2200 -jar ./target/hello.jar
+  特别的：-D要放在-jar前面，否则参数无效。对应为VM options
+参数直接跟在命令后面
+  例如：java -jar hello.jar 参数名=参数值 参数名2=参数值2
+  参数就是jar包主启动类中main方法的args参数，按顺序来
+-- springboot特有的方式，--key=value
+  例如：java -jar ./target/hello.jar --server.port=2200
+  特别的：也可以通过@Value("${server.port}")取到值
+```
