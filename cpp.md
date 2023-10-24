@@ -113,7 +113,21 @@ make默认生成第一个目标，make clean 这是指定make的目标
 执行：make
 执行：make install
 	会把主程序和配置文件复制到/usr/local/nginx 目录下
-
+nginx.conf,配置静态站点和文根
+http{
+	server{
+		listen 80;
+		server_name www.baidu.com #如果配置，则进行hostname匹配过滤
+		location / {
+			/root/www/aa/   html; # 程序文件所在的目录
+            index  index.html index.htm; # 默认页
+		}
+		location /mv {
+			/root/s1/   html; #浏览器访问/mv/qq.html，则实际访问文件为的/root/www/mv/qq.html
+            index  index.html index.htm; # 默认页
+		}
+	}
+}
 ```
 ## 编译mariadb
 ```
