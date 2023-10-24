@@ -697,10 +697,9 @@ tips:可以写最2个简单的java文件，一个包含中文字符，一个包�
 
 char类型占用2个字节，每个char实例的整数值对应unicode规范中该字符的代码值(特别：不包含代码区标识位后的代码值)
 ```
-### ![效果图](./img/unicode代码平面.png)
-### ![效果图](./img/unicode代码平面-BMP.png)
-
-### 发布jar包到maven中心仓
+![效果图](./img/unicode代码平面.png)
+![效果图](./img/unicode代码平面-BMP.png)
+## 发布jar包到maven中心仓
 ```
 注册sonatype账号，然后提第一次发jar包的issue到sonatype，按照指导完成后，sonatype会开通一个仓库给我们。
 我的jar先发到sonatype仓，然后被同步到maven中心仓
@@ -729,7 +728,6 @@ gpg教程
 完整教程请查看pdf文件
 ```
 gpg完整教程文档[FAQ:](./pdf/gpg教程.pdf)
-
 ## jackson
 ```
 var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
