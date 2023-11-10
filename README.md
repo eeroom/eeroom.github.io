@@ -302,6 +302,8 @@ man man
   如果执行卡住就是熵值不够，java的java.util.secureRandom函数会卡住
 /proc/sys/kernel/random/entropy_avail
   查看熵值
+/proc/sys/kernel/random/uuid
+  查看uuid
 /proc/version
   查看系统当前版本信息
 /proc/cpuinfo
