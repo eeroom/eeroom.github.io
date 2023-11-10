@@ -129,6 +129,20 @@ http{
 	}
 }
 ```
+## 编译haveged
+```
+准备gcc
+官网下载tar.gz包，然后解压
+切换到压缩包根目录
+	执行： ./configure
+	执行完configure,就会生成makefile文件，然后就可以执行make
+执行：make
+执行：make install
+	会把主程序和配置文件复制到/usr/local/sbin/ 目录下
+启动程序：haveged -w 1024 -v 1 [--Foreground 可选]
+执行：make uninstall
+	卸载程序
+```
 ## 编译mariadb
 ```
 准备依赖：g++ 编译器和ncurses-devel
