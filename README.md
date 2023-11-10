@@ -298,7 +298,14 @@ man man
 /dev/random
   真随机数
   在虚拟机上会卡住，因为不是真实硬件，熵值不够，无法产生随机数，需要安装haveged软件，增加熵值
-  cat /dev/random |od -x
+  查看随机数值: cat /dev/random |od -x
+  如果执行卡住就是熵值不够，java的java.util.secureRandom函数会卡住
+/proc/sys/kernel/random/entropy_avail
+  查看熵值
+/proc/version
+  查看系统当前版本信息
+/proc/cpuinfo
+  查看cpu信息
 /etc/hostname
   计算机名称
 /etc/profile
