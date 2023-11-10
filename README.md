@@ -201,7 +201,7 @@ vi 文件路径
             s/被替换的值/新值/g   替换光标所在行所有匹配的值
             %s/被替换的值/新值    替换所有行各行第一个匹配的值
             %s/被替换的值/新值/g  替换所有行所有匹配的值
-od 文件路径
+od 文件路径或者其他二进制内容
   以16进制模式查看文件内容
 stat 路径
   查看inode的编号，大小，所在磁盘区块等信息
@@ -220,22 +220,6 @@ dir /s /b
 ```
 ## 系统及配置
 ```
-/etc/shadow
-  保存了所有的用户账号
-chage -l 账号名
-  查看账号的信息，过期时间，密码过期时间等
-su 用户名
-  直接切换用户，不用logout
-logout
-  注销当前用户
-poweroff
-  立刻关机
-halt
-  立刻关机，centos6好用，7不行，原因待研究
-shutdown [-h 关机] [-r 重启] [now 立刻执行]
-  关机或者重启
-shutdown [-s 关机] [-r 重启] [-t 秒数]
-  windows系统关机或者重启
 free [-h 美化显示]
   内存使用情况
 top 
@@ -248,10 +232,6 @@ pstree
   需要安装包：psmisc，everything版中可以找到，这个包没有其他依赖
 kill [-l 列举所有信号] [-信号] [-pid 进程id]
   结束进程
-chkconfig [--add 增加][--del 删除][--list 列举全部] [服务名称 [on 开机启动] [off 开机不启动]]
-  服务管理工具，启用、禁用服务等，已过时，centos7中被systemd取代
-service [--status-all 所有状态] [服务名成 [start 启动][stop 停止][restart 重启]]
-  服务管理工具，启动、停止、查看状态等，已过时
 ss
   列举所有在用的端口
 lsof
@@ -318,6 +298,27 @@ man man
   执行source /etc/profile ，让新配置生效
 /etc/passwd
   所有的用户和相关信息
+/etc/shadow
+  保存了所有的用户账号
+chage -l 账号名
+  查看账号的信息，过期时间，密码过期时间等
+su 用户名
+  直接切换用户，不用logout
+logout
+  注销当前用户
+poweroff
+  立刻关机
+halt
+  立刻关机，centos6好用，7不行，原因待研究
+shutdown [-h 关机] [-r 重启] [now 立刻执行]
+  关机或者重启
+shutdown [-s 关机] [-r 重启] [-t 秒数]
+  windows系统关机或者重启
+chkconfig [--add 增加][--del 删除][--list 列举全部] [服务名称 [on 开机启动] [off 开机不启动]]
+  已过时，centos7中被systemd取代
+  服务管理工具，启用、禁用服务等
+service [--status-all 所有状态] [服务名成 [start 启动][stop 停止][restart 重启]]
+  服务管理工具，启动、停止、查看状态等，已过时
 ie打不开，打开无反应
   注册表修改权限
   路径：HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\Main
