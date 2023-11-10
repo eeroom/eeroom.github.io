@@ -1590,3 +1590,18 @@ mstsc的使用方法：
   目标用户名：frpc主机的用户名
   目标密码：frpc主机的用户密码
 ```
+# httpd
+```
+apache http server
+Everything版中包含安装包，直接安装即可
+安装完成，直接启动即可访问，默认80端口，站点目录为/var/www/html
+添加文件/var/www/html/index.html 即可实现hello world
+配置文件：/etc/httpd/conf/httpd.conf
+找到<Directory "/var/www/html">就是站点目录的配置
+
+基于httpd的虚拟主机VirtualHost，可以配置多个站点
+虚拟主机有3种方式，iis的配置在绑定中有对应的设置
+相同IP不同端口 
+相同IP相同端口不同域名 这个最科学
+不同IP相同端口（多网卡机器）
+```
