@@ -1590,7 +1590,7 @@ mstsc的使用方法：
   目标用户名：frpc主机的用户名
   目标密码：frpc主机的用户密码
 ```
-# httpd
+## httpd
 ```
 apache http server
 Everything版中包含安装包，直接安装即可
@@ -1605,9 +1605,33 @@ Everything版中包含安装包，直接安装即可
 相同IP相同端口不同域名 这个最科学
 不同IP相同端口（多网卡机器）
 ```
-# vsftpd
+## vsftpd
 ```
 Everything版中包含安装包，直接安装即可
 安装完成，直接启动即可访问，默认21端口，匿名访问
 ftp目录为：/var/ftp
 ```
+## oracle数据库
+```
+下载docker镜像：dragonbest520/oracle-xe-10g，oracle-xe-11g等版本
+或者从本地导入镜像
+启动容器：
+docker run --name oracle10g -d -p 49160:22 -p 1521:1521 -p 49162:8080  -v oracle_xe_10g_vol:/usr/lib/oracle -e ORACLE_ALLOW_REMOTE=true   --restart=always dragonbest520/oracle-xe-10g
+镜像已经配置了登陆账号信息，使用navicat即可登录：
+  hostname: 192.168.56.102
+  port: 1521
+  sid: xe
+  username: system
+  password: oracle
+或者使用ssh登陆：
+  ssh root@192.168.56.102 -p 49160
+  password: admin
+或者通过浏览器登录：
+  http://192.168.56.102:49162/apex
+  username: system
+  password: oracle
+
+
+
+```
+
