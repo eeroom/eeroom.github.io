@@ -1,4 +1,4 @@
-## linux发行版
+﻿## linux发行版
 ```
 DVD版
   常用的普通安装版，包含大量常用软件
@@ -404,6 +404,9 @@ ssh 目标机用户名@目标机地址
   修改服务端的sshd_config（不是ssh_config），设置如下：
     UseDNS no
     GSSAPIAuthentication no
+测试网络端口是否通
+  ssh -v 目标ip -p 目标端口
+    如果出现Connection established则表示端口通，如果是Connection refused则表示不通
 windows安装OpenSSH
   解压程序包到指定位置，推荐路径：C:\Program Files\OpenSSH
   执行：powershell.exe -ExecutionPolicy Bypass -File "C:\Program Files\OpenSSH\install-sshd.ps1"
