@@ -5,34 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell Launch Current File",
-            "type": "PowerShell",
-            "request": "launch",
-            "script": "${file}",
-            "args": [],
-            "cwd": "${file}"
-        },
-        {
-            "name": "gcc",
+            "name": "运行app.c",
             "type": "cppdbg",
             "request": "launch",
             //"program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "program": "${fileDirname}\\app.exe",
+            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "E:\\Mingw\\bin\\gdb.exe",
+            "miDebuggerPath": "D:\\01Tools\\msys64\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "为 gdb 启用整齐打印",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }
-            ]
-            // "preLaunchTask": "make"
+            ],
+            "preLaunchTask": "编译app.c"
         }
     ]
 }
