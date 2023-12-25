@@ -4,18 +4,17 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**"
-                ,"E:/gtk30/include/**"
-                ,"E:/gtk30/lib/glib-2.0/include"],
+            ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE"
             ],
             "windowsSdkVersion": "8.1",
-            "compilerPath": "E:/Mingw/bin/gcc.exe",
+            "compilerPath": "D:\\01Tools\\msys64\\mingw64\\bin\\gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++14",
-            "intelliSenseMode": "gcc-x86"
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4
