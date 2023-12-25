@@ -236,6 +236,8 @@ pacman -Sl
   显示软件仓库所有软件的列表
 pacman -Qs 关键字
   搜索已安装的软件包
+pacman -S msys2-keyring
+	解决安装程序报错， signature from "David Macek <david.macek.0@gmail.com>" is unknown trust
 
 GTK
 gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
