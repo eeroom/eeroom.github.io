@@ -317,6 +317,7 @@ nginx -s reload 重启
 --with-http_ssl_module
 
 2、使用msvc编译
+准备步骤参照第1条
 调整configure参数为：
 ./auto/configure \
     --with-cc=cl \
@@ -338,7 +339,7 @@ nginx -s reload 重启
 差异就在于：--with-cc=cl \
 打开vs2015开发人员命令提示符，执行：nmake
 执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
-后续的操作参照第1条的步骤
+后续的操作参照第1条
 ```
 ## C语法
 ```
