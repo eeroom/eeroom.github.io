@@ -268,6 +268,78 @@ tasks.json 完整路径：项目根目录/.vscode/tasks.json
     "terminal.integrated.shellArgs.windows": ["-mingw64", "-no-start", "-defterm", "-here"] 
 	可以配置各个子环境的终端，通过msys2_shell.cmd -help查看子环境对应的参数值
 ```
+## windows环境下编译nginx
+```
+从nginx的官网下载源代码 nginx-1.18.0-RELEASE.gz
+准备pcre,zlib,openssl的源代码[pcre-8.45.tar.gz,zlib-1.3.tar.gz,openssl-3.2.0.tar.gz]
+准备perl,strawberry-perl-5.30.3.1-64bit.zip [可选]
+
+使用gcc编译的步骤如下：
+cd到源代码根目录，执行
+mkdir objs
+mkdir objs/lib
+cd objs/lib
+tar xzf /d/Code/pcre-8.45.tar.gz
+tar xzf /d/Code/zlib-1.3.tar.gz
+tar xzf /d/Code/openssl-3.2.0.tar.gz [可选]
+./auto/configure \
+    --with-debug \
+    --prefix= \
+    --conf-path=conf/nginx.conf \
+    --pid-path=logs/nginx.pid \
+    --http-log-path=logs/access.log \
+    --error-log-path=logs/error.log \
+    --sbin-path=nginx.exe \
+    --http-client-body-temp-path=temp/client_body_temp \
+    --http-proxy-temp-path=temp/proxy_temp \
+    --http-fastcgi-temp-path=temp/fastcgi_temp \
+    --http-scgi-temp-path=temp/scgi_temp \
+    --http-uwsgi-temp-path=temp/uwsgi_temp \
+    --with-cc-opt=-DFD_SETSIZE=1024 \
+    --with-pcre=objs/lib/pcre-8.45 \
+    --with-zlib=objs/lib/zlib-1.3
+关键点：--conf-path=conf/nginx.conf等路径配置，如果不指定，则默认为/usr/local/nginx/conf/nginx.conf
+	这种情况下，程序在windows也能跑，只是各项配置路径是固定的并且很奇怪
+	如果nginx在D盘里的某个目录执行，则需要把配置文件放在d:/usr/local/nginx/conf/nginx.conf，日志的路径也类似
+make
+执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
+把nginx.exe复制到d:/01Tools/nginx1.18/
+把源代码目录下的docs/html目录复制到d:/01Tools/nginx1.18/
+把源代码目录下的conf目录复制到d:/01Tools/nginx1.18/
+在d:/01Tools/nginx1.18/ 中创建logs,temp两个子目录
+修改config/nginx.conf中的端口号配置
+打开cmd执行nginx.exe就可以启动服务
+nginx -s stop 停止服务，需要新开cmd执行
+nginx -s reload 重启
+如果需要支持https，就需要增加configure参数：
+--with-openssl=objs/lib/openssl-3.2.0 \
+--with-openssl-opt=no-asm \
+--with-http_ssl_module
+
+2、使用msvc编译
+调整configure参数为：
+./auto/configure \
+    --with-cc=cl \
+    --with-debug \
+    --prefix= \
+    --conf-path=conf/nginx.conf \
+    --pid-path=logs/nginx.pid \
+    --http-log-path=logs/access.log \
+    --error-log-path=logs/error.log \
+    --sbin-path=nginx.exe \
+    --http-client-body-temp-path=temp/client_body_temp \
+    --http-proxy-temp-path=temp/proxy_temp \
+    --http-fastcgi-temp-path=temp/fastcgi_temp \
+    --http-scgi-temp-path=temp/scgi_temp \
+    --http-uwsgi-temp-path=temp/uwsgi_temp \
+    --with-cc-opt=-DFD_SETSIZE=1024 \
+    --with-pcre=objs/lib/pcre-8.45 \
+    --with-zlib=objs/lib/zlib-1.3
+差异就在于：--with-cc=cl \
+打开vs2015开发人员命令提示符，执行：nmake
+执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
+后续的操作参照第1条的步骤
+```
 ## C语法
 ```
 数据类型
