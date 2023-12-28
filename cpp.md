@@ -239,6 +239,14 @@ pacman -Qs 关键字
 pacman -S msys2-keyring
 	解决安装程序报错， signature from "David Macek <david.macek.0@gmail.com>" is unknown trust
 
+使用pacman下载依赖包的时候，屏蔽不想要的子环境的包，修改配置文件：/etc/pacman.conf
+注释不想要的子环境，例如：
+#[mingw32]
+#Include = /etc/pacman.d/mirrorlist.mingw
+
+#[ucrt64]
+#Include = /etc/pacman.d/mirrorlist.mingw
+
 GTK
 gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
 ```
