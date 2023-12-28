@@ -391,6 +391,15 @@ int main(){
     return 0;
 }
 ```
+## 编译mingw64环境下的libcurl
+```
+从官网下载源代码：curl-7.86.0.tar.gz
+解压后，切换到lib目录，执行：make -f Makefile.m32，即可得到libcurl.dll，可用于调用libcurl的库
+已知问题，缺少对https等的支持
+
+切换到src目录，执行：make -f Makefile.m32，即可得到curl.exe
+通过curl.exe --version 可以看到缺少对https等大量协议的支持
+```
 ## C语法
 ```
 数据类型
