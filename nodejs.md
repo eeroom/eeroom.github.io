@@ -89,3 +89,33 @@ document.exeCommand("Copy")
 6、避免消息解耦组建和逻辑模块之间的依赖，没必要，因为js不是强类型，最后只能通过查询事件名称来 知道 事件的订阅方
     A的行为影响B的属性值或其他的，直接在A中调用影响B的函数方法，简单明了
 ```
+## 防抖和节流
+```
+两类场景：
+1、用户点击搜索后，继续连续点击搜索按钮，则后面的连续点击无效，必须等第一次点击的请求返回之后，用户再点击才有效
+伪代码如下：
+let flag=0
+async function searchHandler(){
+    if(flag>0) return
+    flag=flag+1
+    await 请求
+    flag=0
+}
+
+2、对用户的输入内容进行远程校验，用户连续输入，则以最后一次的输入内容为准，前面的内容不需要发请求进行校验
+伪代码如下：
+let flag=0
+async function validateHandler(){
+    flag=flag+1
+    let validateInternal=(flagValue){
+        window.setTimeout(async ()=>{
+            if(flagValue!=flag) return
+            await 请求
+            if(flagValue!=flag) return
+            校验逻辑
+            flag=0
+        },200)
+    }
+    validateInternal(flag)
+}
+```
