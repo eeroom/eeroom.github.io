@@ -3,7 +3,8 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "D:\\01Tools\\msys64\\usr\\include\\**"
             ],
             "defines": [
                 "_DEBUG",
@@ -13,7 +14,7 @@
             "windowsSdkVersion": "8.1",
             "compilerPath": "D:\\01Tools\\msys64\\mingw64\\bin\\gcc.exe",
             "cStandard": "c11",
-            "cppStandard": "c++14",
+            "cppStandard": "c++11",
             "intelliSenseMode": "gcc-x64"
         }
     ],
