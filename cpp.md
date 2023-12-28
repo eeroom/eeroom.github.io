@@ -349,6 +349,48 @@ nginx -s reload 重启
 执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
 后续的操作参照第1条
 ```
+## 调用libcurl
+```
+gcc编译器的3个关键参数：
+-I指定头文件的目录，可以多个
+-L指定库的目录，可以多个
+-l指定库文件，可以多个
+gcc编译器会有默认的-I值和-L值，分别为/usr/include和/usr/lib
+
+vscode的.vscode/c_cpp_properties.json文件主要影响代码编辑器的智能提示，需要把libcure涉及的头文件的目录包含进来，否则编辑器中报红
+ "includePath": [
+	"${workspaceFolder}/**",
+	"D:\\Downloads\\curl-8.5.0_3-win64-mingw\\curl-8.5.0_3-win64-mingw\\include\\**"
+],
+./vscode/tasks.json文件影响编译任务，需要指定-I,-L,-l的值
+ "args": [
+	"-g",
+	"${file}",
+	"-o",
+	"${fileDirname}\\${fileBasenameNoExtension}.exe",
+	"-ID:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/include",
+	"-LD:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/lib",
+	"-lcurl"
+    ]
+等价于在mingw64中执行：gcc -g app.cpp -o app.exe -ID:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/include -LD:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/lib -lcurl
+
+依赖的libcurl的来源：
+1、从curl官网下载curl-8.5.0_3-win64-mingw.zip
+2、pacman安装libcurl-devel，已知问题：编译出来的程序依赖msys-2.0.dll等大量msys-xxx.dll的库，msys-xxx.dll的文件都在msys2子环境的/usr/bin中，并且执行到curl的地方会报错，原因待研究
+3、pacman中缺少mingw-x86_64-libcurl-devel的包
+
+最简代码如下：
+#include<curl/curl.h>
+
+int main(){
+    curl_global_init(CURL_GLOBAL_ALL);
+    CURL* curl=curl_easy_init();
+    curl_easy_setopt(curl,CURLOPT_URL,"http://www.baidu.com");
+    curl_easy_setopt(curl,CURLOPT_FOLLOWLOCATION,1L);
+    CURLcode res= curl_easy_perform(curl);
+    return 0;
+}
+```
 ## C语法
 ```
 数据类型
