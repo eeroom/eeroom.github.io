@@ -8,7 +8,9 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.exe",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-ID:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/include",
+                "-LD:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/lib",
                 "-lcurl"
             ],
             "options": {

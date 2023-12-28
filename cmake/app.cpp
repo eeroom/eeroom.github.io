@@ -6,7 +6,7 @@ int main(){
     int a=3;
     int b=a*34;
     printf("hello world%d",b);
-
+    curl_global_init(CURL_GLOBAL_ALL);
     CURL* curl=nullptr;
     CURLcode res;
     curl=curl_easy_init();
