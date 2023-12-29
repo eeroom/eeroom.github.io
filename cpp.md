@@ -302,6 +302,14 @@ tasks.json 完整路径：项目根目录/.vscode/tasks.json
 打开/usr/local/myopenssl 既可看到编译后的可执行文件，头文件，库文件
 头文件和库文件可用于后续的开发引用
 ```
+## 编译zlib
+```
+从官网下载源代码：zlib-1.2.11.tar.gz
+打开mingw64环境，切换到源代码根目录
+执行：make -f ./win32/Makefile.gcc
+完成后在源代码根目录可以看到生成的库文件和示例程序，通过文件生成时间排序可以看出来
+头文件也在源代码根目录
+```
 ## windows环境下编译nginx
 ```
 从nginx的官网下载源代码 nginx-1.18.0-RELEASE.gz
