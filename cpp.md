@@ -291,6 +291,17 @@ tasks.json 完整路径：项目根目录/.vscode/tasks.json
     "terminal.integrated.shellArgs.windows": ["-mingw64", "-no-start", "-defterm", "-here"] 
 	可以配置各个子环境的终端，通过msys2_shell.cmd -help查看子环境对应的参数值
 ```
+## 编译openssl
+```
+从官网下载源代码：openssl-1.1.1w.tar.gz 
+打开mingw64环境，切换到源代码根目录
+执行：./Configure mingw64 --prefix=/usr/local/myopenssl
+执行：make
+执行：make install  
+特别的：最后一步，通过日志可以发现，会往C:\Program Files目录中创建SSL目录，提示无权限，失败，这正是需要的，所以不要用管理员权限打开编译环境
+打开/usr/local/myopenssl 既可看到编译后的可执行文件，头文件，库文件
+头文件和库文件可用于后续的开发引用
+```
 ## windows环境下编译nginx
 ```
 从nginx的官网下载源代码 nginx-1.18.0-RELEASE.gz
