@@ -250,6 +250,21 @@ pacman -S msys2-keyring
 GTK
 gcc `pkg-config --cflags gtk+-2.0` -o main.exe main.c `pkg-config --libs gtk+-2.0`
 ```
+## configure文件
+```
+configure的参数约定：
+--prefix的作用：编译时指定程序后续的安装目录，及配置文件读取目录
+如果不指定--prefix的值，则默认值如下：
+可执行文件：/usr/local/bin
+库文件：/usr/local/lib
+配置文件：/usr/local/etc
+其他资源文件：/usr/local/share
+缺点：搞不清哪些文件属于哪个程序
+
+如果指定:--prefix=/usr/local/abc ,那么这个程序的所有文件都放在abc目录中
+删除程序只需要删除abc目录即可
+把程序给其他机器用也只需要复制abc目录即可
+```
 ## VsCode配置gcc环境
 ```
 C/C++插件，微软提供，支持跳转到定义，智能提示等功能，默认使用vc编译器和msvc的体系进行智能提示

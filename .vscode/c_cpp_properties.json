@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:\\Downloads\\curl-8.5.0_3-win64-mingw\\curl-8.5.0_3-win64-mingw\\include\\**"
+                "D:\\Downloads\\curl-8.5.0_3-win64-mingw\\curl-8.5.0_3-win64-mingw\\include\\**",
+                "D:/01Tools/msys64/mingw64/include/**"
             ],
             "defines": [
                 "_DEBUG",

@@ -10,6 +10,8 @@
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "-ID:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/include",
+                "-ID:/01Tools/msys64/mingw64/include",
+                "-ID:/01Tools/msys64/mingw64/lib",
                 "-LD:/Downloads/curl-8.5.0_3-win64-mingw/curl-8.5.0_3-win64-mingw/lib",
                 "-lcurl"
             ],
