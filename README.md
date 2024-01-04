@@ -54,6 +54,9 @@ tcpdump [-D 列举网卡] [-A ASCII格式] [-X 16进制] [-i 指定网卡] [-nn 
 Wireshark教程
 curl
   网络访问，下载的工具
+  http下载文件：curl http://www.baidu.com/abc.tar -o ./root/abc.tar
+  ftp上传文件：curl -u 账号:密码 -T d:/abc.tar ftp://localhost/abc.tar
+  ftp下载文件：curl -u 账号:密码 ftp://localhost/abc.tar -o d:/abc.tar
 wget
   下载工具
 dig
