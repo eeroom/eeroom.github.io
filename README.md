@@ -442,6 +442,8 @@ sftp
   删除指定的映射,执行：net use Z: /del 
 ftp ftp地址
   ftp命令行客户端，交互式，上传、下载文件
+使用curl上传和下载
+  参看curl部分使用
 ```
 ## systemd
 ```
