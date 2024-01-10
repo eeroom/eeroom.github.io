@@ -119,3 +119,9 @@ async function validateHandler(){
     validateInternal(flag)
 }
 ```
+## apply call bind
+```
+apply 修改this指向，立即执行
+call 修改this指向，立即执行
+bind 修改this指向，生成新的function
+```
