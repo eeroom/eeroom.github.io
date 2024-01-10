@@ -235,3 +235,54 @@ TNS模式连接数据库,需要配置tsname.ora文件,文件路径为：{oracle 
 
 待研究：oracle提供新的100%托管程序集,应该可以不用走TSN模式连接了
 ```
+## 死锁
+```
+在sqlserver中创建一个死锁的例子
+第一步：创建2个临时表，并且插入数据
+CREATE TABLE ##TableA (ID INT IDENTITY,Val CHAR(1) ) 
+GO 
+INSERT INTO ##TableA (Val) VALUES ('A'), ('B') 
+GO 
+CREATE TABLE ##TableB(ID INT IDENTITY,Val CHAR(1) ) 
+GO 
+INSERT INTO ##TableB (Val) VALUES ('C'), ('D') 
+GO 
+第二步：执行一个事务操作，然后新开一个查询窗口立即执行第三步
+BEGIN TRANSACTION 
+SELECT @@SPID AS ProcessID 
+UPDATE ##TableA SET Val = 'E' WHERE ID = 1 
+------------------------------------ 
+WAITFOR DELAY '00:00:07' 
+UPDATE ##TableB SET Val= N'G' WHERE ID = 1 
+COMMIT 
+SELECT Val, GETDATE() AS CompletionTime FROM ##TableA WHERE ID=1 
+SELECT Val, GETDATE() AS CompletionTime FROM ##TableB WHERE ID=1 
+第三步：执行另一个事物操作
+BEGIN TRANSACTION
+SELECT @@SPID AS ProcessID
+UPDATE ##TableB SET Val = N'F' WHERE ID = 1
+--------------------------------------
+WAITFOR DELAY '00:00:07'
+UPDATE ##TableA SET Val = N'H' WHERE ID = 1
+COMMIT
+SELECT Val, GETDATE() AS CompletionTime FROM ##TableA WHERE ID=1
+SELECT Val, GETDATE() AS CompletionTime FROM ##TableB WHERE ID=1 	
+
+死锁发生后，打开：数据库实例》管理》扩展事件》system_health》package0.event_file
+执行过滤，name=xml_deadlock_report 就可以看到最近所有的死锁记录
+很久以前的数据会被覆盖
+写入会有延时，发生死锁后，需要过一会，才会被记录到这里
+
+等价的查询语句如下：
+--来源，微软的sqlserver文档，死锁指南章节
+SELECT xdr.value('@timestamp', 'datetime') AS [Date],
+    xdr.query('.') AS [Event_Data]
+FROM (SELECT CAST([target_data] AS XML) AS Target_Data
+            FROM sys.dm_xe_session_targets AS xt
+            INNER JOIN sys.dm_xe_sessions AS xs ON xs.address = xt.event_session_address
+            WHERE xs.name = N'system_health'
+              AND xt.target_name = N'ring_buffer'
+    ) AS XML_Data
+CROSS APPLY Target_Data.nodes('RingBufferTarget/event[@name="xml_deadlock_report"]') AS XEventData(xdr)
+ORDER BY [Date] DESC;
+```
