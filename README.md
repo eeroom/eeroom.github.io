@@ -1486,20 +1486,6 @@ for [/f 解析文本] [/l 集合区间] 变量 in (集合内容) do 每次循环
       特别的：%%a %%b %%c对应tokens提取的列,提取了多少列就用多少个变量,变量字母按从小到大的顺序
   集合区间，/l指定循环的集合是一个(起始值,步长,结束值)的区间,例如：for /l %%a in (1,1,100)  do echo %%a
 ```
-## ssms
-```
-sqlserver management studio
-SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-  指定事务隔离级别
-  隔离级别主要有：READ UNCOMMITTED、READ COMMITTED
-事务、事务隔离级别、锁的区别和关系，update锁，insert锁
-  待研究
-SET IMPLICIT_TRANSACTIONS ON
-  设置隐式事务
-清理登陆界面缓存的账号和密码，步骤如下：
-  缓存的账号和密码被保存在特定目录的文件中，路径：%当前用户目录%\AppData\Roaming\Microsoft\SQL Server Management Studio\%版本%\
-  删除文件：SqlStudio.bin
-```
 ## postman
 ```
 设置变量
