@@ -286,3 +286,6 @@ FROM (SELECT CAST([target_data] AS XML) AS Target_Data
 CROSS APPLY Target_Data.nodes('RingBufferTarget/event[@name="xml_deadlock_report"]') AS XEventData(xdr)
 ORDER BY [Date] DESC;
 ```
+## 收缩日志、文件
+```
+```
