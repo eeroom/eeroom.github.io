@@ -289,3 +289,12 @@ ORDER BY [Date] DESC;
 ## 收缩日志、文件
 ```
 ```
+## sqlcmd
+```
+sqlcmd -U sa -P 123456 -S tcp:192.168.56.1\DEV,1433
+登上服务器后，进入交互模式
+多行模式，以go为分割标识，例如：
+select getdate()
+go
+
+```
