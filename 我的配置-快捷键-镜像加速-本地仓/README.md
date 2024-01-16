@@ -75,6 +75,7 @@ Electron和Python的镜像地址
 全局配置文件：
     C:\Users\Deroom\.npmrc
     或者：D:\\01Tools\\node-v10.15.3-win-x64\\etc\\npmrc
+npm config list 命令可能卡住，删除C:\Users\Deroom\.npmrc即可解决
 ```
 
 
