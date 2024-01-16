@@ -1,0 +1,90 @@
+<UserSettings>
+	<ApplicationIdentity version="11.0"/>
+	<ToolsOptions>
+		<ToolsOptionsCategory name="Environment" RegisteredName="Environment"/>
+	</ToolsOptions>
+	<Category name="Environment_Group" RegisteredName="Environment_Group">
+		<Category name="Environment_KeyBindings" Category="{F09035F1-80D2-4312-8EC4-4D354A4BCB4C}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_KeyBindings" PackageName="Visual Studio Environment Package">
+			<Version>11.0.0.0</Version>
+			<KeyboardShortcuts>
+				<ScopeDefinitions>
+					<Scope Name="团队资源管理器" ID="{7AA20502-9463-47B7-BF43-341BAF51157C}"/>
+					<Scope Name="VC 对话框编辑器" ID="{543E0C02-8C85-4E43-933A-5EF320E3431F}"/>
+					<Scope Name="UML 类图" ID="{FE170F05-DE3A-4067-A3ED-08AE56B31DB3}"/>
+					<Scope Name="UML 组件图" ID="{13C19B18-BD05-42F3-9D3A-2A55E6E9169F}"/>
+					<Scope Name="XML(文本)编辑器" ID="{FA3CD31E-987B-443A-9B81-186104E8DAC1}"/>
+					<Scope Name="文本编辑器" ID="{8B382828-6202-11D1-8870-0000F87579D2}"/>
+					<Scope Name="工作项结果视图" ID="{7026002D-01F6-44E7-95CF-A896C00DA3F8}"/>
+					<Scope Name="ADO.NET 实体数据模型设计器" ID="{C99AEA30-8E36-4515-B76F-496F5A48A6AA}"/>
+					<Scope Name="解决方案资源管理器" ID="{3AE79031-E1BC-11D0-8F78-00A0C9110057}"/>
+					<Scope Name="查询设计器" ID="{B2C40B32-3A37-4CA9-97B9-FA44248B69FF}"/>
+					<Scope Name="Web 浏览器" ID="{E8B06F41-6D01-11D2-AA7D-00C04F990343}"/>
+					<Scope Name="图形设计器" ID="{58961B49-13E0-48C0-9258-13CBC4D40279}"/>
+					<Scope Name="AppManifestDesigner" ID="{4D47164B-07B6-4A52-A855-728D6A2E2AA3}"/>
+					<Scope Name="数据集编辑器" ID="{B334A759-F450-40A5-BE2A-65937BCD5415}"/>
+					<Scope Name="XAML UI 设计器" ID="{E9B8485C-1217-4277-9ED6-C825A5AC1968}"/>
+					<Scope Name="关系图文档编辑器" ID="{295A0962-5A59-4F4F-9E12-6BC670C15C3B}"/>
+					<Scope Name="F# Interactive" ID="{DEE22B65-9761-4A26-8FB2-759B971D6DFC}"/>
+					<Scope Name="视图设计器" ID="{B968E165-98E0-41F0-8FBE-A8ED1D246A90}"/>
+					<Scope Name="XAML 编辑器" ID="{A4F9FF65-A78C-4650-866D-5069CC4127CF}"/>
+					<Scope Name="Microsoft SQL Server Data Tools，表设计器" ID="{2366CF66-2394-4701-AFCA-37ED7FD41648}"/>
+					<Scope Name="全局" ID="{5EFC7975-14BC-11CF-9B2B-00AA00573819}"/>
+					<Scope Name="类图" ID="{59B0B277-7DDF-4E36-A3ED-02DAC5B9E2FA}"/>
+					<Scope Name="UML 活动图" ID="{950C3878-B510-4BC5-9051-42798A870364}"/>
+					<Scope Name="UML 用例图" ID="{FCFECC7C-3151-4B48-A85A-909F50500A70}"/>
+					<Scope Name="工作项查询视图" ID="{B6303490-B828-410C-9216-AE727D0E282D}"/>
+					<Scope Name="Team Foundation Build 详细信息编辑器" ID="{86306A97-84F2-4F5A-889B-1318501AEB5F}"/>
+					<Scope Name="CSS 源编辑器" ID="{A764E89A-518D-11D2-9A89-00C04F79EFC3}"/>
+					<Scope Name="数据库设计器" ID="{CFF78A9B-78A3-45A3-9142-0267AFC261FA}"/>
+					<Scope Name="工作项编辑器" ID="{40A91D9D-8076-4D28-87C5-5AF9F0ACFE0F}"/>
+					<Scope Name="序列图" ID="{5028BC9F-844B-4C51-A624-0005945D14AE}"/>
+					<Scope Name="图形调试器" ID="{D27456A1-9094-4CDE-BADA-82994ED560D8}"/>
+					<Scope Name="VC 字符串编辑器" ID="{58442DA9-10DA-4AA9-A2AF-96E4D481379B}"/>
+					<Scope Name="合并编辑器窗口" ID="{9A9A8AAA-ACD2-4DB6-BD81-8D64176C52B6}"/>
+					<Scope Name="设置设计器" ID="{515231AD-C9DC-4AA3-808F-E1B65E72081C}"/>
+					<Scope Name="VisualStudio" ID="{B465B5AD-8799-4507-B90A-EE29ACF36AF9}"/>
+					<Scope Name="Windows 窗体设计器" ID="{BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F}"/>
+					<Scope Name="VC 快捷键编辑器" ID="{EB56D0B5-BEE7-4D0C-8BE6-88A8ED256695}"/>
+					<Scope Name="报表设计器" ID="{CB3675B8-701E-4F56-9167-2714E167FF3F}"/>
+					<Scope Name="工作流设计器" ID="{D4D9FCBC-B26A-4C41-AB9F-11FD2466829A}"/>
+					<Scope Name="托管资源编辑器" ID="{FEA4DCC9-3645-44CD-92E7-84B55A16465C}"/>
+					<Scope Name="Page Inspector" ID="{B8F809CA-7D14-4935-8657-727DC294E16B}"/>
+					<Scope Name="编码的 UI 测试编辑器" ID="{E91F82D5-B532-47E9-ADAD-72F96EF9D35F}"/>
+					<Scope Name="并发报告" ID="{5FCCFCD6-6237-4D02-B1DC-B6321AF08CE5}"/>
+					<Scope Name="差异查看器" ID="{79D52DDF-52BC-43F1-9663-B3E85CDCA912}"/>
+					<Scope Name="Microsoft SQL Server Data Tools，架构比较" ID="{00E9D2E3-9044-47D1-978C-BE2825249219}"/>
+					<Scope Name="表设计器" ID="{4194FEE5-6777-419F-A5FC-47A536DF1BDB}"/>
+					<Scope Name="层关系图" ID="{305563E9-FDF9-485B-B73E-D9FEDCC36F2E}"/>
+					<Scope Name="HTML 编辑器设计视图" ID="{CB3FCFEA-03DF-11D1-81D2-00A0C91BBEE3}"/>
+					<Scope Name="HTML 编辑器源视图" ID="{CB3FCFEB-03DF-11D1-81D2-00A0C91BBEE3}"/>
+					<Scope Name="VC 图像编辑器" ID="{C0BA70ED-069E-412B-9C06-7442E28A11B9}"/>
+					<Scope Name="Microsoft SQL Server Data Tools, T-SQL Editor" ID="{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"/>
+					<Scope Name="查询结果" ID="{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"/>
+					<Scope Name="测试资源管理器" ID="{E1B7D1F8-9B3C-49B1-8F4F-BFC63A88835D}"/>
+					<Scope Name="XML 架构设计器" ID="{DEE6CEF9-3BCA-449A-82A6-FC757D6956FB}"/>
+				</ScopeDefinitions>
+				<DefaultShortcuts/>
+				<ShortcutsScheme>Visual C# 2005</ShortcutsScheme>
+				<UserShortcuts>
+					<RemoveShortcut Command="Edit.DecreaseFilterLevel" Scope="文本编辑器">Alt+,</RemoveShortcut>
+					<RemoveShortcut Command="Edit.IncreaseFilterLevel" Scope="文本编辑器">Alt+.</RemoveShortcut>
+					<Shortcut Command="Edit.LineStartExtend" Scope="文本编辑器">Alt+,</Shortcut>
+					<Shortcut Command="Edit.LineEndExtend" Scope="文本编辑器">Alt+.</Shortcut>
+					<Shortcut Command="Edit.WordPreviousExtend" Scope="文本编辑器">Alt+H</Shortcut>
+					<Shortcut Command="Edit.WordNextExtend" Scope="文本编辑器">Alt+;</Shortcut>
+					<Shortcut Command="Edit.CharLeft" Scope="文本编辑器">Alt+J</Shortcut>
+					<Shortcut Command="Edit.CharRight" Scope="文本编辑器">Alt+L</Shortcut>
+					<Shortcut Command="Edit.LineUp" Scope="文本编辑器">Alt+I</Shortcut>
+					<Shortcut Command="Edit.LineDown" Scope="文本编辑器">Alt+K</Shortcut>
+					<Shortcut Command="Edit.GoToDefinition" Scope="文本编辑器">Alt+2</Shortcut>
+					<Shortcut Command="Edit.CollapseAllOutlining" Scope="文本编辑器">Alt+Q</Shortcut>
+					<Shortcut Command="View.NavigateBackward" Scope="文本编辑器">Alt+1</Shortcut>
+					<Shortcut Command="Edit.ToggleOutliningExpansion" Scope="文本编辑器">Alt+E</Shortcut>
+					<Shortcut Command="Edit.GenerateMethod" Scope="文本编辑器">Alt+F</Shortcut>
+					<Shortcut Command="Edit.LineStart" Scope="文本编辑器">Alt+N</Shortcut>
+					<Shortcut Command="Edit.LineEnd" Scope="文本编辑器">Alt+O</Shortcut>
+				</UserShortcuts>
+			</KeyboardShortcuts>
+		</Category>
+	</Category>
+</UserSettings>

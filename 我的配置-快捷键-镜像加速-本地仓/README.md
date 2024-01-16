@@ -41,5 +41,11 @@ C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\
 加速镜像
 C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\lib\maven3\conf\settings.xml
 ```
+## visual studio
+```
+快捷键
+vs2012-快捷键.vssettings
+vs2015快捷键.vssettings
+```
 
 
