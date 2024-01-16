@@ -47,5 +47,11 @@ C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\
 vs2012-快捷键.vssettings
 vs2015快捷键.vssettings
 ```
+## firefox
+```
+关闭自动更新
+C:\Program Files\Mozilla Firefox\defaults\pref\channel-prefs.js
+C:\Program Files\Mozilla Firefox\distribution\policies.json
+```
 
 
