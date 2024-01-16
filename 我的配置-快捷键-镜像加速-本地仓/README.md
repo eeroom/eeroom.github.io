@@ -56,7 +56,9 @@ C:\Program Files\Mozilla Firefox\distribution\policies.json
 # nodejs
 ```
 缓存包目录：
-    npm config set cache "D:\Data_npm"
+    npm config set cache D:/Data_npm
+加速镜像
+    npm config set registry https://mirrors.huaweicloud.com/repository/npm/
 nodejs工具的镜像地址
     npm config set disturl https://repo.huaweicloud.com/nodejs
 Node-Sass的镜像地址
