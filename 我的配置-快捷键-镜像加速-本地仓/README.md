@@ -53,5 +53,26 @@ vs2015快捷键.vssettings
 C:\Program Files\Mozilla Firefox\defaults\pref\channel-prefs.js
 C:\Program Files\Mozilla Firefox\distribution\policies.json
 ```
+# nodejs
+```
+缓存包目录：
+    npm config set cache "D:\Data_npm"
+nodejs工具的镜像地址
+    npm config set disturl https://repo.huaweicloud.com/nodejs
+Node-Sass的镜像地址
+    npm config set sass_binary_site https://repo.huaweicloud.com/node-sass
+浏览器引擎驱动镜像地址，如果需要安装Selenium，请点击此处
+    npm config set phantomjs_cdnurl https://repo.huaweicloud.com/phantomjs
+    npm config set chromedriver_cdnurl https://repo.huaweicloud.com/chromedriver
+    npm config set operadriver_cdnurl https://repo.huaweicloud.com/operadriver 
+Electron和Python的镜像地址
+    npm config set electron_mirror https://repo.huaweicloud.com/electron/
+    npm config set python_mirror https://repo.huaweicloud.com/python
+设置会被自动写入到全局配置文件：
+    C:\Users\Deroom\.npmrc
+全局配置文件：
+    C:\Users\Deroom\.npmrc
+    或者：D:\\01Tools\\node-v10.15.3-win-x64\\etc\\npmrc
+```
 
 
