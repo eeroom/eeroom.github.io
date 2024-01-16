@@ -34,5 +34,12 @@
 依赖包本地缓存路径
     C:\Users\Deroom\AppData\Roaming\NuGet\NuGet.config
 ```
+## maven
+```
+依赖包本地缓存
+C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\lib\maven3\conf\settings.xml
+加速镜像
+C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\lib\maven3\conf\settings.xml
+```
 
 
