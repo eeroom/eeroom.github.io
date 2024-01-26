@@ -1635,9 +1635,6 @@ docker run --name oracle10g -d -p 49160:22 -p 1521:1521 -p 49162:8080  -v oracle
   http://192.168.56.102:49162/apex
   username: system
   password: oracle
-
-
-
 ```
 ## android studio配置
 ```
@@ -1649,7 +1646,5 @@ C:\Program Files\Android\Android Studio\bin\idea.properties
 配置 GRADLE_HOME=D:\01Tools\gradle-4.10.2-bin
     GRADLE_USER_HOME=D:\Data_Gradle
     添加%GRADLE_HOME%\bin到PATH
-
-
 ```
 
