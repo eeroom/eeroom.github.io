@@ -1647,4 +1647,13 @@ C:\Program Files\Android\Android Studio\bin\idea.properties
     GRADLE_USER_HOME=D:\Data_Gradle
     添加%GRADLE_HOME%\bin到PATH
 ```
+## java service wrapper
+```
+作用：把java程序包装成windows服务
+wrapper官网没有windows64位的包
+activeMQ的包里面有64位和32位的wrapper
+可以参看：D:\01Tools\apache-activemq-5.15.10-bin\bin\win64\InstallService.bat的逻辑
+安装服务：wrapper.exe -i wrapper.conf的完整路径
+移除服务：wrapper.exe -r 
+```
 
