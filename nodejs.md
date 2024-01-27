@@ -9,6 +9,45 @@ import bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css
 加载xml和缩放大小的js参照工作流项目中bpmn的使用
 
 ```
+## 前端模块规范
+```
+UMD：
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.libName = factory());
+}(this, (function () { 'use strict';})));
+
+主干就是匿名函数立即执行：
+(function (global, factory){
+    //逻辑
+}(this,(function (){'use strict';})))
+等同于：
+(function (global, factory){
+    //逻辑
+})(this,(function (){'use strict';}))
+
+CommonJs:nodejs的模块遵循此规范
+require的核心就是一个包装函数,exports, require, module都是包装函数传递进去的
+function wrapper (script) {
+    return '(function (exports, require, module, __filename, __dirname) {' + 
+        script +
+     '\n})'
+}
+function require(id) {
+ var cachedModule = Module._cache[id];
+  if(cachedModule){
+    return cachedModule.exports;
+  }
+  const module = { exports: {} }
+  // 这里先将引用加入缓存 后面循环引用会说到
+  Module._cache[id] = module
+  //当然不是eval这么简单
+  eval(wrapper('module.exports = "123"'))(module.exports, require, module, 'filename', 'dirname')
+  return module.exports
+}
+
+```
 ## 原型链
 ```
 基本数据类型
