@@ -1636,17 +1636,6 @@ docker run --name oracle10g -d -p 49160:22 -p 1521:1521 -p 49162:8080  -v oracle
   username: system
   password: oracle
 ```
-## android studio配置
-```
-安装后先改配置文件，再打开程序
-C:\Program Files\Android\Android Studio\bin\idea.properties
-增加一行：disable.android.first.run=true
-断网，配置android sdk的目录，关闭自动更新等
-配置全局gradle，下载gradle-4.10.2-bin.zip，解压到到：D:\01Tools\gradle-4.10.2-bin
-配置 GRADLE_HOME=D:\01Tools\gradle-4.10.2-bin
-    GRADLE_USER_HOME=D:\Data_Gradle
-    添加%GRADLE_HOME%\bin到PATH
-```
 ## java service wrapper
 ```
 作用：把java程序包装成windows服务

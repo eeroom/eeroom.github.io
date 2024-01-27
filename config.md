@@ -8,6 +8,14 @@
 [Visual Studio copy.xml](./config/idea.xml)  
 [init.gradle](./config/init.gradle)
 ```
+安装后先改配置文件，再打开程序
+C:\Program Files\Android\Android Studio\bin\idea.properties
+增加一行：disable.android.first.run=true
+断网，配置android sdk的目录，关闭自动更新等
+配置全局gradle，下载gradle-4.10.2-bin.zip，解压到到：D:\01Tools\gradle-4.10.2-bin
+配置 GRADLE_HOME=D:\01Tools\gradle-4.10.2-bin
+    GRADLE_USER_HOME=D:\Data_Gradle
+    添加%GRADLE_HOME%\bin到PATH
 快捷键
     C:\Users\Deroom\.AndroidStudio3.3\config\keymaps\Visual Studio copy.xml
 避免首次运行自动下载android sdk
