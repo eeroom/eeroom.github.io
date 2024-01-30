@@ -1,12 +1,12 @@
 ## idea
-[Visual Studio copy.xml](./config/idea.xml)
+[Visual Studio copy.xml](./setting/idea.xml)
 ```
 快捷键
     C:\Users\Deroom\.IdeaIC2019.2\config\keymaps\Visual Studio copy.xml
 ```
 ## andorid studio
-[Visual Studio copy.xml](./config/idea.xml)  
-[init.gradle](./config/init.gradle)
+[Visual Studio copy.xml](./setting/idea.xml)  
+[init.gradle](./setting/init.gradle)
 ```
 安装后先改配置文件，再打开程序
 C:\Program Files\Android\Android Studio\bin\idea.properties
@@ -36,19 +36,19 @@ C:\Program Files\Android\Android Studio\bin\idea.properties
     android studio的Setting》Build,Execution,Deployment》Gradle，勾选：Use local gradle distribution
 ```
 ## vscode
-[keybindings.json](./config/keybindings.json)
+[keybindings.json](./setting/keybindings.json)
 ```
 快捷键
     C:\Users\Deroom\AppData\Roaming\Code\User\keybindings.json
 ```
 ## nuget
-[NuGet.config](./config/NuGet.config)
+[NuGet.config](./setting/NuGet.config)
 ```
 依赖包本地缓存路径
     C:\Users\Deroom\AppData\Roaming\NuGet\NuGet.config
 ```
 ## maven
-[settings.xml](./config/settings.xml)
+[settings.xml](./setting/settings.xml)
 ```
 依赖包本地缓存
 C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\lib\maven3\conf\settings.xml
@@ -56,16 +56,16 @@ C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\
 C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.2\plugins\maven\lib\maven3\conf\settings.xml
 ```
 ## visual studio
-[vs2012-快捷键.vssettings](./config/vs2012-快捷键.vssettings)  
-[vs2015快捷键.vssettings](./config/vs2015快捷键.vssettings)
+[vs2012-快捷键.vssettings](./setting/vs2012-快捷键.vssettings)  
+[vs2015快捷键.vssettings](./setting/vs2015快捷键.vssettings)
 ```
 快捷键
 vs2012-快捷键.vssettings
 vs2015快捷键.vssettings
 ```
 ## firefox
-[下载channel-prefs.js](./config/channel-prefs.js)  
-[下载policies.json](./config/policies.json)
+[下载channel-prefs.js](./setting/channel-prefs.js)  
+[下载policies.json](./setting/policies.json)
 ```
 关闭自动更新
 C:\Program Files\Mozilla Firefox\defaults\pref\channel-prefs.js
