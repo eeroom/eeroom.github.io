@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>easyui-demo</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../lib/Bootstrap3.3.7/css/bootstrap.css" rel="stylesheet" />
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../css/ie10-viewport-bug-workaround.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="../css/layout-fluid.css" rel="stylesheet" />
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="/js/ie8-responsive-file-warning.js"></script>
+        <script src="/js/html5shiv.min.js"></script>
+        <script src="/js/respond.min.js"></script>
+    <![endif]-->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../lib/jQuery/jquery-1.11.3.js"></script>
+
+    <script src="../lib/Bootstrap3.3.7/js/bootstrap.js"></script>
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../js/menu.js"></script>
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/icon.css">
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/color.css">
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/default/tree.css">
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.parser.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.draggable.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.droppable.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.tree.js"></script>
+    <style type="text/css">
+        #tt {
+            position: absolute;
+            right: 5px;
+            width: 180px;
+            top: 20px;
+            height: 800px;
+            overflow-y: auto;
+            border: 1px grey solid;
+        }
+
+        #easyuibrowser {
+            width: 760px;
+            height: 800px;
+            border: 1px grey solid;
+            margin-left: -30px;
+            padding-left: 0;
+        }
+
+        #easyuibrowserCode {
+            height: 800px;
+            border: 1px grey solid;
+            margin-right: 160px;
+            position: relative;
+            margin-left: 731px;
+        }
+
+        #easyuibrowserCode>textarea {
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            border: none;
+        }
+
+        .easyui-tip {
+            margin-left: -30px;
+            color: red;
+        }
+    </style>
+    <script type="text/javascript">
+        var refreshdoc = function (node) {
+            if (node.children)
+                return
+            var url = "../lib/jquery-easyui-1.5.2/demo/" + node.id;
+            $("#easyuibrowser").attr("src", url)
+            $.get(url, function (html) {
+                $("#easyuibrowserCode>textarea").text(html)
+            })
+        }
+        $(function () {
+
+            $('#tt').tree({
+                method: "get",
+                url: 'tree_data_easyui1.5.json',
+                onClick: refreshdoc,
+                onDblClick: function (node) {
+                    node.children && $("#tt").tree("toggle", node.target)
+                }
+            });
+            refreshdoc({ id: "tree/basic.html" })
+        })
+    </script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">千针石林</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="./bootstrap-table.html">html</a></li>
+                    <li id="README"><a href="../index.html?tp=README.md">devops</a></li>
+                    <li id='net'><a href="../index.html?tp=net.md">.net</a></li>
+                    <li id="java"><a href="../index.html?tp=java.md">java</a></li>
+                    <li id="cpp"><a href="../index.html?tp=cpp.md">c/c++</a></li>
+                    <li id="nodejs"><a href="../index.html?tp=nodejs.md">nodejs</a></li>
+                    <li id="Algorithm"><a href="../index.html?tp=Algorithm.md">Algorithm</a></li>
+                    <li id="sql"><a href="./index.html?tp=sql.md">SQL</a></li>
+                    <li><a href="../hzfoundation/index.html" target="_blank">hz</a></li>
+
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">帮助</a></li>
+                    <li><a href="#">eeroom</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li>
+                        <a data-toggle="collapse" href="#collapseExample1">
+                            <span>jQuery</span>
+                            <span class="menu-xiangyou pull-right" style="display:none">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+                            </span>
+                            <span class="menu-xiangxia pull-right" style="">
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <ul id="collapseExample1" class="nav in nav-sub">
+                            <li><a href="./bootstrap-layout-fluid.html"><span>layout</span></a></li>
+                            <li><a href="./bootstrap-table.html"><span>table</span></a></li>
+                            <li><a href="./bootstrap-drawer.html"><span>drawer</span></a></li>
+                            <li><a href="./bootstrap-datepicker.html"><span>datepicker</span></a></li>
+                            <li><a href="./bootstrap-select.html"><span>select</span></a></li>
+                            <li class="active"><a href="./easyui-demo.html"><span>easyui1.5</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="menu-l1">
+                        <a target="_blank" href="./react.html"><span>react</span></a>
+                    </li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li class="menu-l1">
+                        <a target="_blank" href="./vue.html"><span>vue</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-21 col-md-offset-3 main">
+
+                <iframe id="easyuibrowser" class="pull-left" src="" frameborder="0"></iframe>
+                <div id="easyuibrowserCode">
+                    <textarea readonly></textarea>
+                </div>
+
+                <ul id="tt"></ul>
+                <div class="easyui-tip">可以独立引入各个组件，避免整体引入导致的冲突，独立引入的关键点：先引入该组件的依赖组件,依赖关系可以通过下面的文档查询。具体参照本页右侧的独立引入的树组件</div>
+                <div class="easyui-tip"><a href="../lib/jquery-easyui-1.5.2/jQuery_EasyUI1.5API.rar" download="jQuery_EasyUI1.5API.rar">点击下载文档jQuery_EasyUI1.5API.rar</a></div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-offset-3 ">
+        <p class="text-center" style="margin:0 0"><small>版权所有&copy;丢了光影 2016-2020</small></p>
+    </div>
+</body>
+
+</html>
