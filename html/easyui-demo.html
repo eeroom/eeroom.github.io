@@ -28,20 +28,20 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../jQuery/jquery-1.11.3.js"></script>
+    <script src="../lib/jQuery/jquery-1.11.3.js"></script>
 
     <script src="../lib/Bootstrap3.3.7/js/bootstrap.js"></script>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../js/ie10-viewport-bug-workaround.js"></script>
     <script src="../js/menu.js"></script>
-    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/icon.css">
-    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/color.css">
-    <link rel="stylesheet" href="../jquery-easyui-1.5.2/themes/default/tree.css">
-    <script src="../jquery-easyui-1.5.2/plugins/jquery.parser.js"></script>
-    <script src="../jquery-easyui-1.5.2/plugins/jquery.draggable.js"></script>
-    <script src="../jquery-easyui-1.5.2/plugins/jquery.droppable.js"></script>
-    <script src="../jquery-easyui-1.5.2/plugins/jquery.tree.js"></script>
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/icon.css">
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/color.css">
+    <link rel="stylesheet" href="../lib/jquery-easyui-1.5.2/themes/default/tree.css">
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.parser.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.draggable.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.droppable.js"></script>
+    <script src="../lib/jquery-easyui-1.5.2/plugins/jquery.tree.js"></script>
     <style type="text/css">
         #tt {
             position: absolute;
@@ -85,7 +85,7 @@
         var refreshdoc = function (node) {
             if (node.children)
                 return
-            var url = "../jquery-easyui-1.5.2/demo/" + node.id;
+            var url = "../lib/jquery-easyui-1.5.2/demo/" + node.id;
             $("#easyuibrowser").attr("src", url)
             $.get(url, function (html) {
                 $("#easyuibrowserCode>textarea").text(html)
@@ -187,7 +187,7 @@
 
                 <ul id="tt"></ul>
                 <div class="easyui-tip">可以独立引入各个组件，避免整体引入导致的冲突，独立引入的关键点：先引入该组件的依赖组件,依赖关系可以通过下面的文档查询。具体参照本页右侧的独立引入的树组件</div>
-                <div class="easyui-tip"><a href="../jquery-easyui-1.5.2/jQuery_EasyUI1.5API.rar" download="jQuery_EasyUI1.5API.rar">点击下载文档jQuery_EasyUI1.5API.rar</a></div>
+                <div class="easyui-tip"><a href="../lib/jquery-easyui-1.5.2/jQuery_EasyUI1.5API.rar" download="jQuery_EasyUI1.5API.rar">点击下载文档jQuery_EasyUI1.5API.rar</a></div>
 
             </div>
         </div>
