@@ -830,6 +830,16 @@ WORKDIR
 镜像优化
   基础镜像使用 alpine ，Tiny Core Linux 等体积小的镜像，alpine不使用glibc,centos等系统用的都是glibc
   多阶段构建，多个FROM ,在前面的FROM 中编译，COPY结果到后面的FROM ,避免镜像中包含编译环境，最终减少镜像体积
+构建项目镜像
+  # https://hub.docker.com/_/microsoft-dotnet-core
+  FROM microsoft/aspnetcore:2.0
+  WORKDIR /app
+  # copy csproj and restore as distinct layers
+  # copy everything else and build app
+  COPY . .
+  # final stage/image
+  expose 80
+  ENTRYPOINT ["dotnet", "Azeroth.Klz.dll"]
 ```
 ## docker compose
 ```
