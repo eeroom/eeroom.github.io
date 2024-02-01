@@ -207,4 +207,19 @@ sass只支持::v-deep
 ```
 FPI
 ```
+## 自动化测试 selenium
+```
+https://github.com/SeleniumHQ/selenium/tree/trunk/javascript/node/selenium-webdriver
+nodejs v18.5
+依赖：geckodriver  selenium-webdriver
+
+const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
+
+(async function () {
+  let mydriver = await new Builder().forBrowser(Browser.FIREFOX).build();
+  await mydriver.get('https://www.baidu.com');
+  await mydriver.findElement(By.id('kw')).sendKeys('c# java', Key.RETURN);
+  await mydriver.wait(until.titleIs('百度一下，你就知道'), 1000);
+})();
+```
 
