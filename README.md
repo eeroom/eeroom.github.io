@@ -1545,6 +1545,30 @@ foreach($fileName in $remoteFileNames){
 ```
 ## bat教程
 ```
+@rem 开头的@表示不打印此行命令本身，rem表示注释，::也表示注释 ，echo off等价于后续每一行的命令开头都增加@
+@echo off
+rem 支持打印中文
+chcp 65001
+echo 当前文件的完整目录：%~dp0
+echo 当前文件的全路径：%~f0
+echo 当前文件的文件名：%~n0
+echo 当前文件的扩展名：%~x0
+echo 当前文件的大小：%~z0
+echo 当前文件的创建时间：%~t0
+echo 第一个参数：%1
+echo 第二个参数：%2
+rem 对于%0到%9，for循环里面的%i形式的变量，可以使用上述扩展变量语法
+rem 遍历指定目录及子目录下:以.jar，文件大小大于20000 的文件
+set fullpath=D:\01Tools\apache-activemq-5.15.10-bin\bin
+set sizeMin=20000
+for /r %fullpath% %%i in (*.jar) do (
+    if %%~zi gtr %sizeMin%  echo %%i---------------%%~zi
+)
+if %1 == install (echo 执行安装) else (echo 不执行任何操作)
+
+set /p myname=请输入你的姓名:
+echo 你的姓名是：%myname%
+
 命令不区分大小写
 echo [off 关闭] 内容
   打印内容
