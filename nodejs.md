@@ -211,7 +211,7 @@ FPI
 ```
 https://github.com/SeleniumHQ/selenium/tree/trunk/javascript/node/selenium-webdriver
 nodejs v18.5
-依赖：geckodriver  selenium-webdriver
+依赖： geckodriver  selenium-webdriver
 
 const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 
