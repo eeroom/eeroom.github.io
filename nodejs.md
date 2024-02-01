@@ -225,4 +225,9 @@ const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 ## electron
 ```
 ```
+## 关闭当前选项卡
+```
+window.location.href="about:blank"
+window.close();
+```
 
