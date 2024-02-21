@@ -1799,4 +1799,18 @@ activeMQ的包里面有64位和32位的wrapper
 安装服务：wrapper.exe -i wrapper.conf的完整路径
 移除服务：wrapper.exe -r 
 ```
+## RustDesk
+```
+服务端：
+解压rustdesk-server-linux-amd64_1.1.10.zip到root目录下，执行：
+./hbbs -r 
+./hbbr 
+
+客户端：
+安装rustdesk-1.2.3-x86_64.exe
+启动程序后，进入设置》网络》ID服务器，设置为服务端的IP
+
+后续操作和teamview或者向日葵类似
+如果不修改ID服务器，则使用官方的ID服务器
+```
 
