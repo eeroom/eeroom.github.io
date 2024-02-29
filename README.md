@@ -337,6 +337,10 @@ shutdown [-h 关机] [-r 重启] [now 立刻执行]
   关机或者重启
 shutdown [-s 关机] [-r 重启] [-t 秒数]
   windows系统关机或者重启
+/var/log/
+  系统日志，审计日志，具体待研究
+history
+  查看所有历史执行过的命令
 chkconfig [--add 增加][--del 删除][--list 列举全部] [服务名称 [on 开机启动] [off 开机不启动]]
   已过时，centos7中被systemd取代
   服务管理工具，启用、禁用服务等
