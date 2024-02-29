@@ -764,3 +764,27 @@ mapper.readValue(jsonstr,HashMap.class)
 jdk动态代理实现的api调用客户端
 Feign.builder().target(接口类,url地址base).接口方法()
 ```
+## docker部署
+```
+创建/root/cloud/dockerfile，内容如下：
+FROM adoptopenjdk:11-jdk-hotspot
+#指定一个workdir，目录随便
+WORKDIR /usr/local/cloud-eureka
+#把相对dockerfile所在目录的相对路径的文件 复制到 workdir相对路径的位置
+COPY . .
+#声明系统运行需要用到的端口，只是声明，方便创建容器的人知道需要处理哪些端口映射
+expose 80
+#等价于cmd的dotnet命令 
+CMD ["java","-jar","cloud-eureka.jar"]
+
+把cloud-eureka.jar和lib目录 复制到/root/cloud
+打包镜像：
+docker build -t cloud-eureka .
+
+创建容器并运行：
+docker run -d -p 10586:9112 cloud-eureka
+
+验证：
+curl http://localhost:10586
+浏览器打开：http://192.168.56.102:10586
+```
