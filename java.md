@@ -750,3 +750,12 @@ mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
 ```
 开源代理服务端+客户端
 ```
+## fegin
+```
+<dependency>
+  <groupId>io.github.openfeign</groupId>
+  <artifactId>feign-core</artifactId>
+</dependency>
+jdk动态代理实现的api调用客户端
+Feign.builder().target(接口类,url地址base).接口方法()
+```
