@@ -731,8 +731,13 @@ gpg完整教程文档[FAQ:](./page/gpg教程.pdf)
 ## jackson
 ```
 var mapper=new com.fasterxml.jackson.databind.ObjectMapper()
+//序列化的时候读取私有字段
 mapper.setVisibility(PropertyAccesser.ALL,JsonAutoDetect.Visibility.ANY);
-mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
+var jsonstr= mapper.writeValueAsString(new Object(){int id=1;String name="zz";});
+//反序列的时候，如果json中有额外的字段，class没有与其对应的属性，默认报错，这样配置就不会报错，
+//这个配置对于调用第三方接口特别重要，接口可能增加某个字段数据，但我们不需要用，也就没必要修改代码
+mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+mapper.readValue(jsonstr,HashMap.class)
 ```
 ## 命令行参数
 ```
