@@ -788,3 +788,7 @@ docker run -d -p 10586:9112 cloud-eureka
 curl http://localhost:10586
 浏览器打开：http://192.168.56.102:10586
 ```
+## Retrofit2
+```
+Retrofit2 替换OKHTTP
+```
