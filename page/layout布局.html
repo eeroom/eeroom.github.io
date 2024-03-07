@@ -15,6 +15,8 @@
             height: 55px;
             line-height: 55px;
             border: 1px red solid;
+            background-color: gainsboro;
+            z-index: 200;
         }
 
         header>img {
@@ -40,9 +42,17 @@
             bottom: 1px;
             width: 200px;
             border: 1px blueviolet solid;
-            background-color: rgb(219, 207, 188)
+            background-color: gainsboro
         }
-
+        nav>img{
+            position: absolute;
+            display: inline-block;
+            height: 120px;
+            width: 13px;
+            top: 50px;
+            right: -1px;
+            cursor: pointer;
+        }
         nav>ul {
             list-style: none;
         }
@@ -55,6 +65,7 @@
             position: relative;
             margin-top: 55px;
             margin-left: 200px;
+            padding: 20px;
         }
 
         section>ul {
@@ -104,6 +115,7 @@
         </div>
     </header>
     <nav>
+        <img src="../img/按钮02.png" title="收起菜单"></span>
         <ul>
             <li><a href="#">菜单1</a></li>
             <li><a href="#">菜单2</a></li>
