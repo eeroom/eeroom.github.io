@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            line-height: 55px;
+            border: 1px red solid;
+        }
+
+        header>img {
+            vertical-align: bottom;
+            height: 55px;
+            width: 55px;
+            margin: 0 20px;
+        }
+
+        header>div {
+            float: right;
+            margin-right: 20px
+        }
+
+        header>div>a {
+            margin: 0 10px;
+        }
+
+        nav {
+            position: fixed;
+            top: 55px;
+            left: 0;
+            bottom: 1px;
+            width: 200px;
+            border: 1px blueviolet solid;
+            background-color: rgb(219, 207, 188)
+        }
+
+        nav>ul {
+            list-style: none;
+        }
+
+        nav>ul>li {
+            margin: 20px 0;
+        }
+
+        section {
+            position: relative;
+            margin-top: 55px;
+            margin-left: 200px;
+        }
+
+        section>ul {
+            list-style: none;
+            border: 1px saddlebrown solid;
+        }
+
+        section>ul>li {
+            display: inline-block;
+            height: 36px;
+            line-height: 36px;
+            width: 115px;
+            text-align: center;
+            background-image: url(../img/tab美化.png);
+            background-repeat: no-repeat;
+            margin: 0 -2px;
+            vertical-align: bottom;
+        }
+
+        section>ul>li:nth-child(1),
+        section>ul>li:hover {
+            background-position: -357px -145px;
+            width: 180px;
+            height: 45px;
+            line-height: 45px;
+            font-weight: bold;
+        }
+        section>p{
+            text-indent: 2em
+        }
+        section>div{
+            word-wrap: break-word;
+        }
+        footer{
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="../img/img10.jpg">
+        <span>流星哈谢了社乐系统</span>
+        <div>
+            <a href="#">设置</a>
+            <a href="#">eeroom</a>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">菜单1</a></li>
+            <li><a href="#">菜单2</a></li>
+            <li><a href="#">菜单3</a></li>
+            <li><a href="#">菜单4</a></li>
+            <li><a href="#">菜单5</a></li>
+            <li><a href="#">菜单6</a></li>
+            <li><a href="#">菜单7</a></li>
+        </ul>
+    </nav>
+    <section>
+        <ul>
+            <li>中国广东</li>
+            <li>中国广东11</li>
+            <li class="active">中国广东22</li>
+            <li>中国广东33</li>
+            <li>中国广东44</li>
+            <li>中国广东55</li>
+            <li>中国广东66</li>
+            <li>中国广东77</li>
+        </ul>
+        <p>
+            <img src="../img/配置SSH免密登陆.png" alt="" srcset="" align="left">
+            Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
+            为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+            1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
+            设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
+            为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+            1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
+            设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+            Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
+            为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+            1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
+            设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
+            为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+            1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
+            设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+        </p>
+        <div>
+            111111111111111aaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        </div>
+        <div>我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</div>
+    </section>
+    <footer>
+        版权所有&copy;丢了光影&commat;2024
+    </footer>
+</body>
+
+</html>
