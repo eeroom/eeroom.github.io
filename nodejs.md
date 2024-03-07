@@ -230,4 +230,16 @@ const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 window.location.href="about:blank"
 window.close();
 ```
+## 样式和布局
+```
+    导航栏
+位置固定：fixed，固定高度
+图文居中：图片的align设置为middle，line-height和height保持一致，font-size不能为0
+右侧内容：浮动
+屏幕自适应：媒体查询，media，max-width从大的值开始往下写，主要几档：1600 1440 1200 900
+    max-width=1600表示with<=1600生效，并且没有if else的短路逻辑，所有需要从大往小写
+    当with为1400的时候，1600和1440都符合，但是1440在后，会覆盖1600的设置，css的覆盖原则
+    如果反过来写，则1600的设置覆盖1440的设置，并且所有小于1600的情况下，都会被1600的设置覆盖
+    使用min-with则和上面相反
+```
 
