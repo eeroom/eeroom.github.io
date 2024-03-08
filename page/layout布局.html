@@ -5,177 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./layout布局.css">
     <title>Document</title>
-    <style>
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 55px;
-            line-height: 55px;
-            border: 1px red solid;
-            background-color: gainsboro;
-            z-index: 200;
-        }
-
-        header>img {
-            vertical-align: bottom;
-            height: 55px;
-            width: 55px;
-            margin: 0 20px;
-            border-radius: 50%;
-        }
-
-        header>div {
-            float: right;
-            margin-right: 20px
-        }
-
-        header>div>a {
-            margin: 0 10px;
-        }
-
-        nav {
-            position: fixed;
-            top: 55px;
-            left: 0;
-            bottom: 1px;
-            width: 200px;
-            border: 1px blueviolet solid;
-            background-color: gainsboro
-        }
-
-        nav>img {
-            position: absolute;
-            display: inline-block;
-            height: 120px;
-            width: 13px;
-            top: 50px;
-            right: -1px;
-            cursor: pointer;
-        }
-
-        nav>ul {
-            list-style: none;
-        }
-
-        nav>ul>li {
-            margin: 20px 0;
-        }
-
-        section {
-            position: relative;
-            margin-top: 55px;
-            margin-left: 200px;
-            padding: 20px;
-        }
-
-
-        section>ul {
-            list-style: none;
-            border: 1px saddlebrown solid;
-        }
-
-        section>ul>li {
-            display: inline-block;
-            height: 36px;
-            line-height: 36px;
-            width: 115px;
-            text-align: center;
-            background-image: url(../img/tab美化.png);
-            background-repeat: no-repeat;
-            margin: 0 -2px;
-            vertical-align: bottom;
-        }
-
-        section>ul>li:nth-child(1),
-        section>ul>li:hover {
-            background-position: -357px -145px;
-            width: 180px;
-            height: 45px;
-            line-height: 45px;
-            font-weight: bold;
-        }
-
-        section>p {
-            text-indent: 2em;
-            line-height: 1.5;
-        }
-
-        section>p>img {
-            float: left;
-            margin: 0 10px 0 0;
-            border: 1px slateblue solid;
-        }
-
-        section>div {
-            word-wrap: break-word;
-            opacity: 0.3;
-        }
-
-        section>fieldset>img {
-            width: 80px;
-            height: 80px;
-            transition-property: transform, width, height;
-            transition-duration: 500ms;
-        }
-
-        section>fieldset>img:hover {
-            width: 120px;
-            height: 120px;
-            transform: rotate(180deg)
-        }
-
-        @keyframes loading1 {
-            0% {
-                opacity: 0;
-            }
-
-            20% {
-                opacity: 0.2;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        section>fieldset>span {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            border-radius: 50%;
-            margin: 0 0.2em;
-            background-color: rgb(238, 118, 75);
-            animation: loading1 1s ease 0s infinite normal none;
-        }
-
-        section>fieldset>span:nth-of-type(2) {
-            background-color: rgb(224, 120, 83);
-            animation-delay: 0.2s;
-
-        }
-
-        section>fieldset>span:nth-of-type(3) {
-            background-color: rgb(206, 119, 87);
-            animation-delay: 0.4s;
-        }
-
-        section>fieldset>span:nth-of-type(4) {
-            background-color: rgb(175, 113, 90);
-            animation-delay: 0.6s;
-        }
-
-        section>fieldset>span:nth-of-type(5) {
-            background-color: rgb(160, 109, 90);
-            animation-delay: 0.8s;
-        }
-
-        footer {
-            text-align: center;
-        }
-    </style>
 </head>
 
 <body>
@@ -229,12 +60,12 @@
             </span>
 
         </p>
-        <div>
+        <p>
             111111111111111aaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        </div>
-        <div>
+        </p>
+        <p>
             我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我
-        </div>
+        </p>
         <fieldset>
             <legend>转换和过渡效果</legend>
             <img src="../img/img12.jpg" alt="">
@@ -247,6 +78,17 @@
             <span></span>
             <span></span>
         </fieldset>
+        <hr>
+        <span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
     </section>
     <footer>
         版权所有&copy;丢了光影&commat;2024

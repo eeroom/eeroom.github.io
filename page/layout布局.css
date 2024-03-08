@@ -1,0 +1,227 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 55px;
+    line-height: 55px;
+    border: 1px red solid;
+    background-color: gainsboro;
+    z-index: 200;
+}
+
+header>img {
+    vertical-align: bottom;
+    height: 55px;
+    width: 55px;
+    margin: 0 20px;
+    border-radius: 50%;
+}
+
+header>div {
+    float: right;
+    margin-right: 20px
+}
+
+header>div>a {
+    margin: 0 10px;
+}
+
+nav {
+    position: fixed;
+    top: 55px;
+    left: 0;
+    bottom: 1px;
+    width: 200px;
+    border: 1px blueviolet solid;
+    background-color: gainsboro
+}
+
+nav>img {
+    position: absolute;
+    display: inline-block;
+    height: 120px;
+    width: 13px;
+    top: 50px;
+    right: -1px;
+    cursor: pointer;
+}
+
+nav>ul {
+    list-style: none;
+}
+
+nav>ul>li {
+    margin: 20px 0;
+}
+
+section {
+    position: relative;
+    margin-top: 55px;
+    margin-left: 200px;
+    padding: 20px;
+}
+
+
+section>ul {
+    list-style: none;
+    border: 1px saddlebrown solid;
+}
+
+section>ul>li {
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    width: 115px;
+    text-align: center;
+    background-image: url(../img/tab美化.png);
+    background-repeat: no-repeat;
+    margin: 0 -2px;
+    vertical-align: bottom;
+}
+
+section>ul>li:nth-child(1),
+section>ul>li:hover {
+    background-position: -357px -145px;
+    width: 180px;
+    height: 45px;
+    line-height: 45px;
+    font-weight: bold;
+}
+
+section>p {
+    text-indent: 2em;
+    line-height: 1.5;
+}
+
+section>p>img {
+    float: left;
+    margin: 0 10px 0 0;
+    border: 1px slateblue solid;
+}
+
+section>p:nth-of-type(2) {
+    word-break: normal;
+    word-wrap: break-word;
+    white-space:normal;
+    opacity: 0.3;
+}
+
+section>fieldset>img {
+    width: 80px;
+    height: 80px;
+    transition-property: transform, width, height;
+    transition-duration: 500ms;
+}
+
+section>fieldset>img:hover {
+    width: 120px;
+    height: 120px;
+    transform: rotate(180deg)
+}
+
+@keyframes loading1 {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+section>fieldset>span {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    margin: 0 0.2em;
+    background-color: rgb(238, 118, 75);
+    animation: loading1 1s ease 0s infinite normal none;
+}
+
+section>fieldset>span:nth-of-type(2) {
+    background-color: rgb(224, 120, 83);
+    animation-delay: 0.2s;
+
+}
+
+section>fieldset>span:nth-of-type(3) {
+    background-color: rgb(206, 119, 87);
+    animation-delay: 0.4s;
+}
+
+section>fieldset>span:nth-of-type(4) {
+    background-color: rgb(175, 113, 90);
+    animation-delay: 0.6s;
+}
+
+section>fieldset>span:nth-of-type(5) {
+    background-color: rgb(160, 109, 90);
+    animation-delay: 0.8s;
+}
+
+section>span{
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    border: 1px hotpink solid;
+}
+section>span>span{
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background-color: black;
+    opacity: 1;
+    animation: loading1 800ms 0s infinite;
+    position: absolute;
+ 
+}
+section>span>span:nth-child(1){
+    animation-delay: 100ms;
+    top: 0;
+    left: 50%;
+}
+section>span>span:nth-child(2){
+    animation-delay: 200ms;
+    top: 10%;
+    right: 10%;
+}
+section>span>span:nth-child(3){
+    animation-delay: 300ms;
+    top: 50%;
+    right: 0;
+}
+section>span>span:nth-child(4){
+    animation-delay: 400ms;
+    bottom: 10%;
+    right: 10%;
+}
+section>span>span:nth-child(5){
+    animation-delay: 500ms;
+    bottom: 0;
+    left: 50%;
+}
+section>span>span:nth-child(6){
+    animation-delay: 600ms;
+    bottom: 10%;
+    left:  10%;
+}
+section>span>span:nth-child(7){
+    animation-delay: 700ms;
+    top: 50%;
+    left: 0;
+    
+}
+section>span>span:nth-child(8){
+    animation-delay: 875ms;
+    top: 10%;
+    left: 10%;
+  
+}
+
+
+footer {
+    text-align: center;
+}
