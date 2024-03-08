@@ -241,14 +241,14 @@ window.close();
     if else的范围匹配，小于从小的值开始写，大于从大的开始写，因为有短路逻辑
 导航栏
     位置：fixed，固定高度
-    logo：高度保持一致，vertical-align=bottom
+    logo：高度保持一致，vertical-align:bottom，圆形图片：正方形然后 border-radius:50%
     文字垂直居中：line-height和height保持一致，font-size不能为0
     右侧内容：浮动
 左侧菜单
     位置：fixed，固定宽度，bottom为0
 内容区域
     位置：固定左侧和顶部偏移
-    图文混排：设置img的align属性
+    图文混排：设置img的float
     列表：li设置为inline-block，自动向右增长
     背景图片位置：background-position:x轴偏移 y轴偏移，默认值为:0% 0%，%为单位的计算规则:(元素宽度-背景图片宽度)*百分比。0 0等价于left center,50% 50%等价于center center
     背景图片重复：如果元素宽度小于背景图片，则重复无效果
@@ -289,7 +289,11 @@ white-space：
     |    pre-wrap    |     保留            |     保留             |       换行            |                     |
     |----------------|--------------------|----------------------|-----------------------|---------------------|
 文字超长：
-    text-overflow：ellipsis
-    overflow：hidden
+    text-overflow:ellipsis
+    overflow:hidden
+透明度：
+  opacity:0.5 
+  0-完全透明，1-不透明
+  场景：遮罩层
 ```
 
