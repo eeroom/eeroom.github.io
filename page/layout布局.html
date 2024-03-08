@@ -45,7 +45,8 @@
             border: 1px blueviolet solid;
             background-color: gainsboro
         }
-        nav>img{
+
+        nav>img {
             position: absolute;
             display: inline-block;
             height: 120px;
@@ -54,6 +55,7 @@
             right: -1px;
             cursor: pointer;
         }
+
         nav>ul {
             list-style: none;
         }
@@ -68,7 +70,7 @@
             margin-left: 200px;
             padding: 20px;
         }
-      
+
 
         section>ul {
             list-style: none;
@@ -95,43 +97,51 @@
             line-height: 45px;
             font-weight: bold;
         }
-       
-        section>p{
+
+        section>p {
             text-indent: 2em;
             line-height: 1.5;
         }
+
         section>p>img {
             float: left;
             margin: 0 10px 0 0;
             border: 1px slateblue solid;
         }
-        section>div{
+
+        section>div {
             word-wrap: break-word;
             opacity: 0.3;
         }
-        section>img{
+
+        section>fieldset>img {
             width: 80px;
             height: 80px;
-            transition-property: transform,width,height;
+            transition-property: transform, width, height;
             transition-duration: 500ms;
         }
-        section>img:hover{
-            width:120px;
+
+        section>fieldset>img:hover {
+            width: 120px;
             height: 120px;
-            transform:rotate(180deg)
+            transform: rotate(180deg)
         }
-        @keyframes loading1{
-            0%{
+
+        @keyframes loading1 {
+            0% {
                 opacity: 0;
             }
-            20%{
+
+            20% {
                 opacity: 0.2;
             }
-            100%{
+
+            100% {
                 opacity: 1;
             }
         }
-        section>span{
+
+        section>fieldset>span {
             display: inline-block;
             width: 1em;
             height: 1em;
@@ -140,24 +150,29 @@
             background-color: rgb(238, 118, 75);
             animation: loading1 1s ease 0s infinite normal none;
         }
-        section>span:nth-of-type(2){
+
+        section>fieldset>span:nth-of-type(2) {
             background-color: rgb(224, 120, 83);
             animation-delay: 0.2s;
-            
+
         }
-        section>span:nth-of-type(3){
+
+        section>fieldset>span:nth-of-type(3) {
             background-color: rgb(206, 119, 87);
             animation-delay: 0.4s;
         }
-        section>span:nth-of-type(4){
+
+        section>fieldset>span:nth-of-type(4) {
             background-color: rgb(175, 113, 90);
             animation-delay: 0.6s;
         }
-        section>span:nth-of-type(5){
+
+        section>fieldset>span:nth-of-type(5) {
             background-color: rgb(160, 109, 90);
             animation-delay: 0.8s;
         }
-        footer{
+
+        footer {
             text-align: center;
         }
     </style>
@@ -199,30 +214,39 @@
             <img src="../img/配置SSH免密登陆.png" alt="" srcset="">
             <span>
                 Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
-                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f
+                作为参数，Glide将会显示原始图片的20%的大小，如果原图是
                 1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
                 设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
-                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f
+                作为参数，Glide将会显示原始图片的20%的大小，如果原图是
                 1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
                 设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
                 Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
-                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
+                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f
+                作为参数，Glide将会显示原始图片的20%的大小，如果原图是
                 1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
             </span>
-            
+
         </p>
         <div>
             111111111111111aaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         </div>
-        <div>我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</div>
-        转换和过渡效果
-        <img src="../img/img12.jpg" alt="">
-        <hr>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <div>
+            我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我
+        </div>
+        <fieldset>
+            <legend>转换和过渡效果</legend>
+            <img src="../img/img12.jpg" alt="">
+        </fieldset>
+        <fieldset>
+            <legend>关键帧动画</legend>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </fieldset>
     </section>
     <footer>
         版权所有&copy;丢了光影&commat;2024
