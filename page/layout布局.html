@@ -109,6 +109,54 @@
             word-wrap: break-word;
             opacity: 0.3;
         }
+        section>img{
+            width: 100px;
+            height: 100px;
+            transition-property: transform,width,height;
+            transition-duration: 500ms;
+        }
+        section>img:hover{
+            width:200px;
+            height: 200px;
+            transform:rotate(45deg)
+        }
+        @keyframes loading1{
+            0%{
+                opacity: 0;
+            }
+            20%{
+                opacity: 0.2;
+            }
+            100%{
+                opacity: 1;
+            }
+        }
+        section>span{
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            margin: 0 0.2em;
+            background-color: rgb(238, 118, 75);
+            animation: loading1 1s ease 0s infinite normal none;
+        }
+        section>span:nth-of-type(2){
+            background-color: rgb(224, 120, 83);
+            animation-delay: 0.2s;
+            
+        }
+        section>span:nth-of-type(3){
+            background-color: rgb(206, 119, 87);
+            animation-delay: 0.4s;
+        }
+        section>span:nth-of-type(4){
+            background-color: rgb(175, 113, 90);
+            animation-delay: 0.6s;
+        }
+        section>span:nth-of-type(5){
+            background-color: rgb(160, 109, 90);
+            animation-delay: 0.8s;
+        }
         footer{
             text-align: center;
         }
@@ -160,10 +208,6 @@
                 Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
                 为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
                 1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
-                设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。Glide的缩略图功能在这里不得不说，和占位图略有不同，占位图必须使用资源文件才行，而缩略图是动态的占位图可以从网络中加载。缩略图会在世纪请求加载完成或者处理完之后才显示。在原始图片到达之后，缩略图不会取代原始图片，只会被抹除。Glide
-                为缩略图提供了2种不同的加载方式，比较简单的方式是调用 thumbnail() 方法，参数是 float 类型，作为其倍数大小。例如，你传入 0.2f 作为参数，Glide将会显示原始图片的20%的大小，如果原图是
-                1000x1000 的尺寸，那么缩略图将会是 200x200 的尺寸。为缩略图明显比原图小得多，所以我们需要确保 ImageView 的 ScaleType
-                设置的正确。作者：MrTrying链接：https://www.jianshu.com/p/7ce7b02988a4来源：简书著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
             </span>
             
         </p>
@@ -171,6 +215,14 @@
             111111111111111aaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa111111111111111aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         </div>
         <div>我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我我</div>
+        转换和渐变
+        <img src="../img/img12.jpg" alt="">
+        <hr>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
     </section>
     <footer>
         版权所有&copy;丢了光影&commat;2024
