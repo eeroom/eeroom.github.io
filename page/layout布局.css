@@ -106,7 +106,23 @@ section>p:nth-of-type(2) {
     white-space:normal;
     opacity: 0.3;
 }
-
+section>div{
+    border: 1px sienna solid;
+}
+section>div>input{
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+}
+section>div>label{
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(100% - 40px);
+    line-height: 24px;
+}
+section>fieldset{
+    clear: both
+}
 section>fieldset>img {
     width: 80px;
     height: 80px;
