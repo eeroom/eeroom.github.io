@@ -296,4 +296,9 @@ white-space：
   0-完全透明，1-不透明
   场景：遮罩层
 ```
+## 18版本的坑
+```
+不兼容旧版的ssl，开启兼容，设置环境变量：export NODE_OPTIONS=--openssl-legacy-provider
+vue3的自带打包会提示报错
+```
 
