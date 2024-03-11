@@ -511,6 +511,9 @@ WantedBy=multi-user.target
 ```
 yum [list installed] [info mysql* available 查询] [grouplist 程序组]
   列举已安装的程序
+rpm -ql 程序名称
+  查看指定程序被安装后的文件路径
+  程序名称从列举已安装的程序中获取
 yum [localinstall 本地安装] [install] 程序名称 [--nogpgcheck 不校验gpg] [--downloadonly --downloaddir /root/myapp 仅下载，不安装] 
   安装或下载程序
 yum localinstall 目录/* --nogpgcheck
