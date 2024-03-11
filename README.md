@@ -1550,6 +1550,25 @@ foreach($fileName in $remoteFileNames){
        [System.Console]::WriteLine("完成下载:"+$fileName);
 }
 ```
+## sh教程
+```
+特别的：参数如果有特殊字符，比如&，就把该参数用''包起来即可
+set -ex
+  -e遇到任何错误，就停止执行
+  -x 把执行过的命令打印一下，并且在开头添加+号
+变量名=变量值 定义变量
+  例如：fileName=abc.txt
+$变量名
+  echo 环境变量PATH：$PATH
+  echo 环境变量PATH：${PATH}
+  echo 当前时间：$(date +'%Y%m%d%H%M%s')
+分支语句
+  if
+  then
+  fi
+
+
+```
 ## bat教程
 ```
 @rem 开头的@表示不打印此行命令本身，rem表示注释，::也表示注释 ，echo off等价于后续每一行的命令开头都增加@
