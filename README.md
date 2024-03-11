@@ -1563,11 +1563,13 @@ $变量名
   echo 环境变量PATH：${PATH}
   echo 当前时间：$(date +'%Y%m%d%H%M%s')
 分支语句
-  if
-  then
+  if [ "${flag}" = "true" ];then
+    xxxx
+  elif [ ];then
+    xxxx
+  else
+    xxxx
   fi
-
-
 ```
 ## bat教程
 ```
