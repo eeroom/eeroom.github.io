@@ -299,6 +299,6 @@ white-space：
 ## 18版本的坑
 ```
 不兼容旧版的ssl，开启兼容，设置环境变量：export NODE_OPTIONS=--openssl-legacy-provider
-vue3的自带打包会提示报错
+vue3的自带打包会提示报错：digital envelope routines::unsupported
 ```
 
