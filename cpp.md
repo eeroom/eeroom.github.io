@@ -310,13 +310,72 @@ tasks.json 完整路径：项目根目录/.vscode/tasks.json
 完成后在源代码根目录可以看到生成的库文件和示例程序，通过文件生成时间排序可以看出来
 头文件也在源代码根目录
 ```
-## windows环境下编译nginx
+## msys2编译nginx
 ```
-从nginx的官网下载源代码 nginx-1.18.0-RELEASE.gz
-准备pcre,zlib,openssl的源代码[pcre-8.45.tar.gz,zlib-1.3.tar.gz,openssl-3.2.0.tar.gz]
-准备perl,strawberry-perl-5.30.3.1-64bit.zip [可选]
+官网下载源代码，http://hg.nginx.org/nginx   nginx-1.18.0-RELEASE.zip
+解压后查看目录：src\os\win32，需要有相应的头文件就能编译windows版nginx
+msys2安装依赖：pcre,pcre-devel,openssl,openssl-devel,zlib,zlib-devel
+根据configure的检测结果，修改如下：
+auto/lib/pcre/conf
+	96行 "$NGX_PLATFORM" != win32 改为 "$NGX_PLATFORM" == win32
+	115行 /usr/local/lib 改为/usr/lib ;/usr/local/include 改为 /usr/include
+auto/lib/openssl/conf
+	54行 "$NGX_PLATFORM" != win32 改为 "$NGX_PLATFORM" == win32
+auto/lib/zlib/conf
+	45行 "$NGX_PLATFORM" != win32 改为 "$NGX_PLATFORM" == win32
+auto/feature
+	43行 增加：echo ngx_test:"$ngx_test"
+修改思路：
+官网的指导文档是把依赖打成静态库依赖，需要编译依赖的源码
+经过上述修改后，依赖打成动态库依赖
+configure的检测逻辑把$NGX_PLATFORM的值设置为win32,参看auto/configure文件的40行,这个设定不能改，否则头文件的坚持过不了
+检测依赖库pcre,openssl,zlib的时候，win32默认只能是指定依赖库的源码路径进行静态编译，所以修改坚持的判断条件为：$NGX_PLATFORM" == win32
+msys2的pcre的头文件和库文件分别在/usr/include和usr/lib，而普通linux中在/usr/local/include和/usr/local/lib
+检测依赖库的原理是写一个最简单的依赖对应库的main函数，然后调用gcc编译，如果成功，该依赖就没问题
 
-使用gcc编译的步骤如下：
+生成Makfile
+./auto/configure \
+    --prefix=. \
+    --conf-path=conf/nginx.conf \
+    --pid-path=logs/nginx.pid \
+    --http-log-path=logs/access.log \
+    --error-log-path=logs/error.log \
+    --sbin-path=nginx.exe \
+    --http-client-body-temp-path=temp/client_body_temp \
+    --http-proxy-temp-path=temp/proxy_temp \
+    --http-fastcgi-temp-path=temp/fastcgi_temp \
+    --http-scgi-temp-path=temp/scgi_temp \
+    --http-uwsgi-temp-pat
+执行：make
+prefix=. ,使得nginx.exe和conf,logs,temp目录保持在同一级
+执行：make install
+prefix=. ,上述命令会执行失败，因为复制conf目录的时候源目录和目标目录是相同的
+可以使用prefix=mynginx ，执行make install ,得到conf,html等文件夹的默认文件
+然后结合prefix=. 编译得到的nginx.exe，最终得到完整的可执行程序和配置
+因为依赖库是动态编译，运行时依赖一下dll，需要和nginx.exe放在一起:
+msys-pcre-1.dll
+msys-crypto-1.1.dll
+msys-ssl-1.1.dll
+msys-z.dll
+msys-2.0.dll
+
+--conf-path=conf/nginx.conf，如果不指定，则默认为/usr/local/nginx/conf/nginx.conf
+这种情况下，程序在windows也能跑，只是各项配置路径是固定的并且很奇怪
+如果nginx在D盘里的某个目录执行，则需要把配置文件放在d:/usr/local/nginx/conf/nginx.conf，日志的路径也类似
+--with-http_ssl_module 支持https，待研究
+
+cmd执行nginx.exe即可可以启动服务，注意点：配置文件中默认端口为80，一般需要修改
+nginx -s stop 停止服务，需要新开cmd执行
+nginx -s reload 重启
+```
+## msvc编译nginx
+```
+下载源代码，参照msys2版本
+准备pcre,zlib,openssl的源代码[必选]
+pcre-8.45.tar.gz
+zlib-1.3.tar.gz
+openssl-3.2.0.tar.gz
+准备perl,strawberry-perl-5.30.3.1-64bit.zip [可选]
 cd到源代码根目录，执行
 mkdir objs
 mkdir objs/lib
@@ -324,47 +383,10 @@ cd objs/lib
 tar xzf /d/Code/pcre-8.45.tar.gz
 tar xzf /d/Code/zlib-1.3.tar.gz
 tar xzf /d/Code/openssl-3.2.0.tar.gz [可选]
-./auto/configure \
-    --with-debug \
-    --prefix= \
-    --conf-path=conf/nginx.conf \
-    --pid-path=logs/nginx.pid \
-    --http-log-path=logs/access.log \
-    --error-log-path=logs/error.log \
-    --sbin-path=nginx.exe \
-    --http-client-body-temp-path=temp/client_body_temp \
-    --http-proxy-temp-path=temp/proxy_temp \
-    --http-fastcgi-temp-path=temp/fastcgi_temp \
-    --http-scgi-temp-path=temp/scgi_temp \
-    --http-uwsgi-temp-path=temp/uwsgi_temp \
-    --with-cc-opt=-DFD_SETSIZE=1024 \
-    --with-pcre=objs/lib/pcre-8.45 \
-    --with-zlib=objs/lib/zlib-1.3
-关键点：--conf-path=conf/nginx.conf等路径配置，如果不指定，则默认为/usr/local/nginx/conf/nginx.conf
-	这种情况下，程序在windows也能跑，只是各项配置路径是固定的并且很奇怪
-	如果nginx在D盘里的某个目录执行，则需要把配置文件放在d:/usr/local/nginx/conf/nginx.conf，日志的路径也类似
-make
-执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
-把nginx.exe复制到d:/01Tools/nginx1.18/
-把源代码目录下的docs/html目录复制到d:/01Tools/nginx1.18/
-把源代码目录下的conf目录复制到d:/01Tools/nginx1.18/
-在d:/01Tools/nginx1.18/ 中创建logs,temp两个子目录
-修改config/nginx.conf中的端口号配置
-打开cmd执行nginx.exe就可以启动服务
-nginx -s stop 停止服务，需要新开cmd执行
-nginx -s reload 重启
-如果需要支持https，就需要增加configure参数：
---with-openssl=objs/lib/openssl-3.2.0 \
---with-openssl-opt=no-asm \
---with-http_ssl_module
 
-2、使用msvc编译
-准备步骤参照第1条
-调整configure参数为：
 ./auto/configure \
     --with-cc=cl \
-    --with-debug \
-    --prefix= \
+    --prefix=. \
     --conf-path=conf/nginx.conf \
     --pid-path=logs/nginx.pid \
     --http-log-path=logs/access.log \
@@ -378,10 +400,12 @@ nginx -s reload 重启
     --with-cc-opt=-DFD_SETSIZE=1024 \
     --with-pcre=objs/lib/pcre-8.45 \
     --with-zlib=objs/lib/zlib-1.3
-差异就在于：--with-cc=cl \
+
+--with-cc=cl 
+关键点：cl是msvc的编译器
 打开vs2015开发人员命令提示符，执行：nmake
 执行完后，即可在objs目录下看到编译出来的可执行文件nginx.exe
-后续的操作参照第1条
+后续的操作参照msys2版本
 ```
 ## 调用libcurl
 ```
